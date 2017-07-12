@@ -8,6 +8,11 @@ import android.support.v7.preference.PreferenceFragmentCompat;
  */
 
 public class SettingsFragment extends PreferenceFragmentCompat {
+
+    public static SettingsFragment newInstance() {
+        final SettingsFragment fragment = new SettingsFragment();
+        return fragment;
+    }
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         addPreferencesFromResource(R.xml.fragment_preferences);

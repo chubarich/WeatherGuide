@@ -7,11 +7,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.julia.weatherguide.ui.BaseFragment;
+
 /**
  * Created by julia on 09.07.17.
  */
 
-public class AboutFragment extends Fragment {
+public class AboutFragment extends BaseFragment {
+
+    public static AboutFragment newInstance() {
+        final AboutFragment fragment = new AboutFragment();
+        return fragment;
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

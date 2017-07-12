@@ -15,20 +15,23 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
+import com.example.julia.weatherguide.ui.BaseActivity;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import icepick.State;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
 
     @BindView(R.id.drawer_layout) DrawerLayout mDrawerLayout;
     @BindView(R.id.nv_main) NavigationView mDrawerMenu;
     @BindView(R.id.toolbar) Toolbar mToolbar;
-    private int mCurrentFragmentId = Integer.MAX_VALUE;
-    private Fragment mCurrentFragment;
-    private FragmentManager mFragmentManager;
+
+    @State
+    int mCurrentFragmentId = Integer.MAX_VALUE;
+
     private ActionBarDrawerToggle mDrawerToggle;
-    private static final String CURRENT_FRAGMENT_ID_TAG = "current_fragment";
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,8 +43,6 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
-        mFragmentManager = getSupportFragmentManager();
-
         mDrawerMenu.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -52,35 +53,25 @@ public class MainActivity extends AppCompatActivity {
                 }
                 switch (id) {
                     case R.id.action_to_settings:
-                        mCurrentFragment = new SettingsFragment();
-                        FragmentTransaction settingsTransaction = mFragmentManager.beginTransaction();
-                        settingsTransaction.replace(R.id.main_content, mCurrentFragment);
-                        settingsTransaction.commit();
-                        mCurrentFragmentId = id;
+                        getSupportFragmentManager()
+                                .beginTransaction()
+                                .replace(R.id.main_content, SettingsFragment.newInstance())
+                                .commit();
                         break;
                     case R.id.action_to_about:
-                        mCurrentFragment = new AboutFragment();
-                        FragmentTransaction aboutTransaction = mFragmentManager.beginTransaction();
-                        aboutTransaction.replace(R.id.main_content, mCurrentFragment);
-                        aboutTransaction.commit();
-                        mCurrentFragmentId = id;
+                        getSupportFragmentManager()
+                                .beginTransaction()
+                                .replace(R.id.main_content, AboutFragment.newInstance())
+                                .commit();
                         break;
                 }
+                mCurrentFragmentId = id;
                 mDrawerLayout.closeDrawer(GravityCompat.START);
                 return true;
             }
         });
-        if (savedInstanceState != null) {
-            mCurrentFragmentId = savedInstanceState.getInt(CURRENT_FRAGMENT_ID_TAG);
-        }
-
     }
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putInt(CURRENT_FRAGMENT_ID_TAG, mCurrentFragmentId);
-    }
 
     @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
@@ -93,8 +84,9 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (mDrawerToggle.onOptionsItemSelected(item))
+        if (mDrawerToggle.onOptionsItemSelected(item)) {
             return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 

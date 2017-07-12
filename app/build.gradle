@@ -31,6 +31,10 @@ android {
     }
 }
 
+repositories {
+    maven {url "https://clojars.org/repo/"}
+}
+
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
@@ -43,6 +47,8 @@ dependencies {
 
     compile 'com.jakewharton:butterknife:8.7.0'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.7.0'
-    
+
+    compile 'frankiesardo:icepick:3.2.0'
+    provided 'frankiesardo:icepick-processor:3.2.0'
     testCompile 'junit:junit:4.12'
 }
