@@ -15,26 +15,28 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class MainActivity extends AppCompatActivity {
 
-    private DrawerLayout mDrawerLayout;
-    private NavigationView mDrawerMenu;
+    @BindView(R.id.drawer_layout) DrawerLayout mDrawerLayout;
+    @BindView(R.id.nv_main) NavigationView mDrawerMenu;
+    @BindView(R.id.toolbar) Toolbar mToolbar;
     private int mCurrentFragmentId = Integer.MAX_VALUE;
     private Fragment mCurrentFragment;
     private FragmentManager mFragmentManager;
     private ActionBarDrawerToggle mDrawerToggle;
     private static final String CURRENT_FRAGMENT_ID_TAG = "current_fragment";
-
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mDrawerMenu = (NavigationView) findViewById(R.id.nv_main);
+        ButterKnife.bind(this);
 
 
-        setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
+        setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
