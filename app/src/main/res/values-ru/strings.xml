@@ -5,10 +5,4 @@
 
     <string name="about_application">Приложение WeatherGuide готовится приносить пользу</string>
 
-    <string name="prefs_the_first">Первая настройка</string>
-
-    <string-array name="menu_titles_array">
-        <item>Настройки</item>
-        <item>О приложении</item>
-    </string-array>
 </resources>
