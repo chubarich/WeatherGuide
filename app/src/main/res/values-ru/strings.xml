@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Погода</string>
+    <string name="left_drawer_menu_title_settings">Настройки</string>
+    <string name="left_drawer_menu_title_about">О приложении</string>
+
+    <string name="about_application">Приложение WeatherGuide готовится приносить пользу</string>
+
+</resources>

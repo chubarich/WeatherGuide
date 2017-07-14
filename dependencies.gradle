@@ -1,0 +1,45 @@
+ext.versions = [
+        code                         : 1,
+        name                         : '1.0',
+
+        minSdk                       : 15,
+        targetSdk                    : 25,
+        compileSdk                   : 25,
+        buildTools                   : '25.0.3',
+
+        androidGradlePlugin          : '2.3.3',
+
+        supportLibs                  : '25.3.1',
+        supportConstraintLayout      : '1.0.2',
+        butterKnife                  : '8.7.0',
+        icepick                      : '3.2.0',
+
+        espresso                     : '2.2.2',
+        junit                        : '4.12',
+]
+
+ext.gradlePlugins = [
+        android          : "com.android.tools.build:gradle:$versions.androidGradlePlugin",
+]
+
+ext.libraries = [
+
+
+        autoValue               : "com.google.auto.value:auto-value:$versions.autoValue",
+
+        supportAppCompat        : "com.android.support:appcompat-v7:$versions.supportLibs",
+        supportDesign           : "com.android.support:design:$versions.supportLibs",
+        supportConstraintLayout : "com.android.support.constraint:constraint-layout:$versions.supportConstraintLayout",
+        supportPreference       : "com.android.support:preference-v7:$versions.supportLibs",
+
+        butterKnife             : "com.jakewharton:butterknife:$versions.butterKnife",
+        butterKnifeCompiler     : "com.jakewharton:butterknife-compiler:$versions.butterKnife",
+        icepick                 : "frankiesardo:icepick:$versions.icepick",
+        icepickProcessor        : "frankiesardo:icepick-processor:$versions.icepick",
+
+        // Test dependencies
+        junit                   : "junit:junit:$versions.junit",
+        supportTestRunner       : "com.android.support.test:runner:$versions.supportTestRunner",
+        supportTestRules        : "com.android.support.test:rules:$versions.supportTestRunner",
+        espressoCore            : "com.android.support.test.espresso:espresso-core:$versions.espresso"
+]

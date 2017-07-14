@@ -78,6 +78,7 @@ gen-external-apklibs
 
 # Keystore files
 *.jks
+keystore.properties
 
 # OS-specific files
 .DS_Store
