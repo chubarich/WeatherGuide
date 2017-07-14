@@ -1,22 +1,28 @@
 apply plugin: 'com.android.application'
 
+def keystorePropertiesFile = rootProject.file("keystore.properties")
+def keystoreProperties = new Properties()
+keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+
+
 android {
     signingConfigs {
         config {
-            keyAlias 'key0'
-            keyPassword 'key0key0'
-            storeFile file('/home/julia/keystores/android.jks')
-            storePassword 'android'
+            keyAlias keystoreProperties['keyAlias']
+            keyPassword keystoreProperties['keyPassword']
+            storeFile file(keystoreProperties['storeFile'])
+            storePassword keystoreProperties['storePassword']
         }
     }
-    compileSdkVersion 25
-    buildToolsVersion "25.0.3"
+
+    compileSdkVersion versions.compileSdk
+    buildToolsVersion versions.buildTools
     defaultConfig {
         applicationId "com.example.julia.weatherguide"
-        minSdkVersion 15
-        targetSdkVersion 25
-        versionCode 1
-        versionName "1.0"
+        minSdkVersion versions.minSdk
+        targetSdkVersion versions.targetSdk
+        versionCode versions.code
+        versionName versions.name
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -37,18 +43,19 @@ repositories {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+    androidTestCompile( libraries.espressoCore, {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.android.support:appcompat-v7:25.3.1'
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    compile 'com.android.support:design:25.3.1'
-    compile 'com.android.support:preference-v7:25.3.1'
+    compile libraries.supportAppCompat
+    compile libraries.supportConstraintLayout
+    compile libraries.supportDesign
+    compile libraries.supportPreference
 
-    compile 'com.jakewharton:butterknife:8.7.0'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:8.7.0'
+    compile libraries.butterKnife
+    annotationProcessor libraries.butterKnifeCompiler
 
-    compile 'frankiesardo:icepick:3.2.0'
-    provided 'frankiesardo:icepick-processor:3.2.0'
-    testCompile 'junit:junit:4.12'
+    compile libraries.icepick
+    provided libraries.icepickProcessor
+
+    testCompile libraries.junit
 }

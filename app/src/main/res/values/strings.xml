@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name" translatable="false">WeatherGuide</string>
+    <string name="app_name">WeatherGuide</string>
 
     <string name="left_drawer_menu_title_settings">Settings</string>
     <string name="left_drawer_menu_title_about">About</string>
