@@ -1,4 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-
+    <EditTextPreference
+        android:key="@string/refresh_key"
+        android:title="@string/refresh_period"
+        android:summary="@string/refresh_period_summary"
+        android:dialogTitle="@string/refresh_period"
+        android:dialogMessage="@string/refresh_period_summary"
+        android:inputType="number"
+        android:persistent="false"
+        android:singleLine="true" />
 </PreferenceScreen>

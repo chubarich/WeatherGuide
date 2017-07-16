@@ -8,11 +8,17 @@ ext.versions = [
         buildTools                   : '25.0.3',
 
         androidGradlePlugin          : '2.3.3',
+        retrolambdaGradlePlugin      : '3.6.1',
 
         supportLibs                  : '25.3.1',
         supportConstraintLayout      : '1.0.2',
         butterKnife                  : '8.7.0',
         icepick                      : '3.2.0',
+        retrofit                     : '2.3.0',
+        rxjava                       : '2.1.1',
+        rxandroid                    : '2.0.1',
+        firebase                     : '0.7.0',
+        picasso                      : '2.5.2',
 
         espresso                     : '2.2.2',
         junit                        : '4.12',
@@ -20,6 +26,7 @@ ext.versions = [
 
 ext.gradlePlugins = [
         android          : "com.android.tools.build:gradle:$versions.androidGradlePlugin",
+        retrolambda      : "me.tatarka:gradle-retrolambda:$versions.retrolambdaGradlePlugin",
 ]
 
 ext.libraries = [
@@ -36,7 +43,13 @@ ext.libraries = [
         butterKnifeCompiler     : "com.jakewharton:butterknife-compiler:$versions.butterKnife",
         icepick                 : "frankiesardo:icepick:$versions.icepick",
         icepickProcessor        : "frankiesardo:icepick-processor:$versions.icepick",
-
+        retrofit                : "com.squareup.retrofit2:retrofit:$versions.retrofit",
+        retrofitRxAdapter       : "com.squareup.retrofit2:adapter-rxjava2:$versions.retrofit",
+        retrofitGsonConverter   : "com.squareup.retrofit2:converter-gson:$versions.retrofit",
+        rxjava                  : "io.reactivex.rxjava2:rxjava:$versions.rxjava",
+        rxandroid               : "io.reactivex.rxjava2:rxandroid:$versions.rxandroid",
+        firebase                : "com.firebase:firebase-jobdispatcher:$versions.firebase",
+        picasso                 : "com.squareup.picasso:picasso:$versions.picasso",
         // Test dependencies
         junit                   : "junit:junit:$versions.junit",
         supportTestRunner       : "com.android.support.test:runner:$versions.supportTestRunner",
