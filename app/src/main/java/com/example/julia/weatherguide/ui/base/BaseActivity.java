@@ -1,8 +1,8 @@
-package com.example.julia.weatherguide.ui;
+package com.example.julia.weatherguide.ui.base;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 
 import icepick.Icepick;
 
@@ -10,15 +10,16 @@ import icepick.Icepick;
  * Created by julia on 12.07.17.
  */
 
-public class BaseFragment extends Fragment {
+public class BaseActivity extends AppCompatActivity {
+
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Icepick.restoreInstanceState(this, savedInstanceState);
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
+    protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         Icepick.saveInstanceState(this, outState);
     }

@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'me.tatarka.retrolambda'
 
 def keystorePropertiesFile = rootProject.file("keystore.properties")
 def keystoreProperties = new Properties()
@@ -25,16 +26,24 @@ android {
         versionName versions.name
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+
     buildTypes {
         debug {
             debuggable true
         }
+
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.config
         }
     }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
 }
 
 repositories {
@@ -56,6 +65,17 @@ dependencies {
 
     compile libraries.icepick
     provided libraries.icepickProcessor
+
+    compile libraries.retrofit
+    compile libraries.retrofitRxAdapter
+    compile libraries.retrofitGsonConverter
+
+    compile libraries.rxjava
+    compile libraries.rxandroid
+
+    compile libraries.firebase
+
+    compile libraries.picasso
 
     testCompile libraries.junit
 }

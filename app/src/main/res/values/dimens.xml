@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="vertical_margin">32dp</dimen>
+    <dimen name="horizontal_margin">16dp</dimen>
+    <dimen name="strings_margin">8dp</dimen>
+    <dimen name="weather_icon_width">50dp</dimen>
+    <dimen name="weather_icon_height">30dp</dimen>
+</resources>
