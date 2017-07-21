@@ -1,5 +1,6 @@
-package com.example.julia.weatherguide.di;
+package com.example.julia.weatherguide.di.modules;
 
+import com.example.julia.weatherguide.di.scopes.ScreenScope;
 import com.example.julia.weatherguide.ui.current_weather.CurrentWeatherPresenter;
 import com.example.julia.weatherguide.ui.current_weather.CurrentWeatherPresenterImpl;
 import com.example.julia.weatherguide.ui.settings.SettingsPresenter;

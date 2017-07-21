@@ -4,9 +4,9 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.example.julia.weatherguide.WeatherGuideApplication;
-import com.example.julia.weatherguide.repositories.CurrentWeatherDataModel;
+import com.example.julia.weatherguide.repositories.data.CurrentWeatherDataModel;
 import com.example.julia.weatherguide.repositories.CurrentWeatherRepository;
-import com.example.julia.weatherguide.services.current_weather_refresh.CurrentWeatherRefreshDataService;
+import com.example.julia.weatherguide.services.refresh.CurrentWeatherRefreshDataService;
 import com.firebase.jobdispatcher.Constraint;
 import com.firebase.jobdispatcher.Driver;
 import com.firebase.jobdispatcher.FirebaseJobDispatcher;

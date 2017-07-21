@@ -2,7 +2,8 @@ package com.example.julia.weatherguide.repositories;
 
 import android.support.annotation.NonNull;
 
-import com.example.julia.weatherguide.repositories.data.SharedPreferenceService;
+import com.example.julia.weatherguide.repositories.data.CurrentWeatherDataModel;
+import com.example.julia.weatherguide.repositories.storage.preferences.SharedPreferenceService;
 import com.example.julia.weatherguide.repositories.network.OpenWeatherMapNetworkService;
 
 import io.reactivex.Observable;

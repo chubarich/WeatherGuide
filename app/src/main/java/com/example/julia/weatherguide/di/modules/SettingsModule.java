@@ -1,4 +1,4 @@
-package com.example.julia.weatherguide.di;
+package com.example.julia.weatherguide.di.modules;
 
 import com.example.julia.weatherguide.interactors.SettingsInteractor;
 import com.example.julia.weatherguide.interactors.SettingsInteractorImpl;

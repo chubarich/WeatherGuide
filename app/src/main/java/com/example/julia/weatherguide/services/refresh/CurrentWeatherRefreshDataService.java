@@ -1,4 +1,4 @@
-package com.example.julia.weatherguide.services.current_weather_refresh;
+package com.example.julia.weatherguide.services.refresh;
 
 
 import android.util.Log;

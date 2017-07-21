@@ -4,7 +4,7 @@ import android.support.annotation.NonNull;
 
 import com.example.julia.weatherguide.WeatherGuideApplication;
 import com.example.julia.weatherguide.interactors.CurrentWeatherInteractor;
-import com.example.julia.weatherguide.repositories.CurrentWeatherDataModel;
+import com.example.julia.weatherguide.repositories.data.CurrentWeatherDataModel;
 import com.example.julia.weatherguide.ui.base.BasePresenterImpl;
 
 import javax.inject.Inject;

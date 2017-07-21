@@ -9,8 +9,6 @@ import com.example.julia.weatherguide.WeatherGuideApplication;
 
 import javax.inject.Inject;
 
-import io.reactivex.Observable;
-
 /**
  * Created by julia on 16.07.17.
  */
@@ -24,26 +22,7 @@ public class SettingsRepositoryImpl implements SettingsRepository {
     SharedPreferences sharedPreferences;
 
     public SettingsRepositoryImpl(@NonNull Context context) {
-       // this.context = context;
-       // sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         WeatherGuideApplication.getDataComponent().inject(this);
-    }
-
-    @Override
-    public Observable<Long> getRefreshIntervalChange() {
-        return Observable.create(emitter -> {
-            final SharedPreferences.OnSharedPreferenceChangeListener listener = new SharedPreferences.OnSharedPreferenceChangeListener() {
-                @Override
-                public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
-                    if (s.equals(context.getString(R.string.refresh_key))) {
-                        int defaultInterval = context.getResources().getInteger(R.integer.default_refresh_interval);
-                        emitter.onNext((long) sharedPreferences.getInt(s, defaultInterval));
-                    }
-                }
-            };
-            sharedPreferences.registerOnSharedPreferenceChangeListener(listener);
-            emitter.setCancellable(() -> sharedPreferences.unregisterOnSharedPreferenceChangeListener(listener));
-        });
     }
 
     @Override

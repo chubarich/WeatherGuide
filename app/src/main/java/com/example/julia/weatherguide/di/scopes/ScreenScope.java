@@ -1,4 +1,4 @@
-package com.example.julia.weatherguide.di;
+package com.example.julia.weatherguide.di.scopes;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

@@ -1,9 +1,15 @@
-package com.example.julia.weatherguide.di;
+package com.example.julia.weatherguide.di.components;
 
+import com.example.julia.weatherguide.di.modules.DataModule;
+import com.example.julia.weatherguide.di.modules.PreferencesModule;
+import com.example.julia.weatherguide.di.modules.ScreenRelatedModule;
+import com.example.julia.weatherguide.di.modules.SettingsModule;
+import com.example.julia.weatherguide.di.modules.AppModule;
+import com.example.julia.weatherguide.di.modules.CurrentWeatherModule;
 import com.example.julia.weatherguide.interactors.CurrentWeatherInteractorImpl;
 import com.example.julia.weatherguide.interactors.SettingsInteractorImpl;
 import com.example.julia.weatherguide.repositories.SettingsRepositoryImpl;
-import com.example.julia.weatherguide.services.current_weather_refresh.CurrentWeatherRefreshDataService;
+import com.example.julia.weatherguide.services.refresh.CurrentWeatherRefreshDataService;
 import com.example.julia.weatherguide.ui.current_weather.CurrentWeatherPresenterImpl;
 import com.example.julia.weatherguide.ui.settings.SettingsPresenterImpl;
 

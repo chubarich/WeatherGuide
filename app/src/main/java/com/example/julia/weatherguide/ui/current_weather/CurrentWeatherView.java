@@ -1,6 +1,6 @@
 package com.example.julia.weatherguide.ui.current_weather;
 
-import com.example.julia.weatherguide.repositories.CurrentWeatherDataModel;
+import com.example.julia.weatherguide.repositories.data.CurrentWeatherDataModel;
 import com.example.julia.weatherguide.ui.base.BaseView;
 
 /**

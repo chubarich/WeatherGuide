@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 import com.example.julia.weatherguide.R;
 import com.example.julia.weatherguide.WeatherGuideApplication;
-import com.example.julia.weatherguide.repositories.CurrentWeatherDataModel;
+import com.example.julia.weatherguide.repositories.data.CurrentWeatherDataModel;
 import com.example.julia.weatherguide.ui.base.BaseFragment;
 
 import javax.inject.Inject;

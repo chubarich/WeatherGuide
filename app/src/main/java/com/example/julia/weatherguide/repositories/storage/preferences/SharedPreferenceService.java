@@ -1,13 +1,12 @@
-package com.example.julia.weatherguide.repositories.data;
+package com.example.julia.weatherguide.repositories.storage.preferences;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
-import android.util.Log;
 
-import com.example.julia.weatherguide.repositories.CurrentWeatherDataModel;
 import com.example.julia.weatherguide.WeatherGuideApplication;
+import com.example.julia.weatherguide.repositories.data.CurrentWeatherDataModel;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
@@ -52,7 +51,7 @@ public class SharedPreferenceService {
         }
         return true;
     }
-    //TODO: has dummy argument for unify interface
+
     public Observable<CurrentWeatherDataModel> getCurrentWeather (@NonNull String location) {
        return Observable.create(new ObservableOnSubscribe<CurrentWeatherDataModel>() {
            @Override
@@ -66,7 +65,6 @@ public class SharedPreferenceService {
     }
 
     public void saveToSharedPreferences(@NonNull CurrentWeatherDataModel data) {
-        Log.d(TAG, "saveToSharedPreferences");
         Context context = WeatherGuideApplication.getInstance().getApplicationContext();
         SharedPreferences sharedPreferences = context.getSharedPreferences(CURRENT_WEATHER_PREFERENCES, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();

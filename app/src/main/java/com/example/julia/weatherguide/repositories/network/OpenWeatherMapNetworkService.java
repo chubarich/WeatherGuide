@@ -4,7 +4,7 @@ import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 
 import com.example.julia.weatherguide.WeatherGuideApplication;
-import com.example.julia.weatherguide.repositories.CurrentWeatherDataModel;
+import com.example.julia.weatherguide.repositories.data.CurrentWeatherDataModel;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.squareup.picasso.Picasso;

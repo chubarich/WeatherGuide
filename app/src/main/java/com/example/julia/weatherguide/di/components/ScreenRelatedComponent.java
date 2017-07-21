@@ -1,5 +1,7 @@
-package com.example.julia.weatherguide.di;
+package com.example.julia.weatherguide.di.components;
 
+import com.example.julia.weatherguide.di.modules.ScreenRelatedModule;
+import com.example.julia.weatherguide.di.scopes.ScreenScope;
 import com.example.julia.weatherguide.ui.current_weather.CurrentWeatherFragment;
 import com.example.julia.weatherguide.ui.settings.SettingsFragment;
 

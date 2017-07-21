@@ -2,15 +2,15 @@ package com.example.julia.weatherguide;
 
 import android.app.Application;
 
-import com.example.julia.weatherguide.di.AppModule;
-import com.example.julia.weatherguide.di.CurrentWeatherModule;
-import com.example.julia.weatherguide.di.DaggerDataComponent;
-import com.example.julia.weatherguide.di.DataComponent;
-import com.example.julia.weatherguide.di.DataModule;
-import com.example.julia.weatherguide.di.PreferencesModule;
-import com.example.julia.weatherguide.di.ScreenRelatedComponent;
-import com.example.julia.weatherguide.di.ScreenRelatedModule;
-import com.example.julia.weatherguide.di.SettingsModule;
+import com.example.julia.weatherguide.di.components.DaggerDataComponent;
+import com.example.julia.weatherguide.di.modules.AppModule;
+import com.example.julia.weatherguide.di.modules.CurrentWeatherModule;
+import com.example.julia.weatherguide.di.components.DataComponent;
+import com.example.julia.weatherguide.di.modules.DataModule;
+import com.example.julia.weatherguide.di.modules.PreferencesModule;
+import com.example.julia.weatherguide.di.components.ScreenRelatedComponent;
+import com.example.julia.weatherguide.di.modules.ScreenRelatedModule;
+import com.example.julia.weatherguide.di.modules.SettingsModule;
 
 /**
  * Created by julia on 15.07.17.
