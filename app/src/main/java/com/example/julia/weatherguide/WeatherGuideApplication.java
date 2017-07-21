@@ -3,12 +3,14 @@ package com.example.julia.weatherguide;
 import android.app.Application;
 
 import com.example.julia.weatherguide.di.AppModule;
-import com.example.julia.weatherguide.di.CurrentWeatherComponent;
 import com.example.julia.weatherguide.di.CurrentWeatherModule;
 import com.example.julia.weatherguide.di.DaggerDataComponent;
 import com.example.julia.weatherguide.di.DataComponent;
 import com.example.julia.weatherguide.di.DataModule;
 import com.example.julia.weatherguide.di.PreferencesModule;
+import com.example.julia.weatherguide.di.ScreenRelatedComponent;
+import com.example.julia.weatherguide.di.ScreenRelatedModule;
+import com.example.julia.weatherguide.di.SettingsModule;
 
 /**
  * Created by julia on 15.07.17.
@@ -18,7 +20,7 @@ public class WeatherGuideApplication extends Application {
 
     private static WeatherGuideApplication weatherGuideApp;
     private static DataComponent dataComponent;
-    private static CurrentWeatherComponent currentWeatherComponent;
+    private static ScreenRelatedComponent screenRelatedComponent;
 
     public static WeatherGuideApplication getInstance() {
         return weatherGuideApp;
@@ -38,18 +40,21 @@ public class WeatherGuideApplication extends Application {
                 .appModule(new AppModule(getApplicationContext()))
                 .dataModule(new DataModule())
                 .preferencesModule(new PreferencesModule())
+                .settingsModule(new SettingsModule())
+                .currentWeatherModule(new CurrentWeatherModule())
                 .build();
     }
 
-    public CurrentWeatherComponent plusCurrentWeatherComponent() {
-        if (currentWeatherComponent == null) {
-            currentWeatherComponent = dataComponent.plusCurrentWeatherComponent(new CurrentWeatherModule());
+
+    public ScreenRelatedComponent plusScreenRelatedComponent() {
+        if (screenRelatedComponent == null) {
+            screenRelatedComponent = dataComponent.plusScreenRelatedComponent(new ScreenRelatedModule());
         }
-        return currentWeatherComponent;
+        return screenRelatedComponent;
     }
 
-    public void clearCurrentWeatherComponent() {
-        currentWeatherComponent = null;
+    public void clearScreenRelatedComponent() {
+        screenRelatedComponent = null;
     }
 
 }

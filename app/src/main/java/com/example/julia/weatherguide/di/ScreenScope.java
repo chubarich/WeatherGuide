@@ -6,10 +6,10 @@ import java.lang.annotation.RetentionPolicy;
 import javax.inject.Scope;
 
 /**
- * Created by julia on 20.07.17.
+ * Created by julia on 21.07.17.
  */
 @Scope
 @Retention(RetentionPolicy.RUNTIME)
-public @interface WeatherScope {
+public @interface ScreenScope {
 
 }

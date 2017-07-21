@@ -1,27 +1,32 @@
 package com.example.julia.weatherguide.ui.settings;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 
 import com.example.julia.weatherguide.R;
+import com.example.julia.weatherguide.WeatherGuideApplication;
 import com.example.julia.weatherguide.interactors.SettingsInteractor;
-import com.example.julia.weatherguide.ui.base.BasePresenter;
+import com.example.julia.weatherguide.ui.base.BasePresenterImpl;
+
+import javax.inject.Inject;
 
 /**
  * Created by julia on 16.07.17.
  */
 
-public class SettingsPresenterImpl extends BasePresenter<SettingsView> {
+public class SettingsPresenterImpl extends BasePresenterImpl<SettingsView> implements SettingsPresenter<SettingsView> {
 
-    private final SettingsInteractor interactor;
-    private Context context;
+    @Inject
+    SettingsInteractor interactor;
 
-    public SettingsPresenterImpl(SettingsInteractor interactor, @NonNull Context context) {
-        this.interactor = interactor;
-        this.context = context;
+    @Inject
+    Context context;
+
+    public SettingsPresenterImpl() {
+        WeatherGuideApplication.getDataComponent().inject(this);
     }
 
-    void onRefreshPeriodChanged(String newValue) {
+
+    public void onRefreshPeriodChanged(String newValue) {
         try {
             long period = Long.valueOf(newValue);
             if (period > 0) {

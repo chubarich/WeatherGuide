@@ -1,18 +1,24 @@
 package com.example.julia.weatherguide.interactors;
 
+import com.example.julia.weatherguide.WeatherGuideApplication;
 import com.example.julia.weatherguide.repositories.SettingsRepository;
+
+import javax.inject.Inject;
 
 /**
  * Created by julia on 16.07.17.
  */
 
 public class SettingsInteractorImpl implements SettingsInteractor {
-    private final SettingsRepository repository;
-    private final CurrentWeatherInteractor schedulerInteractor;
 
-    public SettingsInteractorImpl(SettingsRepository repo, CurrentWeatherInteractor schedulerInteractor) {
-        this.repository = repo;
-        this.schedulerInteractor = schedulerInteractor;
+    @Inject
+    SettingsRepository repository;
+
+    @Inject
+    CurrentWeatherInteractor schedulerInteractor;
+
+    public SettingsInteractorImpl() {
+        WeatherGuideApplication.getDataComponent().inject(this);
     }
 
     @Override

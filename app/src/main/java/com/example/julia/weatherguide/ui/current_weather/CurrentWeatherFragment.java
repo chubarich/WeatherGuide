@@ -13,10 +13,11 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.julia.weatherguide.R;
-import com.example.julia.weatherguide.interactors.CurrentWeatherInteractorImpl;
+import com.example.julia.weatherguide.WeatherGuideApplication;
 import com.example.julia.weatherguide.repositories.CurrentWeatherDataModel;
-import com.example.julia.weatherguide.repositories.CurrentWeatherRepositoryImpl;
 import com.example.julia.weatherguide.ui.base.BaseFragment;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -60,7 +61,8 @@ public class CurrentWeatherFragment extends BaseFragment implements CurrentWeath
 
     private Unbinder unbinder;
 
-    private CurrentWeatherPresenter  presenter;
+    @Inject
+    CurrentWeatherPresenter presenter;
 
 
     public static CurrentWeatherFragment newInstance() {
@@ -82,7 +84,6 @@ public class CurrentWeatherFragment extends BaseFragment implements CurrentWeath
 
     @Override
     public void showError() {
-        //FIXME: right view for snackbar
         Snackbar.make(CurrentWeatherFragment.this.currentDegreesTextView, getString(R.string.network_error_description), Snackbar.LENGTH_LONG).show();
     }
 
@@ -124,6 +125,7 @@ public class CurrentWeatherFragment extends BaseFragment implements CurrentWeath
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.current_weather_constr_layout, container, false);
         unbinder = ButterKnife.bind(this, view);
+        WeatherGuideApplication.getInstance().plusScreenRelatedComponent().inject(this);
         return view;
     }
 
@@ -131,7 +133,6 @@ public class CurrentWeatherFragment extends BaseFragment implements CurrentWeath
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         getActivity().setTitle(R.string.left_drawer_menu_title_weather);
-        presenter = new CurrentWeatherPresenter(new CurrentWeatherInteractorImpl(getActivity(), new CurrentWeatherRepositoryImpl()));
         presenter.attachView(this);
     }
 

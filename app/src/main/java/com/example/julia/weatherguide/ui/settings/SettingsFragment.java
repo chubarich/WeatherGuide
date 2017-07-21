@@ -6,13 +6,10 @@ import android.support.v7.preference.PreferenceFragmentCompat;
 import android.widget.Toast;
 
 import com.example.julia.weatherguide.R;
-import com.example.julia.weatherguide.interactors.CurrentWeatherInteractor;
-import com.example.julia.weatherguide.interactors.CurrentWeatherInteractorImpl;
-import com.example.julia.weatherguide.interactors.SettingsInteractorImpl;
-import com.example.julia.weatherguide.repositories.CurrentWeatherRepository;
-import com.example.julia.weatherguide.repositories.CurrentWeatherRepositoryImpl;
-import com.example.julia.weatherguide.repositories.SettingsRepository;
-import com.example.julia.weatherguide.repositories.SettingsRepositoryImpl;
+import com.example.julia.weatherguide.WeatherGuideApplication;
+
+import javax.inject.Inject;
+
 
 /**
  * Created by julia on 09.07.17.
@@ -20,7 +17,8 @@ import com.example.julia.weatherguide.repositories.SettingsRepositoryImpl;
 
 public class SettingsFragment extends PreferenceFragmentCompat  implements SettingsView {
 
-    private SettingsPresenterImpl presenter;
+    @Inject
+    SettingsPresenter presenter;
 
     public static SettingsFragment newInstance() {
         final SettingsFragment fragment = new SettingsFragment();
@@ -43,10 +41,7 @@ public class SettingsFragment extends PreferenceFragmentCompat  implements Setti
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         getActivity().setTitle(R.string.left_drawer_menu_title_settings);
-        CurrentWeatherRepository weatherRepo = new CurrentWeatherRepositoryImpl();
-        CurrentWeatherInteractor weatherInteractor = new CurrentWeatherInteractorImpl(getContext(), weatherRepo );
-        SettingsRepository settingsRepo = new SettingsRepositoryImpl(getContext());
-        presenter = new SettingsPresenterImpl(new SettingsInteractorImpl(settingsRepo, weatherInteractor), getContext());
+        WeatherGuideApplication.getInstance().plusScreenRelatedComponent().inject(this);
         presenter.attachView(this);
     }
 

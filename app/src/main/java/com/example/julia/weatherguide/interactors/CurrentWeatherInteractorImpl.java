@@ -38,8 +38,8 @@ public class CurrentWeatherInteractorImpl implements CurrentWeatherInteractor {
     @Inject
     Context context;
 
-    public CurrentWeatherInteractorImpl(@NonNull Context context, CurrentWeatherRepository repo) {
-        WeatherGuideApplication.getInstance().plusCurrentWeatherComponent().inject(this);
+    public CurrentWeatherInteractorImpl() {
+        WeatherGuideApplication.getDataComponent().inject(this);
     }
 
     @Override

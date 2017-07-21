@@ -6,6 +6,8 @@ import com.example.julia.weatherguide.interactors.CurrentWeatherInteractor;
 import com.example.julia.weatherguide.interactors.CurrentWeatherInteractorImpl;
 import com.example.julia.weatherguide.repositories.CurrentWeatherRepository;
 
+import javax.inject.Singleton;
+
 import dagger.Module;
 import dagger.Provides;
 
@@ -14,16 +16,9 @@ import dagger.Provides;
  */
 @Module
 public class CurrentWeatherModule {
-
-    /*@Provides
-    @WeatherScope
-    public CurrentWeatherRepository provideCurrentWeatherRepository() {
-        return new CurrentWeatherRepositoryImpl();
-    }*/
-
     @Provides
-    @WeatherScope
+    @Singleton
     public CurrentWeatherInteractor provideCurrentWeatherInteractor(Context context, CurrentWeatherRepository repo) {
-        return new CurrentWeatherInteractorImpl(context, repo);
+        return new CurrentWeatherInteractorImpl();
     }
 }
