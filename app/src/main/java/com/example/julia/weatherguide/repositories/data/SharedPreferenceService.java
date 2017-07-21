@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.example.julia.weatherguide.repositories.CurrentWeatherDataModel;
 import com.example.julia.weatherguide.WeatherGuideApplication;
@@ -17,6 +18,8 @@ import io.reactivex.ObservableOnSubscribe;
  */
 
 public class SharedPreferenceService {
+
+    private static final String TAG = SharedPreferenceService.class.getSimpleName();
 
     private static final String CURRENT_WEATHER_PREFERENCES = "current_weather";
     private static final String PREF_TEMPERATURE = "current_temperature";
@@ -63,7 +66,7 @@ public class SharedPreferenceService {
     }
 
     public void saveToSharedPreferences(@NonNull CurrentWeatherDataModel data) {
-
+        Log.d(TAG, "saveToSharedPreferences");
         Context context = WeatherGuideApplication.getInstance().getApplicationContext();
         SharedPreferences sharedPreferences = context.getSharedPreferences(CURRENT_WEATHER_PREFERENCES, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -77,11 +80,6 @@ public class SharedPreferenceService {
     }
 
     private CurrentWeatherDataModel readFromSharedPreferences() {
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-
-        }
         CurrentWeatherDataModel data = new CurrentWeatherDataModel();
         Context context = WeatherGuideApplication.getInstance().getApplicationContext();
         SharedPreferences sharedPreferences = context.getSharedPreferences(CURRENT_WEATHER_PREFERENCES, Context.MODE_PRIVATE);

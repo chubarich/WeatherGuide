@@ -19,6 +19,7 @@ ext.versions = [
         rxandroid                    : '2.0.1',
         firebase                     : '0.7.0',
         picasso                      : '2.5.2',
+        dagger                       : '2.11',
 
         espresso                     : '2.2.2',
         junit                        : '4.12',
@@ -50,6 +51,8 @@ ext.libraries = [
         rxandroid               : "io.reactivex.rxjava2:rxandroid:$versions.rxandroid",
         firebase                : "com.firebase:firebase-jobdispatcher:$versions.firebase",
         picasso                 : "com.squareup.picasso:picasso:$versions.picasso",
+        dagger                  : "com.google.dagger:dagger:$versions.dagger",
+        daggerProcessor         : "com.google.dagger:dagger-compiler:$versions.dagger",
         // Test dependencies
         junit                   : "junit:junit:$versions.junit",
         supportTestRunner       : "com.android.support.test:runner:$versions.supportTestRunner",

@@ -2,8 +2,8 @@ package com.example.julia.weatherguide.interactors;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
+import com.example.julia.weatherguide.WeatherGuideApplication;
 import com.example.julia.weatherguide.repositories.CurrentWeatherDataModel;
 import com.example.julia.weatherguide.repositories.CurrentWeatherRepository;
 import com.example.julia.weatherguide.services.current_weather_refresh.CurrentWeatherRefreshDataService;
@@ -17,6 +17,8 @@ import com.firebase.jobdispatcher.Trigger;
 
 import java.util.concurrent.TimeUnit;
 
+import javax.inject.Inject;
+
 import io.reactivex.Observable;
 
 /**
@@ -25,15 +27,19 @@ import io.reactivex.Observable;
 
 public class CurrentWeatherInteractorImpl implements CurrentWeatherInteractor {
 
+    private final String TAG = CurrentWeatherInteractorImpl.class.getSimpleName();
+
     private static final String JOB_TAG = "refresh_service";
     private static final int WINDOW_IN_MINUTES = 30;
 
-    private CurrentWeatherRepository repository;
-    private Context context;
+    @Inject
+    CurrentWeatherRepository repository;
+
+    @Inject
+    Context context;
 
     public CurrentWeatherInteractorImpl(@NonNull Context context, CurrentWeatherRepository repo) {
-        repository = repo;
-        this.context = context;
+        WeatherGuideApplication.getInstance().plusCurrentWeatherComponent().inject(this);
     }
 
     @Override
@@ -63,8 +69,8 @@ public class CurrentWeatherInteractorImpl implements CurrentWeatherInteractor {
                 .setLifetime(Lifetime.FOREVER)
                 .setRecurring(true)
                 .setConstraints(Constraint.ON_ANY_NETWORK)
-                .setTrigger(Trigger.executionWindow((int) TimeUnit.MINUTES.toMillis(interval),
-                        (int) TimeUnit.MINUTES.toMillis(interval + WINDOW_IN_MINUTES) ))
+                .setTrigger(Trigger.executionWindow((int) TimeUnit.MINUTES.toSeconds(interval),
+                        (int) TimeUnit.MINUTES.toSeconds(interval + WINDOW_IN_MINUTES) ))
                 .setReplaceCurrent(true)
                 .build();
         dispatcher.schedule(job);

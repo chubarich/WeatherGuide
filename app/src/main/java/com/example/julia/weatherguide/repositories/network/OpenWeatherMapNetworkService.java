@@ -2,7 +2,6 @@ package com.example.julia.weatherguide.repositories.network;
 
 import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.example.julia.weatherguide.WeatherGuideApplication;
 import com.example.julia.weatherguide.repositories.CurrentWeatherDataModel;
@@ -12,7 +11,6 @@ import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 import java.util.Locale;
-
 
 import io.reactivex.Observable;
 import okhttp3.HttpUrl;
@@ -42,7 +40,6 @@ public class OpenWeatherMapNetworkService {
 
     protected OpenWeatherMapNetworkService() {
         String currentLang = Locale.getDefault().getLanguage();
-        Log.d(TAG, "current lang " + currentLang);
         Gson gson = new GsonBuilder()
                 .setLenient()
                 .create();

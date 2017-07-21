@@ -2,9 +2,12 @@ package com.example.julia.weatherguide.ui.current_weather;
 
 import android.support.annotation.NonNull;
 
+import com.example.julia.weatherguide.WeatherGuideApplication;
 import com.example.julia.weatherguide.interactors.CurrentWeatherInteractor;
 import com.example.julia.weatherguide.repositories.CurrentWeatherRepository;
 import com.example.julia.weatherguide.ui.base.BasePresenter;
+
+import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -16,11 +19,14 @@ import retrofit2.HttpException;
 
 public class CurrentWeatherPresenter extends BasePresenter<CurrentWeatherView> {
 
-    private final CurrentWeatherInteractor weatherInteractor;
+    @Inject
+    CurrentWeatherInteractor weatherInteractor;
+
     private static CurrentWeatherViewState viewState = new CurrentWeatherViewState();
 
     public CurrentWeatherPresenter(CurrentWeatherInteractor interactor) {
-        weatherInteractor = interactor;
+        //TODO: is this right?
+        WeatherGuideApplication.getInstance().plusCurrentWeatherComponent().inject(this);
 
     }
 

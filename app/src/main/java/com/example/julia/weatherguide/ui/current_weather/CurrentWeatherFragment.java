@@ -59,6 +59,7 @@ public class CurrentWeatherFragment extends BaseFragment implements CurrentWeath
     TextView emptyTextView;
 
     private Unbinder unbinder;
+
     private CurrentWeatherPresenter  presenter;
 
 
@@ -129,6 +130,7 @@ public class CurrentWeatherFragment extends BaseFragment implements CurrentWeath
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        getActivity().setTitle(R.string.left_drawer_menu_title_weather);
         presenter = new CurrentWeatherPresenter(new CurrentWeatherInteractorImpl(getActivity(), new CurrentWeatherRepositoryImpl()));
         presenter.attachView(this);
     }
