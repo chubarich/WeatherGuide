@@ -1,8 +1,7 @@
-package com.example.julia.weatherguide.repositories;
+package com.example.julia.weatherguide.repositories.data;
 
 import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
-import android.support.annotation.StringDef;
 
 /**
  * Created by julia on 15.07.17.

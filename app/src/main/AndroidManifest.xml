@@ -23,7 +23,7 @@
 
         <service
             android:exported="false"
-            android:name=".services.current_weather_refresh.CurrentWeatherRefreshDataService">
+            android:name=".services.refresh.CurrentWeatherRefreshDataService">
             <intent-filter>
                 <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE"/>
             </intent-filter>

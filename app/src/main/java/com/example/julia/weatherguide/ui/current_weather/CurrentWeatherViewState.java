@@ -1,6 +1,6 @@
 package com.example.julia.weatherguide.ui.current_weather;
 
-import com.example.julia.weatherguide.repositories.CurrentWeatherDataModel;
+import com.example.julia.weatherguide.repositories.data.CurrentWeatherDataModel;
 
 /**
  * Created by julia on 16.07.17.
@@ -42,7 +42,6 @@ public class CurrentWeatherViewState {
     public void setReasonForLoadingUpdate(boolean reasonForLoadingUpdate) {
         this.reasonForLoadingUpdate = reasonForLoadingUpdate;
     }
-
 
     public CurrentWeatherDataModel getData() {
         return data;

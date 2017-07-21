@@ -11,11 +11,13 @@ import icepick.Icepick;
  */
 
 public class BaseFragment extends Fragment {
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Icepick.restoreInstanceState(this, savedInstanceState);
     }
+
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
