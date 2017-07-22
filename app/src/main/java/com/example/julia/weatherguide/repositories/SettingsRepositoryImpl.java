@@ -3,34 +3,28 @@ package com.example.julia.weatherguide.repositories;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
+import android.support.v4.content.SharedPreferencesCompat;
+import android.support.v7.preference.PreferenceManager;
 
 import com.example.julia.weatherguide.R;
 import com.example.julia.weatherguide.WeatherGuideApplication;
+import com.example.julia.weatherguide.repositories.storage.preferences.SharedPreferenceService;
 
 import javax.inject.Inject;
 
-/**
- * Created by julia on 16.07.17.
- */
-
 public class SettingsRepositoryImpl implements SettingsRepository {
 
-    @Inject
-    Context context;
+  private final Context context;
 
-    @Inject
-    SharedPreferences sharedPreferences;
+  public SettingsRepositoryImpl(Context context) {
+    this.context = context;
+  }
 
-    public SettingsRepositoryImpl(@NonNull Context context) {
-        WeatherGuideApplication.getDataComponent().inject(this);
-    }
-
-    @Override
-    public void saveRefreshInterval(long interval) {
-        sharedPreferences.edit()
-                .putLong(context.getString(R.string.refresh_key), interval)
-                .apply();
-    }
-
+  @Override
+  public void saveRefreshInterval(long interval) {
+    PreferenceManager.getDefaultSharedPreferences(context).edit()
+        .putLong(context.getString(R.string.refresh_key), interval)
+        .apply();
+  }
 
 }

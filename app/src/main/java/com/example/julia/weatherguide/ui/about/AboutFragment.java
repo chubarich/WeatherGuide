@@ -1,22 +1,19 @@
-package com.example.julia.weatherguide;
+package com.example.julia.weatherguide.ui.about;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.julia.weatherguide.ui.base.BaseFragment;
+import com.example.julia.weatherguide.R;
+import com.example.julia.weatherguide.ui.base.view.BaseFragment;
 
-/**
- * Created by julia on 09.07.17.
- */
-
-public class AboutFragment extends BaseFragment {
+public class AboutFragment extends Fragment {
 
     public static AboutFragment newInstance() {
-        final AboutFragment fragment = new AboutFragment();
-        return fragment;
+        return new AboutFragment();
     }
 
     @Nullable

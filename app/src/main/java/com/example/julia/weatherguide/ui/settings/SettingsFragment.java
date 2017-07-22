@@ -3,57 +3,80 @@ package com.example.julia.weatherguide.ui.settings;
 import android.os.Bundle;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceFragmentCompat;
+import android.view.View;
 import android.widget.Toast;
 
 import com.example.julia.weatherguide.R;
 import com.example.julia.weatherguide.WeatherGuideApplication;
+import com.example.julia.weatherguide.ui.base.presenter.PresenterFactory;
+import com.example.julia.weatherguide.ui.base.view.BasePreferenceFragment;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
 
+import static android.support.v7.preference.R.layout.preference;
 
-/**
- * Created by julia on 09.07.17.
- */
+public class SettingsFragment extends BasePreferenceFragment<SettingsPresenter, SettingsView>
+    implements SettingsView {
 
-public class SettingsFragment extends PreferenceFragmentCompat  implements SettingsView {
+  @Inject
+  Provider<PresenterFactory<SettingsPresenter, SettingsView>> presenterFactoryProvider;
 
-    @Inject
-    SettingsPresenter presenter;
+  // --------------------------------------- static -----------------------------------------------
 
-    public static SettingsFragment newInstance() {
-        final SettingsFragment fragment = new SettingsFragment();
-        return fragment;
-    }
-    @Override
-    public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-        addPreferencesFromResource(R.xml.fragment_preferences);
-        findPreference(getString(R.string.refresh_key)).setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-                presenter.onRefreshPeriodChanged((String) newValue);
-                return false;
-            }
+  public static SettingsFragment newInstance() {
+    return new SettingsFragment();
+  }
+
+  // -------------------------------------- lifecycle ---------------------------------------------
+
+  @Override
+  public void onActivityCreated(Bundle savedInstanceState) {
+    super.onActivityCreated(savedInstanceState);
+    ((WeatherGuideApplication) getActivity().getApplication())
+        .getSettingsComponent()
+        .inject(this);
+  }
+
+  @Override
+  public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+    addPreferencesFromResource(R.xml.fragment_preferences);
+    findPreference(getString(R.string.refresh_key))
+        .setOnPreferenceChangeListener((Preference preference, Object newValue) -> {
+          ((SettingsPresenter) getPresenter()).onRefreshPeriodChanged((String) newValue);
+          return false;
         });
+  }
 
-    }
+  @Override
+  public void onStart() {
+    super.onStart();
+    getActivity().setTitle(R.string.left_drawer_menu_title_settings);
+  }
 
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        getActivity().setTitle(R.string.left_drawer_menu_title_settings);
-        WeatherGuideApplication.getInstance().plusScreenRelatedComponent().inject(this);
-        presenter.attachView(this);
-    }
+  // ---------------------------------------- SettingsView ----------------------------------------
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        presenter.detachView();
-    }
+  @Override
+  public void showError() {
+    Toast.makeText(getContext(), getString(R.string.wrong_time_value), Toast.LENGTH_SHORT).show();
+  }
 
-    @Override
-    public void showError(String error) {
-        //TODO:change to dialog
-        Toast.makeText(getContext(), error, Toast.LENGTH_SHORT).show();
-    }
+  // ------------------------------------ BasePreferenceFragment ----------------------------------
+
+
+  @Override
+  protected SettingsView getViewInterface() {
+    return this;
+  }
+
+  @Override
+  protected PresenterFactory<SettingsPresenter, SettingsView> getPresenterFactory() {
+    return presenterFactoryProvider.get();
+  }
+
+  @Override
+  protected int getFragmentId() {
+    return SettingsFragment.class.getSimpleName().hashCode();
+  }
+
 }

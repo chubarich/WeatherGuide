@@ -6,33 +6,36 @@ import com.example.julia.weatherguide.repositories.data.CurrentWeatherDataModel;
 import com.example.julia.weatherguide.repositories.storage.preferences.SharedPreferenceService;
 import com.example.julia.weatherguide.repositories.network.OpenWeatherMapNetworkService;
 
+import io.reactivex.Maybe;
 import io.reactivex.Observable;
-
-
-/**
- * Created by julia on 15.07.17.
- */
+import io.reactivex.Single;
 
 public class CurrentWeatherRepositoryImpl implements CurrentWeatherRepository {
 
-    private static final String TAG = CurrentWeatherRepositoryImpl.class.getSimpleName();
+  private final SharedPreferenceService sharedPreferenceService;
+  private final OpenWeatherMapNetworkService openWeatherMapNetworkService;
 
-    @Override
-    public Observable<CurrentWeatherDataModel> getCurrentWeatherForLocation(@NonNull String location) {
-            return SharedPreferenceService.getService().getCurrentWeather(location)
-                    .switchIfEmpty(getFreshCurrentWeatherForLocation(location));
-    }
+  public CurrentWeatherRepositoryImpl(SharedPreferenceService sharedPreferenceService,
+                                      OpenWeatherMapNetworkService openWeatherMapNetworkService) {
+    this.sharedPreferenceService = sharedPreferenceService;
+    this.openWeatherMapNetworkService = openWeatherMapNetworkService;
+  }
 
-    @Override
-    public Observable<CurrentWeatherDataModel> getFreshCurrentWeatherForLocation(@NonNull String location) {
-        Observable<CurrentWeatherDataModel> dataFromNetwork = OpenWeatherMapNetworkService.getService().getCurrentWeather(location);
-        return dataFromNetwork.doOnNext(data -> {
-                    SharedPreferenceService.getService().saveToSharedPreferences(data);
-                });
-    }
+  @Override
+  public Single<CurrentWeatherDataModel> getCurrentWeatherForLocation(@NonNull String location) {
+    return sharedPreferenceService.getCurrentWeather(location)
+        .switchIfEmpty(getFreshCurrentWeatherForLocation(location).toMaybe())
+        .toSingle();
+  }
 
-    @Override
-    public String getCurrentLocation() {
-        return SharedPreferenceService.getService().getCurrentLocationId();
-    }
+  @Override
+  public Single<CurrentWeatherDataModel> getFreshCurrentWeatherForLocation(@NonNull String location) {
+    return openWeatherMapNetworkService.getCurrentWeather(location)
+        .doOnSuccess(sharedPreferenceService::saveToSharedPreferences);
+  }
+
+  @Override
+  public String getCurrentLocation() {
+    return sharedPreferenceService.getCurrentLocationId();
+  }
 }

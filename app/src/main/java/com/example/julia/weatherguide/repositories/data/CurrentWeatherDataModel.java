@@ -3,79 +3,77 @@ package com.example.julia.weatherguide.repositories.data;
 import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 
-/**
- * Created by julia on 15.07.17.
- */
-
 public class CurrentWeatherDataModel {
 
-    private String locationId;
+  private String locationId;
 
-    public String getLocationName() {
-        return locationName;
-    }
+  private String locationName;
 
-    public void setLocationName(String locationName) {
-        this.locationName = locationName;
-    }
+  private String currentTemperature;
 
-    private String locationName;
-    private String currentTemperature;
-    private String weatherDescription;
-    private String iconId;
-    private int humidity;
+  private String weatherDescription;
+
+  private String iconId;
+
+  private int humidity;
+
+  private Bitmap icon;
 
 
-    private Bitmap icon;
+  public String getLocationName() {
+    return locationName;
+  }
 
-    public void setLocationId(@NonNull String location) {
-        this.locationId = location;
-    }
+  public void setLocationName(String locationName) {
+    this.locationName = locationName;
+  }
 
-    public String getLocationId() {
-        return locationId;
-    }
+  public void setLocationId(@NonNull String location) {
+    this.locationId = location;
+  }
 
-    public int getHumidity() {
-        return humidity;
-    }
+  public String getLocationId() {
+    return locationId;
+  }
 
-    public void setHumidity(int humidity) {
-        this.humidity = humidity;
-    }
+  public int getHumidity() {
+    return humidity;
+  }
 
-    public void setCurrentTemperature(@NonNull String temp) {
-        currentTemperature = temp;
-    }
+  public void setHumidity(int humidity) {
+    this.humidity = humidity;
+  }
 
-    public String getCurrentTemperature() {
-        return currentTemperature;
-    }
+  public void setCurrentTemperature(@NonNull String temp) {
+    currentTemperature = temp;
+  }
 
-    public void setWeatherDescription(@NonNull String description) {
-        weatherDescription = description;
-    }
+  public String getCurrentTemperature() {
+    return currentTemperature;
+  }
 
-    public String getWeatherDescription() {
-        return weatherDescription;
-    }
+  public void setWeatherDescription(@NonNull String description) {
+    weatherDescription = description;
+  }
 
-    public void setIconId(@NonNull String id) {
-        iconId = id;
-    }
+  public String getWeatherDescription() {
+    return weatherDescription;
+  }
 
-    public String getIconId() {
-        return iconId;
-    }
+  public void setIconId(@NonNull String id) {
+    iconId = id;
+  }
 
+  public String getIconId() {
+    return iconId;
+  }
 
-    public Bitmap getIcon() {
-        return icon;
-    }
+  public Bitmap getIcon() {
+    return icon;
+  }
 
-    public void setIcon(Bitmap icon) {
-        this.icon = icon;
-    }
-
+  public void setIcon(Bitmap icon) {
+    this.icon = icon;
+  }
 
 }

@@ -1,4 +1,4 @@
-package com.example.julia.weatherguide;
+package com.example.julia.weatherguide.ui.main;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -8,18 +8,22 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
-import com.example.julia.weatherguide.ui.base.BaseActivity;
+import com.example.julia.weatherguide.R;
+import com.example.julia.weatherguide.ui.about.AboutFragment;
+import com.example.julia.weatherguide.ui.base.view.BaseActivity;
 import com.example.julia.weatherguide.ui.current_weather.CurrentWeatherFragment;
 import com.example.julia.weatherguide.ui.settings.SettingsFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import icepick.Icepick;
 import icepick.State;
 
-public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
   @BindView(R.id.drawer_layout)
   DrawerLayout mDrawerLayout;
@@ -36,6 +40,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    Icepick.restoreInstanceState(this, savedInstanceState);
     setContentView(R.layout.activity_main);
     ButterKnife.bind(this);
     setupListeners(savedInstanceState);
@@ -64,6 +69,12 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     } else {
       super.onBackPressed();
     }
+  }
+
+  @Override
+  protected void onSaveInstanceState(Bundle outState) {
+    super.onSaveInstanceState(outState);
+    Icepick.saveInstanceState(this, outState);
   }
 
   @Override

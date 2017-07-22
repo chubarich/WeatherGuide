@@ -2,59 +2,36 @@ package com.example.julia.weatherguide;
 
 import android.app.Application;
 
+import com.example.julia.weatherguide.di.components.CurrentWeatherComponent;
 import com.example.julia.weatherguide.di.components.DaggerDataComponent;
+import com.example.julia.weatherguide.di.components.SettingsComponent;
 import com.example.julia.weatherguide.di.modules.AppModule;
-import com.example.julia.weatherguide.di.modules.CurrentWeatherModule;
 import com.example.julia.weatherguide.di.components.DataComponent;
-import com.example.julia.weatherguide.di.modules.DataModule;
-import com.example.julia.weatherguide.di.modules.PreferencesModule;
-import com.example.julia.weatherguide.di.components.ScreenRelatedComponent;
-import com.example.julia.weatherguide.di.modules.ScreenRelatedModule;
+import com.example.julia.weatherguide.di.modules.CurrentWeatherModule;
 import com.example.julia.weatherguide.di.modules.SettingsModule;
-
-/**
- * Created by julia on 15.07.17.
- */
 
 public class WeatherGuideApplication extends Application {
 
-    private static WeatherGuideApplication weatherGuideApp;
-    private static DataComponent dataComponent;
-    private static ScreenRelatedComponent screenRelatedComponent;
+  private DataComponent dataComponent;
 
-    public static WeatherGuideApplication getInstance() {
-        return weatherGuideApp;
-    }
+  @Override
+  public void onCreate() {
+    super.onCreate();
+    dataComponent = DaggerDataComponent.builder()
+        .appModule(new AppModule(getApplicationContext()))
+        .build();
+  }
 
-    public static DataComponent getDataComponent() {
-        return dataComponent;
-    }
+  public SettingsComponent getSettingsComponent() {
+    return dataComponent.plusSettingsComponent(new SettingsModule());
+  }
 
+  public CurrentWeatherComponent getCurrentWeatherComponent() {
+    return dataComponent.plusCurrentWeatherComponent(new CurrentWeatherModule());
+  }
 
-
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        weatherGuideApp = this;
-        dataComponent = DaggerDataComponent.builder()
-                .appModule(new AppModule(getApplicationContext()))
-                .dataModule(new DataModule())
-                .preferencesModule(new PreferencesModule())
-                .settingsModule(new SettingsModule())
-                .currentWeatherModule(new CurrentWeatherModule())
-                .build();
-    }
-
-
-    public ScreenRelatedComponent plusScreenRelatedComponent() {
-        if (screenRelatedComponent == null) {
-            screenRelatedComponent = dataComponent.plusScreenRelatedComponent(new ScreenRelatedModule());
-        }
-        return screenRelatedComponent;
-    }
-
-    public void clearScreenRelatedComponent() {
-        screenRelatedComponent = null;
-    }
+  public DataComponent getDataComponent() {
+    return dataComponent;
+  }
 
 }

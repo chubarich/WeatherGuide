@@ -13,7 +13,7 @@
         android:supportsRtl="true"
         android:name=".WeatherGuideApplication"
         android:theme="@style/AppTheme.NoActionBar.TransparentStatusBar">
-        <activity android:name=".MainActivity">
+        <activity android:name=".ui.main.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

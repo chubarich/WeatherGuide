@@ -1,5 +1,6 @@
 package com.example.julia.weatherguide.repositories.network;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 
@@ -13,6 +14,7 @@ import java.io.IOException;
 import java.util.Locale;
 
 import io.reactivex.Observable;
+import io.reactivex.Single;
 import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
@@ -21,79 +23,67 @@ import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-
-/**
- * Created by julia on 15.07.17.
- */
-
 public class OpenWeatherMapNetworkService {
 
-    private static final String TAG = OpenWeatherMapNetworkService.class.getSimpleName();
-    private static final String BASE_URL = "http://api.openweathermap.org/";
-    private static final String ICON_URL_HEAD = "http://openweathermap.org/img/w/";
-    private static final String ICON_URL_TAIL = ".png";
-    private static final String API_KEY = "1f68b1b61499afeb695fe6ac1b090082";
-    private static final String METRIC_NAME = "metric";
+  private static final String BASE_URL = "http://api.openweathermap.org/";
+  private static final String ICON_URL_HEAD = "http://openweathermap.org/img/w/";
+  private static final String ICON_URL_TAIL = ".png";
+  private static final String API_KEY = "1f68b1b61499afeb695fe6ac1b090082";
+  private static final String METRIC_NAME = "metric";
 
-    private static  OpenWeatherMapAPI weatherApi = null;
-    private static  OpenWeatherMapNetworkService serviceInstance = null;
+  private final Context applicationContext;
+  private final OpenWeatherMapAPI weatherApi;
 
-    protected OpenWeatherMapNetworkService() {
-        String currentLang = Locale.getDefault().getLanguage();
-        Gson gson = new GsonBuilder()
-                .setLenient()
-                .create();
-        OkHttpClient okHttpClient = new OkHttpClient().newBuilder().addInterceptor(new Interceptor() {
-            @Override
-            public okhttp3.Response intercept(Chain chain) throws IOException {
-                Request original = chain.request();
-                HttpUrl originalHttpUrl = original.url();
 
-                HttpUrl url = originalHttpUrl.newBuilder()
-                        .addQueryParameter("units", METRIC_NAME)
-                        .addQueryParameter("lang", currentLang)
-                        .addQueryParameter("APPID", API_KEY)
-                        .build();
+  public OpenWeatherMapNetworkService(Context applicationContext) {
+    this.applicationContext = applicationContext;
 
-                Request.Builder requestBuilder = original.newBuilder()
-                        .url(url);
+    Gson gson = new GsonBuilder()
+        .setLenient()
+        .create();
 
-                Request request = requestBuilder.build();
-                return chain.proceed(request);
-            }
-        }).build();
+    Retrofit retrofit = new Retrofit.Builder()
+        .baseUrl(BASE_URL)
+        .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+        .addConverterFactory(GsonConverterFactory.create(gson))
+        .client(buildOkHttpClient(Locale.getDefault().getLanguage()))
+        .build();
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(BASE_URL)
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create(gson))
-                .client(okHttpClient)
-                .build();
+    weatherApi = retrofit.create(OpenWeatherMapAPI.class);
+  }
 
-        weatherApi = retrofit.create(OpenWeatherMapAPI.class);
-    }
+  public Single<CurrentWeatherDataModel> getCurrentWeather(@NonNull String location) {
+    return weatherApi.getCurrentWeatherForLocation(location).map(weatherInCity -> {
+      CurrentWeatherDataModel data = new CurrentWeatherDataModel();
+      data.setLocationName(weatherInCity.getName());
+      data.setLocationId(weatherInCity.getId().toString());
+      data.setCurrentTemperature(String.valueOf(weatherInCity.getMain().getTemp()));
+      data.setHumidity(weatherInCity.getMain().getHumidity());
+      data.setIconId(weatherInCity.getWeather().get(0).getIcon());
+      data.setWeatherDescription(weatherInCity.getWeather().get(0).getDescription());
 
-    public synchronized static OpenWeatherMapNetworkService getService() {
-        if (serviceInstance == null) {
-            serviceInstance = new OpenWeatherMapNetworkService();
-        }
-        return serviceInstance;
-    }
+      Bitmap bitmap = Picasso.with(applicationContext.getApplicationContext())
+          .load(ICON_URL_HEAD + data.getIconId() + ICON_URL_TAIL)
+          .get();
+      data.setIcon(bitmap);
 
-    public Observable<CurrentWeatherDataModel> getCurrentWeather (@NonNull String location) {
-        return weatherApi.getCurrentWeatherForLocation(location).map(weatherInCity -> {
-            CurrentWeatherDataModel data = new CurrentWeatherDataModel();
-            data.setLocationName(weatherInCity.getName());
-            data.setLocationId(weatherInCity.getId().toString());
-            data.setCurrentTemperature(String.valueOf(weatherInCity.getMain().getTemp()));
-            data.setHumidity(weatherInCity.getMain().getHumidity());
-            data.setIconId(weatherInCity.getWeather().get(0).getIcon());
-            data.setWeatherDescription(weatherInCity.getWeather().get(0).getDescription());
-            Bitmap bitmap = Picasso.with(WeatherGuideApplication.getInstance().getApplicationContext())
-                    .load(ICON_URL_HEAD + data.getIconId() + ICON_URL_TAIL)
-                    .get();
-            data.setIcon(bitmap);
-            return data;
-        });
-    }
+      return data;
+    });
+  }
+
+  private OkHttpClient buildOkHttpClient(String currentLang) {
+    return new OkHttpClient().newBuilder().addInterceptor((chain) -> {
+      Request original = chain.request();
+      HttpUrl originalHttpUrl = original.url();
+      HttpUrl url = originalHttpUrl.newBuilder()
+          .addQueryParameter("units", METRIC_NAME)
+          .addQueryParameter("lang", currentLang)
+          .addQueryParameter("APPID", API_KEY)
+          .build();
+      Request.Builder requestBuilder = original.newBuilder()
+          .url(url);
+      Request request = requestBuilder.build();
+      return chain.proceed(request);
+    }).build();
+  }
 }
