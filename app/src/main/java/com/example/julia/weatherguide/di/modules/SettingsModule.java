@@ -33,8 +33,7 @@ public class SettingsModule {
 
     @Provides
     @ScreenScope
-    PresenterFactory<SettingsPresenter, SettingsView> providePresenterFactory(
-        SettingsInteractor settingsInteractor) {
+    PresenterFactory<SettingsPresenter, SettingsView> providePresenterFactory(SettingsInteractor settingsInteractor) {
         return new SettingsPresenter.Factory(settingsInteractor);
     }
 

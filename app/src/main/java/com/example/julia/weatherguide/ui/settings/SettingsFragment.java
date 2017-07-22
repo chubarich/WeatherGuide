@@ -30,12 +30,13 @@ public class SettingsFragment extends BasePreferenceFragment<SettingsPresenter, 
 
   // -------------------------------------- lifecycle ---------------------------------------------
 
+
   @Override
   public void onActivityCreated(Bundle savedInstanceState) {
-    super.onActivityCreated(savedInstanceState);
     ((WeatherGuideApplication) getActivity().getApplication())
         .getSettingsComponent()
         .inject(this);
+    super.onActivityCreated(savedInstanceState);
   }
 
   @Override

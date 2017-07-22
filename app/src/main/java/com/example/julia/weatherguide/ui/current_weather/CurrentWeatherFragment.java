@@ -69,10 +69,15 @@ public class CurrentWeatherFragment extends BaseFragment<CurrentWeatherPresenter
                            @Nullable Bundle savedInstanceState) {
     View view = super.onCreateView(inflater, container, savedInstanceState);
     unbinder = ButterKnife.bind(this, view);
+    return view;
+  }
+
+  @Override
+  public void onActivityCreated(Bundle savedInstanceState) {
     ((WeatherGuideApplication)getActivity().getApplication())
         .getCurrentWeatherComponent()
         .inject(this);
-    return view;
+    super.onActivityCreated(savedInstanceState);
   }
 
   @Override
