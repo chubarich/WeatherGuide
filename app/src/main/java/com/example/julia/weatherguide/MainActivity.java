@@ -3,6 +3,7 @@ package com.example.julia.weatherguide;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -18,93 +19,97 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import icepick.State;
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    @BindView(R.id.drawer_layout) DrawerLayout mDrawerLayout;
-    @BindView(R.id.nv_main) NavigationView mDrawerMenu;
-    @BindView(R.id.toolbar) Toolbar mToolbar;
+  @BindView(R.id.drawer_layout)
+  DrawerLayout mDrawerLayout;
+  @BindView(R.id.nv_main)
+  NavigationView mDrawerMenu;
+  @BindView(R.id.toolbar)
+  Toolbar mToolbar;
 
-    @State
-    int mCurrentFragmentId = Integer.MAX_VALUE;
+  @State
+  int mCurrentFragmentId = Integer.MAX_VALUE;
 
-    private ActionBarDrawerToggle mDrawerToggle;
+  private ActionBarDrawerToggle mDrawerToggle;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        ButterKnife.bind(this);
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_main);
+    ButterKnife.bind(this);
+    setupListeners(savedInstanceState);
+  }
 
+  @Override
+  protected void onPostCreate(@Nullable Bundle savedInstanceState) {
+    super.onPostCreate(savedInstanceState);
+    mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.drawer_open, R.string.drawer_close);
+    mDrawerLayout.addDrawerListener(mDrawerToggle);
+    mDrawerToggle.syncState();
+  }
 
-        setSupportActionBar(mToolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
-        if (savedInstanceState == null) {
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.main_content, CurrentWeatherFragment.newInstance())
-                    .commit();
-            mCurrentFragmentId = R.id.action_to_current_weather;
-        }
-        mDrawerMenu.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                int id = item.getItemId();
-                if (id == mCurrentFragmentId) {
-                    mDrawerLayout.closeDrawer(GravityCompat.START);
-                    return true;
-                }
-                switch (id) {
-                    case R.id.action_to_current_weather:
-                        getSupportFragmentManager()
-                                .beginTransaction()
-                                .replace(R.id.main_content, CurrentWeatherFragment.newInstance())
-                                .commit();
-                        break;
-                    case R.id.action_to_settings:
-                        getSupportFragmentManager()
-                                .beginTransaction()
-                                .replace(R.id.main_content, SettingsFragment.newInstance())
-                                .commit();
-                        break;
-                    case R.id.action_to_about:
-                        getSupportFragmentManager()
-                                .beginTransaction()
-                                .replace(R.id.main_content, AboutFragment.newInstance())
-                                .commit();
-                        break;
-                }
-                mCurrentFragmentId = id;
-                mDrawerLayout.closeDrawer(GravityCompat.START);
-                return true;
-            }
-        });
+  @Override
+  public boolean onOptionsItemSelected(MenuItem item) {
+    if (mDrawerToggle.onOptionsItemSelected(item)) {
+      return true;
+    }
+    return super.onOptionsItemSelected(item);
+  }
+
+  @Override
+  public void onBackPressed() {
+    if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
+      mDrawerLayout.closeDrawers();
+    } else {
+      super.onBackPressed();
+    }
+  }
+
+  @Override
+  public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+    int id = item.getItemId();
+    if (id != mCurrentFragmentId) {
+      replaceFragment(id);
+    }
+    mDrawerLayout.closeDrawer(GravityCompat.START);
+    return true;
+  }
+
+  private void setupListeners(Bundle savedInstanceState) {
+    setSupportActionBar(mToolbar);
+    if (getSupportActionBar() != null) {
+      getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+      getSupportActionBar().setHomeButtonEnabled(true);
     }
 
+    if (savedInstanceState == null) {
+      replaceFragment(R.id.action_to_current_weather);
+      mDrawerMenu.setCheckedItem(R.id.action_to_current_weather);
+    }
+    mDrawerMenu.setNavigationItemSelectedListener(MainActivity.this);
+  }
 
-    @Override
-    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.drawer_open, R.string.drawer_close);
-        mDrawerLayout.addDrawerListener(mDrawerToggle);
-        mDrawerToggle.syncState();
+  private void replaceFragment(int id) {
+    Fragment fragment;
+    switch (id) {
+      case R.id.action_to_current_weather:
+        fragment = CurrentWeatherFragment.newInstance();
+        break;
+      case R.id.action_to_settings:
+        fragment = SettingsFragment.newInstance();
+        break;
+      case R.id.action_to_about:
+        fragment = AboutFragment.newInstance();
+        break;
+      default:
+        throw new IllegalStateException("Unknown fragment id");
     }
 
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (mDrawerToggle.onOptionsItemSelected(item)) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
-            mDrawerLayout.closeDrawers();
-        } else {
-            super.onBackPressed();
-        }
-    }
+    getSupportFragmentManager()
+        .beginTransaction()
+        .replace(R.id.main_content, fragment)
+        .commit();
+    mCurrentFragmentId = id;
+  }
 }
