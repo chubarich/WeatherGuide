@@ -71,14 +71,18 @@ public class SharedPreferenceServiceImpl implements SharedPreferenceService {
 
     @Override
     public Completable saveWeatherForCurrentLocation(@NonNull WeatherDataModel data) {
-        return Completable.fromAction(
-            () -> sharedPreferences.edit()
-                .putString(PREF_DESCRIPTION, data.getWeatherDescription())
-                .putInt(PREF_HUMIDITY, data.getHumidity())
-                .putString(PREF_ICON_ID, data.getIconId())
-                .putString(PREF_TEMPERATURE, data.getCurrentTemperature())
-                .commit()
-        );
+        if (!isLocationInitialized()) {
+            return Completable.error(new ExceptionBundle(ExceptionBundle.Reason.LOCATION_NOT_INITIALIZED));
+        } else {
+            return Completable.fromAction(
+                () -> sharedPreferences.edit()
+                    .putString(PREF_DESCRIPTION, data.getWeatherDescription())
+                    .putInt(PREF_HUMIDITY, data.getHumidity())
+                    .putString(PREF_ICON_ID, data.getIconId())
+                    .putString(PREF_TEMPERATURE, data.getCurrentTemperature())
+                    .commit()
+            );
+        }
     }
 
     @Override
@@ -103,7 +107,6 @@ public class SharedPreferenceServiceImpl implements SharedPreferenceService {
 
     @Override
     public boolean isLocationInitialized() {
-
         return sharedPreferences.contains(PREF_LONGITUDE)
             && sharedPreferences.contains(PREF_LATITUDE)
             && sharedPreferences.contains(PREF_LOCATION_NAME);
@@ -126,7 +129,7 @@ public class SharedPreferenceServiceImpl implements SharedPreferenceService {
     }
 
     private boolean hasValueInStorage() {
-        return (!TextUtils.isEmpty(sharedPreferences.getString(PREF_DESCRIPTION, DEF_DESCRIPTION)));
+        return sharedPreferences.contains(PREF_DESCRIPTION);
     }
 
 }
