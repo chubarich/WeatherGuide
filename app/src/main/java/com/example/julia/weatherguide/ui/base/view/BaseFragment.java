@@ -19,101 +19,91 @@ import icepick.Icepick;
 public abstract class BaseFragment<P extends BasePresenter<V>, V extends BaseView>
     extends Fragment implements BaseView, LoaderManager.LoaderCallbacks<P> {
 
-  private P presenter;
+    private P presenter;
 
-  protected final BasePresenter<V> getPresenter() {
-    return presenter;
-  }
-
-  // -------------------------------------- lifecycle ---------------------------------------------
-
-  @Override
-  public void onCreate(@Nullable Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    Icepick.restoreInstanceState(this, savedInstanceState);
-  }
-
-  @Override
-  public void onActivityCreated(Bundle savedInstanceState) {
-    super.onActivityCreated(savedInstanceState);
-
-    // loader is created -> get presenter
-    Loader<P> loader = getLoaderManager().getLoader(getFragmentId());
-    if (loader != null) {
-      presenter = ((PresenterLoader<P, V>) loader).getPresenter();
+    protected final BasePresenter<V> getPresenter() {
+        return presenter;
     }
 
-    // init loader
-    if (presenter == null) {
-      getLoaderManager().initLoader(getFragmentId(), null, this);
+    // -------------------------------------- lifecycle ---------------------------------------------
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Icepick.restoreInstanceState(this, savedInstanceState);
     }
-  }
 
-  @NonNull
-  @Override
-  public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
-    super.onCreateView(inflater, parent, savedInstanceState);
-    return inflater.inflate(getLayoutRes(), parent, false);
-  }
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
 
-  @Override
-  public void onViewCreated(View view, Bundle savedInstanceState) {
-    super.onViewCreated(view, savedInstanceState);
-    initializeView(view, savedInstanceState);
-  }
+        // loader is created -> get presenter
+        Loader<P> loader = getLoaderManager().getLoader(getFragmentId());
+        if (loader != null) {
+            presenter = ((PresenterLoader<P, V>) loader).getPresenter();
+        }
 
-  @Override
-  public void onStart() {
-    super.onStart();
-    presenter.attachView(getViewInterface());
-  }
+        // init loader
+        if (presenter == null) {
+            getLoaderManager().initLoader(getFragmentId(), null, this);
+        }
+    }
 
-  @Override
-  public void onDestroyView() {
-    super.onDestroyView();
-    destroyView();
-  }
+    @NonNull
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
+        super.onCreateView(inflater, parent, savedInstanceState);
+        return inflater.inflate(getLayoutRes(), parent, false);
+    }
 
-  @Override
-  public void onStop() {
-    presenter.detachView();
-    super.onStop();
-  }
+    @Override
+    public void onStart() {
+        super.onStart();
+        presenter.attachView(getViewInterface());
+    }
 
-  @Override
-  public void onSaveInstanceState(Bundle outState) {
-    super.onSaveInstanceState(outState);
-    Icepick.saveInstanceState(this, outState);
-  }
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+    }
 
-  // ------------------------------------ LoaderCallbacks ---------------------------------------
+    @Override
+    public void onStop() {
+        presenter.detachView();
+        super.onStop();
+    }
 
-  @Override
-  public Loader<P> onCreateLoader(int id, Bundle args) {
-    return new PresenterLoader<>(getContext(), getPresenterFactory());
-  }
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        Icepick.saveInstanceState(this, outState);
+    }
 
-  @Override
-  public void onLoadFinished(Loader<P> loader, P data) {
-    this.presenter = data;
-  }
+    // ------------------------------------ LoaderCallbacks ---------------------------------------
 
-  @Override
-  public void onLoaderReset(Loader<P> loader) {
-    this.presenter = null;
-  }
+    @Override
+    public Loader<P> onCreateLoader(int id, Bundle args) {
+        return new PresenterLoader<>(getContext(), getPresenterFactory());
+    }
 
-  // ---------------------------------------- abstract --------------------------------------------
+    @Override
+    public void onLoadFinished(Loader<P> loader, P data) {
+        this.presenter = data;
+    }
 
-  protected abstract V getViewInterface();
+    @Override
+    public void onLoaderReset(Loader<P> loader) {
+        this.presenter = null;
+    }
 
-  protected abstract PresenterFactory<P, V> getPresenterFactory();
+    // ---------------------------------------- abstract --------------------------------------------
 
-  protected abstract int getFragmentId();
+    protected abstract V getViewInterface();
 
-  protected abstract int getLayoutRes();
+    protected abstract PresenterFactory<P, V> getPresenterFactory();
 
-  protected abstract void initializeView(View view, Bundle savedInstanceState);
+    protected abstract int getFragmentId();
 
-  protected abstract void destroyView();
+    protected abstract int getLayoutRes();
+
 }

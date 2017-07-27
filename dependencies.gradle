@@ -23,6 +23,8 @@ ext.versions = [
 
         espresso                     : '2.2.2',
         junit                        : '4.12',
+
+        googlePlaces                 : '11.0.2'
 ]
 
 ext.gradlePlugins = [
@@ -57,5 +59,7 @@ ext.libraries = [
         junit                   : "junit:junit:$versions.junit",
         supportTestRunner       : "com.android.support.test:runner:$versions.supportTestRunner",
         supportTestRules        : "com.android.support.test:rules:$versions.supportTestRunner",
-        espressoCore            : "com.android.support.test.espresso:espresso-core:$versions.espresso"
+        espressoCore            : "com.android.support.test.espresso:espresso-core:$versions.espresso",
+
+        googlePlaces            : "com.google.android.gms:play-services-places:$versions.googlePlaces"
 ]

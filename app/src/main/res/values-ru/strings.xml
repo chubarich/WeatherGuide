@@ -9,17 +9,23 @@
     <string name="about_application">Приложение WeatherGuide готовится приносить пользу</string>
 
     <string name="button_name_refresh">обновить</string>
-    <string name="current_location_name">Москва</string>
 
     <string name="humidity">влажность :</string>
 
     <string name="refresh_period">Интервал обновления</string>
     <string name="refresh_period_summary">Установите интервал обновления (в минутах)</string>
-    <string name="refresh_period_message">Задайте период обновления в часах</string>
+    <string name="interval_picked_success">Интервал обновления был успешно изменен</string>
+    <string name="pick_city">Выберите город</string>
 
-    //
+
     //errors
     <string name="network_error_description">Ошибка сети. Проверьте подключение к Интернету.</string>
-    <string name="wrong_time_value">Проверьте введённое значение</string>
+    <string name="wrong_time_value">Неверное значение времени.</string>
+    <string name="play_services_not_available">Google Play Services недоступны на устройстве.</string>
+    <string name="city_not_picked_description">Город не выбран. Вы можете выбрать его в настройках.</string>
+    <string name="city_not_picked_before_interval">Город должен быть выбран перед интервалом обновления.</string>
+    <string name="city_not_picked">Город не был изменен</string>
+    <string name="city_was_picked">Город был успешно изменен</string>
+
 
 </resources>

@@ -6,43 +6,43 @@ import com.example.julia.weatherguide.ui.base.view.BaseView;
 
 public abstract class BasePresenter<V extends BaseView> implements Presenter<V> {
 
-  private V relatedView;
+    private V relatedView;
 
-  // -------------------------------------- BasePresenter -------------------------------------
+    // -------------------------------------- BasePresenter -------------------------------------
 
-  protected final V getView() {
-    return relatedView;
-  }
+    protected final V getView() {
+        return relatedView;
+    }
 
-  protected final boolean isViewAttached() {
-    return relatedView != null;
-  }
+    protected final boolean isViewAttached() {
+        return relatedView != null;
+    }
 
-  // ---------------------------------------- Presenter ---------------------------------------
+    // ---------------------------------------- Presenter ---------------------------------------
 
-  @Override
-  public final void attachView(@NonNull V view) {
-    relatedView = view;
-    onViewAttached();
-  }
+    @Override
+    public final void attachView(@NonNull V view) {
+        relatedView = view;
+        onViewAttached();
+    }
 
-  @Override
-  public final void detachView() {
-    onViewDetached();
-    relatedView = null;
-  }
+    @Override
+    public final void detachView() {
+        onViewDetached();
+        relatedView = null;
+    }
 
-  @Override
-  public void destroy() {
-    onDestroyed();
-  }
+    @Override
+    public void destroy() {
+        onDestroyed();
+    }
 
-  // -------------------------------------------- abstract ----------------------------------------
+    // -------------------------------------------- abstract ----------------------------------------
 
-  protected abstract void onViewAttached();
+    protected abstract void onViewAttached();
 
-  protected abstract void onViewDetached();
+    protected abstract void onViewDetached();
 
-  protected abstract void onDestroyed();
+    protected abstract void onDestroyed();
 
 }

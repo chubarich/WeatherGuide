@@ -9,6 +9,9 @@ import retrofit2.http.Query;
 interface OpenWeatherMapAPI {
 
     @GET("data/2.5/weather")
-    Single<WeatherInCity> getCurrentWeatherForLocation(@Query("id") String cityId);
+    Single<WeatherInCity> getCurrentWeatherForLocation(
+        @Query("lat") double latitude,
+        @Query("lon") double longitude
+    );
 
 }

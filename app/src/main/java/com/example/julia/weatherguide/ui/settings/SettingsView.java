@@ -4,6 +4,10 @@ import com.example.julia.weatherguide.ui.base.view.BaseView;
 
 public interface SettingsView extends BaseView {
 
-    void showError();
+    void showNumberFormatError();
+
+    void showPickTimeSuccess();
+
+    void showLocationNotPickedError();
 
 }

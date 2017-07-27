@@ -1,41 +1,55 @@
 package com.example.julia.weatherguide.repositories;
 
-import android.support.annotation.NonNull;
-
-import com.example.julia.weatherguide.repositories.data.CurrentWeatherDataModel;
+import com.example.julia.weatherguide.repositories.data.Location;
+import com.example.julia.weatherguide.repositories.data.WeatherDataModel;
+import com.example.julia.weatherguide.repositories.exception.ExceptionBundle;
+import com.example.julia.weatherguide.repositories.network.NetworkService;
 import com.example.julia.weatherguide.repositories.storage.preferences.SharedPreferenceService;
-import com.example.julia.weatherguide.repositories.network.OpenWeatherMapNetworkService;
 
-import io.reactivex.Maybe;
-import io.reactivex.Observable;
+import io.reactivex.Completable;
 import io.reactivex.Single;
 
 public class CurrentWeatherRepositoryImpl implements CurrentWeatherRepository {
 
-  private final SharedPreferenceService sharedPreferenceService;
-  private final OpenWeatherMapNetworkService openWeatherMapNetworkService;
+    private final SharedPreferenceService sharedPreferenceService;
+    private final NetworkService openWeatherMapNetworkService;
 
-  public CurrentWeatherRepositoryImpl(SharedPreferenceService sharedPreferenceService,
-                                      OpenWeatherMapNetworkService openWeatherMapNetworkService) {
-    this.sharedPreferenceService = sharedPreferenceService;
-    this.openWeatherMapNetworkService = openWeatherMapNetworkService;
-  }
+    public CurrentWeatherRepositoryImpl(SharedPreferenceService sharedPreferenceService,
+                                        NetworkService networkService) {
+        this.sharedPreferenceService = sharedPreferenceService;
+        this.openWeatherMapNetworkService = networkService;
+    }
 
-  @Override
-  public Single<CurrentWeatherDataModel> getCurrentWeatherForLocation(@NonNull String location) {
-    return sharedPreferenceService.getCurrentWeather(location)
-        .switchIfEmpty(getFreshCurrentWeatherForLocation(location).toMaybe())
-        .toSingle();
-  }
+    @Override
+    public Single<WeatherDataModel> getCurrentWeather() {
+        return getFreshCurrentWeather()
+            .onErrorResumeNext(sharedPreferenceService.getCurrentWeather());
+    }
 
-  @Override
-  public Single<CurrentWeatherDataModel> getFreshCurrentWeatherForLocation(@NonNull String location) {
-    return openWeatherMapNetworkService.getCurrentWeather(location)
-        .doOnSuccess(sharedPreferenceService::saveToSharedPreferences);
-  }
+    @Override
+    public Single<WeatherDataModel> getFreshCurrentWeather() {
+        if (!isLocationInitialized()) {
+            return Single.error(new ExceptionBundle(ExceptionBundle.Reason.LOCATION_NOT_INITIALIZED));
+        } else {
+            return openWeatherMapNetworkService.getCurrentWeather(sharedPreferenceService.getCurrentLocation())
+                .flatMap(weatherDataModel ->
+                    sharedPreferenceService.saveWeatherForCurrentLocation(weatherDataModel)
+                        .onErrorComplete()
+                        .toSingle(() -> {
+                            weatherDataModel.setLocationName(sharedPreferenceService.getCurrentLocationName());
+                            return weatherDataModel;
+                        })
+                );
+        }
+    }
 
-  @Override
-  public String getCurrentLocation() {
-    return sharedPreferenceService.getCurrentLocationId();
-  }
+    @Override
+    public Completable saveCurrentLocation(final Location location, final String cityName) {
+        return sharedPreferenceService.saveCurrentLocation(location, cityName);
+    }
+
+    @Override
+    public boolean isLocationInitialized() {
+        return sharedPreferenceService.isLocationInitialized();
+    }
 }

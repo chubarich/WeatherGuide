@@ -1,195 +1,191 @@
 package com.example.julia.weatherguide.ui.current_weather;
 
-import android.support.annotation.NonNull;
-
-import com.example.julia.weatherguide.WeatherGuideApplication;
 import com.example.julia.weatherguide.interactors.CurrentWeatherInteractor;
-import com.example.julia.weatherguide.interactors.SettingsInteractor;
-import com.example.julia.weatherguide.repositories.data.CurrentWeatherDataModel;
+import com.example.julia.weatherguide.repositories.data.WeatherDataModel;
+import com.example.julia.weatherguide.repositories.exception.ExceptionBundle;
 import com.example.julia.weatherguide.ui.base.presenter.BasePresenter;
 import com.example.julia.weatherguide.ui.base.presenter.PresenterFactory;
-import com.example.julia.weatherguide.ui.settings.SettingsPresenter;
-import com.example.julia.weatherguide.ui.settings.SettingsView;
 
-import javax.inject.Inject;
-
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 
 public class CurrentWeatherPresenter extends BasePresenter<CurrentWeatherView> {
 
-  private CurrentWeatherViewState viewState = new CurrentWeatherViewState();
-
-  private final CurrentWeatherInteractor currentWeatherInteractor;
-  private CompositeDisposable loadCurrentWeatherDisposable;
-  private CompositeDisposable refreshCurrentWeatherDisposable;
-
-
-  private CurrentWeatherPresenter(CurrentWeatherInteractor currentWeatherInteractor) {
-    this.currentWeatherInteractor = currentWeatherInteractor;
-    loadCurrentWeatherDisposable = new CompositeDisposable();
-    refreshCurrentWeatherDisposable = new CompositeDisposable();
-  }
-
-  // --------------------------------------- BasePresenter ----------------------------------------
-
-  @Override
-  protected void onViewAttached() {
-    if (viewState.isLoading()) {
-      if (viewState.isReasonForLoadingUpdate()) {
-        refreshCurrentWeather(viewState.getLocation());
-      } else {
-        loadCurrentWeatherForLocation(viewState.getLocation());
-      }
-    } else {
-      if (viewState.hasData()) {
-        getView().showData(viewState.getData());
-      } else {
-        loadCurrentWeatherForLocation(currentWeatherInteractor.getCurrentLocation());
-      }
-    }
-  }
-
-  @Override
-  protected void onViewDetached() {
-
-  }
-
-  @Override
-  protected void onDestroyed() {
-    currentWeatherInteractor.destroy();
-    loadCurrentWeatherDisposable.dispose();
-    refreshCurrentWeatherDisposable.dispose();
-  }
-
-  // ---------------------------------------- public ----------------------------------------------
-
-  void refreshCurrentWeather(@NonNull String location) {
-    prepareViewForRefreshData(location);
-    viewState.setReasonForLoadingUpdate(true);
-    Disposable disposable = currentWeatherInteractor.getFreshCurrentWeatherForLocation(location)
-        .subscribeOn(Schedulers.io())
-        .observeOn(AndroidSchedulers.mainThread())
-        .subscribe(this::successGetDataAction, this::errorGetDataAction);
-    loadCurrentWeatherDisposable.add(disposable);
-  }
-
-  // ----------------------------------------- private --------------------------------------------
-
-  private void loadCurrentWeatherForLocation(@NonNull String location) {
-    prepareViewForRefreshData(location);
-    Disposable disposable = currentWeatherInteractor.getCurrentWeatherForLocation(location)
-        .subscribeOn(Schedulers.io())
-        .observeOn(AndroidSchedulers.mainThread())
-        .subscribe(this::successGetDataAction,
-            error -> {
-              if (isViewAttached()) {
-                if (viewState.hasData()) {
-                  errorGetDataAction(error);
-                } else {
-                  getView().hideLoading();
-                  viewState.setLoading(false);
-                  getView().showEmptyView();
-                }
-              }
-            });
-    loadCurrentWeatherDisposable.add(disposable);
-  }
-
-  private void successGetDataAction(CurrentWeatherDataModel data) {
-    if (isViewAttached()) {
-      getView().hideLoading();
-      viewState.setLoading(false);
-      viewState.setData(data);
-      getView().showData(data);
-    }
-  }
-
-  private void errorGetDataAction(Throwable error) {
-    if (isViewAttached()) {
-      getView().hideLoading();
-      viewState.setLoading(false);
-      getView().showError();
-    }
-  }
-
-  private void prepareViewForRefreshData(@NonNull String location) {
-    if (isViewAttached()) {
-      getView().showLoading();
-      viewState.setLoading(true);
-      viewState.setLocation(location);
-    }
-  }
-
-  // ---------------------------------------- inner types ----------------------------------------
-
-  private class CurrentWeatherViewState {
-
-    private boolean isLoading;
-    private boolean hasData;
-    private String location;
-    private boolean reasonForLoadingUpdate = false;
-    private CurrentWeatherDataModel data;
-
-
-    private CurrentWeatherViewState() {
-    }
-
-
-    private boolean isLoading() {
-      return isLoading;
-    }
-
-    private void setLoading(boolean loading) {
-      isLoading = loading;
-    }
-
-    private String getLocation() {
-      return location;
-    }
-
-    private void setLocation(String location) {
-      this.location = location;
-    }
-
-    private boolean isReasonForLoadingUpdate() {
-      return reasonForLoadingUpdate;
-    }
-
-    private void setReasonForLoadingUpdate(boolean reasonForLoadingUpdate) {
-      this.reasonForLoadingUpdate = reasonForLoadingUpdate;
-    }
-
-    public CurrentWeatherDataModel getData() {
-      return data;
-    }
-
-    public void setData(CurrentWeatherDataModel data) {
-      this.hasData = true;
-      this.data = data;
-    }
-
-    private boolean hasData() {
-      return hasData;
-    }
-
-  }
-
-  // ------------------------------------------ Factory -------------------------------------------
-
-  public static class Factory implements PresenterFactory<CurrentWeatherPresenter, CurrentWeatherView> {
+    private CurrentWeatherViewState viewState = new CurrentWeatherViewState();
 
     private final CurrentWeatherInteractor currentWeatherInteractor;
+    private CompositeDisposable compositeDisposable;
 
-    public Factory(CurrentWeatherInteractor currentWeatherInteractor) {
-      this.currentWeatherInteractor = currentWeatherInteractor;
+
+    private CurrentWeatherPresenter(CurrentWeatherInteractor currentWeatherInteractor) {
+        this.currentWeatherInteractor = currentWeatherInteractor;
+        compositeDisposable = new CompositeDisposable();
+    }
+
+    // --------------------------------------- BasePresenter ----------------------------------------
+
+    @Override
+    protected void onViewAttached() {
+        if (viewState.isLoading()) {
+            if (viewState.isReasonForLoadingUpdate()) {
+                refreshCurrentWeather();
+            } else {
+                loadCurrentWeather();
+            }
+        } else {
+            if (viewState.hasData()) {
+                getView().showData(viewState.getData());
+            } else {
+                loadCurrentWeather();
+            }
+        }
     }
 
     @Override
-    public CurrentWeatherPresenter create() {
-      return new CurrentWeatherPresenter(currentWeatherInteractor);
+    protected void onViewDetached() {
+
     }
-  }
+
+    @Override
+    protected void onDestroyed() {
+        compositeDisposable.dispose();
+    }
+
+    // ---------------------------------------- public ----------------------------------------------
+
+    public void refreshCurrentWeather() {
+        prepareViewForRefreshData();
+        viewState.setReasonForLoadingUpdate(true);
+        compositeDisposable.add(
+            currentWeatherInteractor.getFreshCurrentWeather()
+                .subscribe(
+                    this::successWeatherData,
+                    this::onError
+                )
+        );
+    }
+
+    // ----------------------------------------- private --------------------------------------------
+
+    private void loadCurrentWeather() {
+        prepareViewForRefreshData();
+        compositeDisposable.add(
+            currentWeatherInteractor.getCurrentWeather()
+                .subscribe(
+                    this::successWeatherData,
+                    this::onError
+                )
+        );
+    }
+
+    // ------------------------------------------- private ------------------------------------------
+
+    private void onError(Throwable error) {
+        if (error instanceof ExceptionBundle) {
+            ExceptionBundle exceptionWithReason = (ExceptionBundle) error;
+            // TODO: change interactors to throw only ExceptionBundle for proper exception handling
+            if (exceptionWithReason.getReason() == ExceptionBundle.Reason.LOCATION_NOT_INITIALIZED) {
+                showCityNotPicked();
+            } else if (exceptionWithReason.getReason() == ExceptionBundle.Reason.EMPTY_DATABASE) {
+                showEmptyView();
+            }
+        } else {
+            if (viewState.hasData()) {
+                showNoInternet();
+            } else {
+                showEmptyView();
+            }
+        }
+    }
+
+    private void successWeatherData(WeatherDataModel data) {
+        viewState.setLoading(false);
+        viewState.setData(data);
+        if (isViewAttached()) {
+            getView().hideLoading();
+            getView().showData(data);
+        }
+    }
+
+    private void showEmptyView() {
+        viewState.setLoading(false);
+        if (isViewAttached()) {
+            getView().hideLoading();
+            getView().showEmptyView();
+        }
+    }
+
+    private void showNoInternet() {
+        viewState.setLoading(false);
+        if (isViewAttached()) {
+            getView().hideLoading();
+            getView().showNoInternet();
+        }
+    }
+
+    private void showCityNotPicked() {
+        viewState.setLoading(false);
+        if (isViewAttached()) {
+            getView().hideLoading();
+            getView().showEmptyView();
+            getView().showCityNotPicked();
+        }
+    }
+
+    private void prepareViewForRefreshData() {
+        viewState.setLoading(true);
+        if (isViewAttached()) {
+            getView().showLoading();
+        }
+    }
+
+    // ---------------------------------------- inner types ----------------------------------------
+
+    private class CurrentWeatherViewState {
+
+        private boolean isLoading;
+        private boolean reasonForLoadingUpdate = false;
+        private WeatherDataModel data;
+
+        private void setLoading(boolean loading) {
+            isLoading = loading;
+        }
+
+        private void setReasonForLoadingUpdate(boolean reasonForLoadingUpdate) {
+            this.reasonForLoadingUpdate = reasonForLoadingUpdate;
+        }
+
+        public void setData(WeatherDataModel data) {
+            this.data = data;
+        }
+
+        private boolean isLoading() {
+            return isLoading;
+        }
+
+        private boolean isReasonForLoadingUpdate() {
+            return reasonForLoadingUpdate;
+        }
+
+        public WeatherDataModel getData() {
+            return data;
+        }
+
+        private boolean hasData() {
+            return data != null;
+        }
+    }
+
+    public static class Factory implements PresenterFactory<CurrentWeatherPresenter, CurrentWeatherView> {
+
+        private final CurrentWeatherInteractor currentWeatherInteractor;
+
+        public Factory(CurrentWeatherInteractor currentWeatherInteractor) {
+            this.currentWeatherInteractor = currentWeatherInteractor;
+        }
+
+        @Override
+        public CurrentWeatherPresenter create() {
+            return new CurrentWeatherPresenter(currentWeatherInteractor);
+        }
+    }
 }

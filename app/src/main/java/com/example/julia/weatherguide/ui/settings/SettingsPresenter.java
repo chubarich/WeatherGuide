@@ -1,68 +1,75 @@
 package com.example.julia.weatherguide.ui.settings;
 
-import android.content.Context;
-
-import com.example.julia.weatherguide.R;
-import com.example.julia.weatherguide.WeatherGuideApplication;
 import com.example.julia.weatherguide.interactors.SettingsInteractor;
 import com.example.julia.weatherguide.ui.base.presenter.BasePresenter;
 import com.example.julia.weatherguide.ui.base.presenter.PresenterFactory;
 
-import javax.inject.Inject;
+import io.reactivex.disposables.CompositeDisposable;
 
 public class SettingsPresenter extends BasePresenter<SettingsView> {
 
-  private final SettingsInteractor interactor;
+    private final SettingsInteractor interactor;
+    private final CompositeDisposable compositeDisposable;
 
-
-  private SettingsPresenter(SettingsInteractor interactor) {
-    this.interactor = interactor;
-  }
-
-  // ------------------------------------ BasePresenter -------------------------------------------
-
-  @Override
-  protected void onViewAttached() {
-  }
-
-  @Override
-  protected void onViewDetached() {
-
-  }
-
-  @Override
-  protected void onDestroyed() {
-    interactor.destroy();
-  }
-
-  // ------------------------------------------- public -------------------------------------------
-
-  void onRefreshPeriodChanged(String newValue) {
-    try {
-      long period = Long.valueOf(newValue);
-      if (period > 0) {
-        interactor.saveRefreshPeriod(period);
-      } else {
-        getView().showError();
-      }
-    } catch (NumberFormatException e) {
-      getView().showError();
+    private SettingsPresenter(SettingsInteractor interactor) {
+        this.interactor = interactor;
+        this.compositeDisposable = new CompositeDisposable();
     }
-  }
 
-  // ------------------------------------------ Factory -------------------------------------------
+    // ------------------------------------ BasePresenter -------------------------------------------
 
-  public static class Factory implements PresenterFactory<SettingsPresenter, SettingsView> {
-
-    private final SettingsInteractor settingsInteractor;
-
-    public Factory(SettingsInteractor settingsInteractor) {
-      this.settingsInteractor = settingsInteractor;
+    @Override
+    protected void onViewAttached() {
     }
 
     @Override
-    public SettingsPresenter create() {
-      return new SettingsPresenter(settingsInteractor);
+    protected void onViewDetached() {
+
     }
-  }
+
+    @Override
+    protected void onDestroyed() {
+        compositeDisposable.dispose();
+    }
+
+    // ------------------------------------------- public -------------------------------------------
+
+    void onRefreshPeriodChanged(String newValue) {
+        try {
+            int period = Integer.valueOf(newValue);
+            if (period > 0) {
+                compositeDisposable.add(
+                    interactor.saveRefreshPeriod(period)
+                        .subscribe(
+                            () -> {
+                                if (isViewAttached()) getView().showPickTimeSuccess();
+                            },
+                            error -> {
+                                if (isViewAttached()) getView().showLocationNotPickedError();
+                            }
+                        )
+                );
+            } else {
+                getView().showNumberFormatError();
+            }
+        } catch (NumberFormatException e) {
+            getView().showNumberFormatError();
+        }
+    }
+
+    // ------------------------------------------ Factory -------------------------------------------
+
+    public static class Factory implements PresenterFactory<SettingsPresenter, SettingsView> {
+
+        private final SettingsInteractor settingsInteractor;
+
+        public Factory(SettingsInteractor settingsInteractor) {
+            this.settingsInteractor = settingsInteractor;
+        }
+
+        @Override
+        public SettingsPresenter create() {
+            return new SettingsPresenter(settingsInteractor);
+        }
+    }
 }

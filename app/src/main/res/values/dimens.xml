@@ -5,4 +5,5 @@
     <dimen name="strings_margin">8dp</dimen>
     <dimen name="weather_icon_width">50dp</dimen>
     <dimen name="weather_icon_height">30dp</dimen>
+    <dimen name="weather_location_name_text_size">16sp</dimen>
 </resources>

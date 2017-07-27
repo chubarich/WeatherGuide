@@ -1,18 +1,19 @@
 package com.example.julia.weatherguide.repositories;
 
-import android.support.annotation.NonNull;
+import com.example.julia.weatherguide.repositories.data.Location;
+import com.example.julia.weatherguide.repositories.data.WeatherDataModel;
 
-import com.example.julia.weatherguide.repositories.data.CurrentWeatherDataModel;
-
-import io.reactivex.Maybe;
-import io.reactivex.Observable;
+import io.reactivex.Completable;
 import io.reactivex.Single;
 
 public interface CurrentWeatherRepository {
 
-  Single<CurrentWeatherDataModel> getCurrentWeatherForLocation(@NonNull String location);
+    Single<WeatherDataModel> getCurrentWeather();
 
-  Single<CurrentWeatherDataModel> getFreshCurrentWeatherForLocation(@NonNull String location);
+    Single<WeatherDataModel> getFreshCurrentWeather();
 
-  String getCurrentLocation();
+    Completable saveCurrentLocation(Location location, String cityName);
+
+    boolean isLocationInitialized();
+
 }

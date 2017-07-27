@@ -1,11 +1,9 @@
 package com.example.julia.weatherguide.interactors;
 
+import io.reactivex.Completable;
+
 public interface SettingsInteractor {
 
-  void saveRefreshPeriod(long period);
-
-  void scheduleForUpdateCurrentWeather(int interval);
-
-  void destroy();
+    Completable saveRefreshPeriod(int period);
 
 }

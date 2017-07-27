@@ -2,8 +2,8 @@ package com.example.julia.weatherguide.interactors;
 
 import android.content.Context;
 
-import com.example.julia.weatherguide.WeatherGuideApplication;
-import com.example.julia.weatherguide.repositories.SettingsRepository;
+import com.example.julia.weatherguide.repositories.CurrentWeatherRepository;
+import com.example.julia.weatherguide.repositories.exception.ExceptionBundle;
 import com.example.julia.weatherguide.services.refresh.CurrentWeatherRefreshDataService;
 import com.firebase.jobdispatcher.Constraint;
 import com.firebase.jobdispatcher.Driver;
@@ -15,47 +15,56 @@ import com.firebase.jobdispatcher.Trigger;
 
 import java.util.concurrent.TimeUnit;
 
-import javax.inject.Inject;
+import io.reactivex.Completable;
+import io.reactivex.Scheduler;
 
 public class SettingsInteractorImpl implements SettingsInteractor {
 
-  private static final String JOB_TAG = "refresh_service";
-  private static final int WINDOW_IN_MINUTES = 30;
+    private static final String JOB_TAG = "refresh_service";
+    private static final int WINDOW_IN_MINUTES = 30;
 
-  private Context context;
-  private SettingsRepository repository;
+    private Context context;
+    private CurrentWeatherRepository repository;
+    private final Scheduler workerScheduler;
+    private final Scheduler uiScheduler;
 
-  public SettingsInteractorImpl(Context context, SettingsRepository settingsRepository) {
-    this.context = context.getApplicationContext();
-    this.repository = settingsRepository;
-  }
+    public SettingsInteractorImpl(Context context, CurrentWeatherRepository currentWeatherRepository,
+                                  Scheduler workerScheduler, Scheduler uiScheduler) {
+        this.context = context.getApplicationContext();
+        this.repository = currentWeatherRepository;
+        this.workerScheduler = workerScheduler;
+        this.uiScheduler = uiScheduler;
+    }
 
-  @Override
-  public void destroy() {
-    this.context = null;
-    this.repository = null;
-  }
+    // ---------------------------------------- public ----------------------------------------------
 
-  @Override
-  public void saveRefreshPeriod(long period) {
-    repository.saveRefreshInterval(period);
-    scheduleForUpdateCurrentWeather((int) period);
-  }
+    @Override
+    public Completable saveRefreshPeriod(int period) {
+        return Completable.fromAction(
+            () -> scheduleForUpdateCurrentWeather(period)
+        )
+            .subscribeOn(workerScheduler)
+            .observeOn(uiScheduler);
+    }
 
-  @Override
-  public void scheduleForUpdateCurrentWeather(int interval) {
-    Driver driver = new GooglePlayDriver(context);
-    FirebaseJobDispatcher dispatcher = new FirebaseJobDispatcher(driver);
-    Job job = dispatcher.newJobBuilder()
-        .setService(CurrentWeatherRefreshDataService.class)
-        .setTag(JOB_TAG)
-        .setLifetime(Lifetime.FOREVER)
-        .setRecurring(true)
-        .setConstraints(Constraint.ON_ANY_NETWORK)
-        .setTrigger(Trigger.executionWindow((int) TimeUnit.MINUTES.toSeconds(interval),
-            (int) TimeUnit.MINUTES.toSeconds(interval + WINDOW_IN_MINUTES)))
-        .setReplaceCurrent(true)
-        .build();
-    dispatcher.schedule(job);
-  }
+    // ---------------------------------------- private ---------------------------------------------
+
+    private void scheduleForUpdateCurrentWeather(int period) throws ExceptionBundle {
+        if (!repository.isLocationInitialized())
+            throw new ExceptionBundle(ExceptionBundle.Reason.LOCATION_NOT_INITIALIZED);
+
+        Driver driver = new GooglePlayDriver(context);
+        FirebaseJobDispatcher dispatcher = new FirebaseJobDispatcher(driver);
+        Job job = dispatcher.newJobBuilder()
+            .setService(CurrentWeatherRefreshDataService.class)
+            .setTag(JOB_TAG)
+            .setLifetime(Lifetime.FOREVER)
+            .setRecurring(true)
+            .setConstraints(Constraint.ON_ANY_NETWORK)
+            .setTrigger(Trigger.executionWindow((int) TimeUnit.MINUTES.toSeconds(period),
+                (int) TimeUnit.MINUTES.toSeconds(period + WINDOW_IN_MINUTES)))
+            .setReplaceCurrent(true)
+            .build();
+        dispatcher.schedule(job);
+    }
 }
