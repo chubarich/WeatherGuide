@@ -2,10 +2,7 @@ package com.example.julia.weatherguide.ui.settings;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v7.preference.Preference;
-import android.support.v7.preference.PreferenceFragmentCompat;
-import android.view.View;
 import android.widget.Toast;
 
 import com.example.julia.weatherguide.R;
@@ -17,14 +14,9 @@ import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.AutocompleteFilter;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
-import com.google.android.gms.location.places.ui.PlacePicker;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
-
-import butterknife.ButterKnife;
-
-import static android.support.v7.preference.R.layout.preference;
 
 public class SettingsFragment extends BasePreferenceFragment<SettingsPresenter, SettingsView>
     implements SettingsView {

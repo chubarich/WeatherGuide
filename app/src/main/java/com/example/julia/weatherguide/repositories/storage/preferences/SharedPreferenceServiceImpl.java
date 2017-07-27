@@ -17,7 +17,6 @@ import io.reactivex.Single;
 
 public class SharedPreferenceServiceImpl implements SharedPreferenceService {
 
-    private static final String CURRENT_WEATHER_PREFERENCES = "current_weather";
     private static final String PREF_TEMPERATURE = "current_temperature";
     private static final String PREF_DESCRIPTION = "current_description";
     private static final String PREF_ICON_ID = "icon_id";
@@ -34,10 +33,10 @@ public class SharedPreferenceServiceImpl implements SharedPreferenceService {
     private static final float DEF_LONGITUDE = 0;
     private static final int DEF_HUMIDITY = 0;
 
-    private final Context context;
+    private final SharedPreferences sharedPreferences;
 
-    public SharedPreferenceServiceImpl(Context context) {
-        this.context = context.getApplicationContext();
+    public SharedPreferenceServiceImpl(SharedPreferences sharedPreferences) {
+        this.sharedPreferences = sharedPreferences;
     }
 
     // ----------------------------------------- public ---------------------------------------------
@@ -58,7 +57,7 @@ public class SharedPreferenceServiceImpl implements SharedPreferenceService {
     @Override
     public Completable saveCurrentLocation(Location location, String locationName) {
         return Completable.fromAction(
-            () -> getSharedPreferences().edit()
+            () -> sharedPreferences.edit()
                 .remove(PREF_TEMPERATURE)
                 .remove(PREF_DESCRIPTION)
                 .remove(PREF_HUMIDITY)
@@ -73,7 +72,7 @@ public class SharedPreferenceServiceImpl implements SharedPreferenceService {
     @Override
     public Completable saveWeatherForCurrentLocation(@NonNull WeatherDataModel data) {
         return Completable.fromAction(
-            () -> getSharedPreferences().edit()
+            () -> sharedPreferences.edit()
                 .putString(PREF_DESCRIPTION, data.getWeatherDescription())
                 .putInt(PREF_HUMIDITY, data.getHumidity())
                 .putString(PREF_ICON_ID, data.getIconId())
@@ -85,8 +84,8 @@ public class SharedPreferenceServiceImpl implements SharedPreferenceService {
     @Override
     public Location getCurrentLocation() {
         if (isLocationInitialized()) {
-            float latitude = getSharedPreferences().getFloat(PREF_LATITUDE, DEF_LATITUDE);
-            float longitude = getSharedPreferences().getFloat(PREF_LONGITUDE, DEF_LONGITUDE);
+            float latitude = sharedPreferences.getFloat(PREF_LATITUDE, DEF_LATITUDE);
+            float longitude = sharedPreferences.getFloat(PREF_LONGITUDE, DEF_LONGITUDE);
             return new Location(longitude, latitude);
         } else {
             return null;
@@ -96,7 +95,7 @@ public class SharedPreferenceServiceImpl implements SharedPreferenceService {
     @Override
     public String getCurrentLocationName() {
         if (isLocationInitialized()) {
-            return getSharedPreferences().getString(PREF_LOCATION_NAME, "");
+            return sharedPreferences.getString(PREF_LOCATION_NAME, "");
         } else {
             return null;
         }
@@ -104,7 +103,7 @@ public class SharedPreferenceServiceImpl implements SharedPreferenceService {
 
     @Override
     public boolean isLocationInitialized() {
-        SharedPreferences sharedPreferences = getSharedPreferences();
+
         return sharedPreferences.contains(PREF_LONGITUDE)
             && sharedPreferences.contains(PREF_LATITUDE)
             && sharedPreferences.contains(PREF_LOCATION_NAME);
@@ -115,8 +114,6 @@ public class SharedPreferenceServiceImpl implements SharedPreferenceService {
     private WeatherDataModel readFromSharedPreferences() throws ExceptionBundle {
         if (!isLocationInitialized())
             throw new ExceptionBundle(ExceptionBundle.Reason.LOCATION_NOT_INITIALIZED);
-
-        SharedPreferences sharedPreferences = getSharedPreferences();
 
         WeatherDataModel data = new WeatherDataModel();
         data.setLocationName(sharedPreferences.getString(PREF_LOCATION_NAME, DEF_LOCATION_NAME));
@@ -129,10 +126,7 @@ public class SharedPreferenceServiceImpl implements SharedPreferenceService {
     }
 
     private boolean hasValueInStorage() {
-        return (!TextUtils.isEmpty(getSharedPreferences().getString(PREF_DESCRIPTION, DEF_DESCRIPTION)));
+        return (!TextUtils.isEmpty(sharedPreferences.getString(PREF_DESCRIPTION, DEF_DESCRIPTION)));
     }
 
-    private SharedPreferences getSharedPreferences() {
-        return context.getSharedPreferences(CURRENT_WEATHER_PREFERENCES, Context.MODE_PRIVATE);
-    }
 }

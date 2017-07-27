@@ -29,10 +29,12 @@ public class CurrentWeatherRefreshDataService extends JobService {
     public boolean onStartJob(JobParameters job) {
         currentWeatherRepository.getFreshCurrentWeather()
             .subscribeOn(Schedulers.io())
-            .subscribe(data -> {
+            .subscribe(
+                data -> {
                     jobFinished(job, false);
                     Log.d(TAG, "onStartJob get data ");
-                }, error -> Log.d(TAG, "onStartJob error " + error.getLocalizedMessage())
+                },
+                error -> Log.d(TAG, "onStartJob error " + error.getLocalizedMessage())
             );
         return true;
     }

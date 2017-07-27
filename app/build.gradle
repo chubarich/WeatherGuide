@@ -78,6 +78,8 @@ dependencies {
 
     compile libraries.rxjava
     compile libraries.rxandroid
+    compile libraries.rxbinding
+    compile libraries.rxbinding_v7
 
     compile libraries.firebase
 
@@ -88,4 +90,6 @@ dependencies {
     compile libraries.googlePlaces
 
     testCompile libraries.junit
+    testCompile libraries.mockito
+    testCompile libraries.robolectric
 }

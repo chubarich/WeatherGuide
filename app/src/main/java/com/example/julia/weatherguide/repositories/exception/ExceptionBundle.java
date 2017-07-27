@@ -13,7 +13,6 @@ public class ExceptionBundle extends Exception {
         this.extras = new Bundle();
     }
 
-
     public Reason getReason() {
         return reason;
     }
