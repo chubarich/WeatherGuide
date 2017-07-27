@@ -89,14 +89,27 @@ public class SharedPreferencesServiceTest {
         assertEquals(location.longitude, DUMMY_LONGITUDE, FLOAT_DELTA);
     }
 
+    
+
+    @Test
+    public void saveWeather_throwsLocationNotInitialized() throws Exception {
+        sharedPreferenceService.saveWeatherForCurrentLocation(getDummyWeather())
+            .test()
+            .assertError(throwable -> throwable instanceof ExceptionBundle
+                && ((ExceptionBundle) throwable).getReason()
+                == ExceptionBundle.Reason.LOCATION_NOT_INITIALIZED
+            );
+    }
+
+
 
     @Test
     public void getWeather_throwsLocationNotInitialized() throws Exception {
         sharedPreferenceService.getCurrentWeather()
             .test()
-            .assertError(throwable -> (throwable instanceof ExceptionBundle) &&
-                ((ExceptionBundle) throwable).getReason()
-                    == ExceptionBundle.Reason.LOCATION_NOT_INITIALIZED
+            .assertError(throwable -> (throwable instanceof ExceptionBundle)
+                && ((ExceptionBundle) throwable).getReason()
+                == ExceptionBundle.Reason.LOCATION_NOT_INITIALIZED
             );
     }
 
@@ -129,8 +142,8 @@ public class SharedPreferencesServiceTest {
             .assertValueCount(1)
             .assertValue(weatherDataModel ->
                 weatherDataModel.getHumidity() == dummyWeather.getHumidity()
-                && weatherDataModel.getIconId().equals(dummyWeather.getIconId())
-                && weatherDataModel.getLocationName().equals(dummyWeather.getLocationName())
+                    && weatherDataModel.getIconId().equals(dummyWeather.getIconId())
+                    && weatherDataModel.getLocationName().equals(dummyWeather.getLocationName())
             );
     }
 
