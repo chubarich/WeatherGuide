@@ -1,18 +1,11 @@
 package com.example.julia.weatherguide.repositories.storage.preferences;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
-import android.text.TextUtils;
-
 import com.example.julia.weatherguide.repositories.data.Location;
 import com.example.julia.weatherguide.repositories.data.WeatherDataModel;
 import com.example.julia.weatherguide.repositories.exception.ExceptionBundle;
-
-import java.util.IllegalFormatCodePointException;
-
 import io.reactivex.Completable;
-import io.reactivex.Maybe;
 import io.reactivex.Single;
 
 public class SharedPreferenceServiceImpl implements SharedPreferenceService {
@@ -115,8 +108,7 @@ public class SharedPreferenceServiceImpl implements SharedPreferenceService {
     // ----------------------------------------- private --------------------------------------------
 
     private WeatherDataModel readFromSharedPreferences() throws ExceptionBundle {
-        if (!isLocationInitialized())
-            throw new ExceptionBundle(ExceptionBundle.Reason.LOCATION_NOT_INITIALIZED);
+        if (!isLocationInitialized()) throw new ExceptionBundle(ExceptionBundle.Reason.LOCATION_NOT_INITIALIZED);
 
         WeatherDataModel data = new WeatherDataModel();
         data.setLocationName(sharedPreferences.getString(PREF_LOCATION_NAME, DEF_LOCATION_NAME));
