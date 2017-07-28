@@ -32,7 +32,7 @@ public class SettingsPresenterTest {
     }
 
     @Test
-    public void onRefreshPeriodChanged_callsShowNumberFormatError() {
+    public void onRefreshPeriodChanged_callsShowNumberFormatError() throws Exception {
         when(settingsInteractor.saveRefreshPeriod(anyInt()))
             .thenReturn(Completable.fromAction(()-> {}));
 
@@ -48,7 +48,7 @@ public class SettingsPresenterTest {
     }
 
     @Test
-    public void onRefreshPeriodChanged_callsLocationNotPickedError() {
+    public void onRefreshPeriodChanged_callsLocationNotPickedError() throws Exception {
         when(settingsInteractor.saveRefreshPeriod(anyInt()))
             .thenReturn(Completable.error(new ExceptionBundle(LOCATION_NOT_INITIALIZED)));
 
@@ -62,7 +62,7 @@ public class SettingsPresenterTest {
     }
 
     @Test
-    public void onRefreshPeriodChanged_callsShowPickTimeSuccess() {
+    public void onRefreshPeriodChanged_callsShowPickTimeSuccess() throws Exception {
         when(settingsInteractor.saveRefreshPeriod(anyInt()))
             .thenReturn(Completable.fromAction(() -> {}));
 
