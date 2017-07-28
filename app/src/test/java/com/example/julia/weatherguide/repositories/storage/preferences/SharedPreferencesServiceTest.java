@@ -132,11 +132,12 @@ public class SharedPreferencesServiceTest {
             .assertValueCount(1)
             .assertValue(weatherDataModel ->
                 weatherDataModel.getHumidity() == dummyWeather.getHumidity()
-                    && weatherDataModel.getIconId().equals(dummyWeather.getIconId())
-                    && weatherDataModel.getLocationName().equals(dummyWeather.getLocationName())
+                && weatherDataModel.getIconId().equals(dummyWeather.getIconId())
+                && weatherDataModel.getLocationName().equals(dummyWeather.getLocationName())
+                && weatherDataModel.getWeatherDescription() != null
+                && weatherDataModel.getCurrentTemperature() != null
             );
     }
-
 
     private WeatherDataModel getDummyWeather() {
         WeatherDataModel dummyWeather = new WeatherDataModel();
