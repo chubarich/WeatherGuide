@@ -33,9 +33,7 @@ public class SharedPreferencesServiceTest {
     public void before() throws Exception {
         sharedPreferences = RuntimeEnvironment.application
             .getSharedPreferences(SHARED_PREFERENCES_DUMMY_NAME, 0);
-        sharedPreferences.edit()
-            .clear()
-            .apply();
+        sharedPreferences.edit().clear().apply();
         sharedPreferenceService = new SharedPreferenceServiceImpl(sharedPreferences);
     }
 
