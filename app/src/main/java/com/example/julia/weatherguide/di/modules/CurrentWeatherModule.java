@@ -1,5 +1,7 @@
 package com.example.julia.weatherguide.di.modules;
 
+import android.content.Context;
+
 import com.example.julia.weatherguide.di.qualifiers.UiScheduler;
 import com.example.julia.weatherguide.di.qualifiers.WorkerScheduler;
 import com.example.julia.weatherguide.di.scopes.ScreenScope;
@@ -12,6 +14,7 @@ import com.example.julia.weatherguide.repositories.storage.preferences.SharedPre
 import com.example.julia.weatherguide.ui.base.presenter.PresenterFactory;
 import com.example.julia.weatherguide.ui.current_weather.CurrentWeatherPresenter;
 import com.example.julia.weatherguide.ui.current_weather.CurrentWeatherView;
+import com.squareup.picasso.Picasso;
 
 import dagger.Module;
 import dagger.Provides;
@@ -22,9 +25,17 @@ public class CurrentWeatherModule {
 
     @Provides
     @ScreenScope
+    Picasso providePicasso(Context context) {
+        return Picasso.with(context);
+    }
+
+    @Provides
+    @ScreenScope
     CurrentWeatherRepository provideRepository(SharedPreferenceService sharedPreferenceService,
-                                               NetworkService openWeatherMapNetworkService) {
-        return new CurrentWeatherRepositoryImpl(sharedPreferenceService, openWeatherMapNetworkService);
+                                               NetworkService openWeatherMapNetworkService,
+                                               Picasso picasso) {
+        return new CurrentWeatherRepositoryImpl(sharedPreferenceService, openWeatherMapNetworkService,
+            picasso);
     }
 
     @Provides

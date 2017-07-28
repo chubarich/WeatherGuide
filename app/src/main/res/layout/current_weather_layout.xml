@@ -102,6 +102,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
+        android:textAlignment="center"
         android:text="@string/empty_view_string"
         android:visibility="gone"/>
 

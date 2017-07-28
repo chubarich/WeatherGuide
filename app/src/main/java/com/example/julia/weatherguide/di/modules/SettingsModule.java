@@ -14,6 +14,7 @@ import com.example.julia.weatherguide.repositories.storage.preferences.SharedPre
 import com.example.julia.weatherguide.ui.base.presenter.PresenterFactory;
 import com.example.julia.weatherguide.ui.settings.SettingsPresenter;
 import com.example.julia.weatherguide.ui.settings.SettingsView;
+import com.squareup.picasso.Picasso;
 
 import dagger.Module;
 import dagger.Provides;
@@ -24,9 +25,17 @@ public class SettingsModule {
 
     @Provides
     @ScreenScope
+    Picasso providePicasso(Context context) {
+        return Picasso.with(context);
+    }
+
+    @Provides
+    @ScreenScope
     CurrentWeatherRepository provideRepository(SharedPreferenceService sharedPreferenceService,
-                                               NetworkService networkService) {
-        return new CurrentWeatherRepositoryImpl(sharedPreferenceService, networkService);
+                                               NetworkService openWeatherMapNetworkService,
+                                               Picasso picasso) {
+        return new CurrentWeatherRepositoryImpl(sharedPreferenceService, openWeatherMapNetworkService,
+            picasso);
     }
 
     @Provides

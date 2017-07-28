@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import com.example.julia.weatherguide.repositories.data.Location;
 import com.example.julia.weatherguide.repositories.data.WeatherDataModel;
 import com.example.julia.weatherguide.repositories.exception.ExceptionBundle;
+import com.example.julia.weatherguide.repositories.network.weather_data.WeatherInCity;
 import com.google.gson.GsonBuilder;
 import com.squareup.picasso.Picasso;
 
@@ -22,24 +23,22 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class OpenWeatherMapNetworkService implements NetworkService {
 
     private static final String BASE_URL = "http://api.openweathermap.org/";
-    private static final String ICON_URL_HEAD = "http://openweathermap.org/img/w/";
-    private static final String ICON_URL_TAIL = ".png";
     private static final String API_KEY = "1f68b1b61499afeb695fe6ac1b090082";
     private static final String METRIC_NAME = "metric";
 
-    private final Context applicationContext;
     private final OpenWeatherMapAPI weatherApi;
 
 
-    public OpenWeatherMapNetworkService(Context applicationContext) {
-        this.applicationContext = applicationContext;
+    public OpenWeatherMapNetworkService() {
         this.weatherApi = new Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-            .addConverterFactory(GsonConverterFactory.create(
-                new GsonBuilder()
-                    .setLenient()
-                    .create())
+            .addConverterFactory(
+                GsonConverterFactory.create(
+                    new GsonBuilder()
+                        .setLenient()
+                        .create()
+                )
             ).client(buildOkHttpClient(Locale.getDefault().getLanguage()))
             .build()
             .create(OpenWeatherMapAPI.class);
@@ -48,26 +47,11 @@ public class OpenWeatherMapNetworkService implements NetworkService {
     // --------------------------------------- public -----------------------------------------------
 
     @Override
-    public Single<WeatherDataModel> getCurrentWeather(Location location) {
+    public Single<WeatherInCity> getCurrentWeather(Location location) {
         if (location == null) {
             return Single.error(new ExceptionBundle(ExceptionBundle.Reason.LOCATION_NOT_INITIALIZED));
         } else {
-            return weatherApi.getCurrentWeatherForLocation(location.latitude, location.longitude)
-                .map(weatherInCity -> {
-                    WeatherDataModel data = new WeatherDataModel();
-                    data.setLocationName(weatherInCity.getName());
-                    data.setCurrentTemperature(String.valueOf(weatherInCity.getMain().getTemp()));
-                    data.setHumidity(weatherInCity.getMain().getHumidity());
-                    data.setIconId(weatherInCity.getWeather().get(0).getIcon());
-                    data.setWeatherDescription(weatherInCity.getWeather().get(0).getDescription());
-
-                    Bitmap bitmap = Picasso.with(applicationContext)
-                        .load(ICON_URL_HEAD + data.getIconId() + ICON_URL_TAIL)
-                        .get();
-                    data.setIcon(bitmap);
-
-                    return data;
-                });
+            return weatherApi.getCurrentWeatherForLocation(location.latitude, location.longitude);
         }
     }
 
