@@ -27,7 +27,7 @@ public class MainPresenterTest {
     public void before() throws Exception {
         mainViewInteractor = mock(MainViewInteractor.class);
         mainView = mock(MainView.class);
-        mainPresenter = new MainPresenter(mainViewInteractor);
+        mainPresenter = new MainPresenter.Factory(mainViewInteractor).create();
     }
 
     @Test
