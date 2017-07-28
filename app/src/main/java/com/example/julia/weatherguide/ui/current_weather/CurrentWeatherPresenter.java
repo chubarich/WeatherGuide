@@ -136,9 +136,9 @@ public class CurrentWeatherPresenter extends BasePresenter<CurrentWeatherView> {
         }
     }
 
-// ---------------------------------------- inner types ----------------------------------------
+    // --------------------------------------- inner types ----------------------------------------
 
-    class CurrentWeatherViewState {
+    private class CurrentWeatherViewState {
 
         private boolean isLoading;
         private WeatherDataModel data;
