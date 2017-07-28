@@ -25,41 +25,44 @@ import java.util.List;
 import io.reactivex.Completable;
 import io.reactivex.Single;
 
+import static com.example.julia.weatherguide.repositories.exception.ExceptionBundle.Reason.EMPTY_DATABASE;
 import static com.example.julia.weatherguide.repositories.exception.ExceptionBundle.Reason.NETWORK_UNAVAILABLE;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.verify;
 
 @RunWith(RobolectricTestRunner.class)
 @Config(manifest = Config.NONE)
 public class CurrentWeatherRepositoryTest {
 
-    private static final Location DUMMY_LOCATION = new Location(1.5f, 2.0f);
-    private static final String DUMMY_NETWORK_DESCRIPTION = "NETWORK";
-    private static final double DUMMY_NETWORK_TEMPERATURE = 22.5;
-    private static final String DUMMY_NETWORK_LOCATION_NAME= "unused";
-    private static final String DUMMY_DATABASE_DESCRIPTION = "DATABASE";
-    private static final double DUMMY_DATABASE_TEMPERATURE = 2567.2;
-    private static final String DUMMY_DATABASE_LOCATION_NAME = "default city";
+    private static final Location LOCATION = new Location(1.5f, 2.0f);
+    private static final String NETWORK_DESCRIPTION = "NETWORK";
+    private static final double NETWORK_TEMPERATURE = 22.5;
+    private static final String NETWORK_LOCATION_NAME = "unused";
+    private static final String DATABASE_DESCRIPTION = "DATABASE";
+    private static final double DATABASE_TEMPERATURE = 2567.2;
+    private static final String DATABASE_LOCATION_NAME = "default city";
 
     private CurrentWeatherRepositoryImpl currentWeatherRepository;
     private SharedPreferenceService sharedPreferenceService;
     private NetworkService networkService;
-    private Picasso picasso;
-    private RequestCreator requestCreator;
 
     @Before
     public void before() throws Exception {
         sharedPreferenceService = mock(SharedPreferenceService.class);
         networkService = mock(NetworkService.class);
-        picasso = mock(Picasso.class);
-        requestCreator = mock(RequestCreator.class);
+        Picasso picasso = mock(Picasso.class);
+        RequestCreator requestCreator = mock(RequestCreator.class);
 
         when(picasso.load(anyString())).thenReturn(requestCreator);
         when(requestCreator.get()).thenThrow(new IOException());
         when(sharedPreferenceService.saveWeatherForCurrentLocation(any(WeatherDataModel.class)))
-            .thenReturn(Completable.fromAction(()->{}));
+            .thenReturn(Completable.fromAction(() -> {
+            }));
 
         currentWeatherRepository = new CurrentWeatherRepositoryImpl(
             sharedPreferenceService,
@@ -78,13 +81,13 @@ public class CurrentWeatherRepositoryTest {
 
         currentWeatherRepository.getCurrentWeather()
             .test()
-            .assertError(error -> error instanceof ExceptionBundle
-                && ((ExceptionBundle) error).getReason()
-                == ExceptionBundle.Reason.LOCATION_NOT_INITIALIZED
+            .assertError(error ->
+                error instanceof ExceptionBundle
+                    && ((ExceptionBundle) error).getReason()
+                    == ExceptionBundle.Reason.LOCATION_NOT_INITIALIZED
             );
-
-        Mockito.verify(sharedPreferenceService, Mockito.never()).getCurrentWeather();
-        Mockito.verify(networkService, Mockito.never()).getCurrentWeather(any(Location.class));
+        Mockito.verify(sharedPreferenceService, never()).getCurrentWeather();
+        Mockito.verify(networkService, never()).getCurrentWeather(any(Location.class));
     }
 
     @Test
@@ -93,13 +96,13 @@ public class CurrentWeatherRepositoryTest {
 
         currentWeatherRepository.getFreshCurrentWeather()
             .test()
-            .assertError(error -> error instanceof ExceptionBundle
-                && ((ExceptionBundle) error).getReason()
-                == ExceptionBundle.Reason.LOCATION_NOT_INITIALIZED
+            .assertError(error ->
+                error instanceof ExceptionBundle
+                    && ((ExceptionBundle) error).getReason()
+                    == ExceptionBundle.Reason.LOCATION_NOT_INITIALIZED
             );
-
-        Mockito.verify(sharedPreferenceService, Mockito.never()).getCurrentWeather();
-        Mockito.verify(networkService, Mockito.never()).getCurrentWeather(any(Location.class));
+        Mockito.verify(sharedPreferenceService, never()).getCurrentWeather();
+        Mockito.verify(networkService, never()).getCurrentWeather(any(Location.class));
     }
 
 
@@ -108,47 +111,42 @@ public class CurrentWeatherRepositoryTest {
     @Test
     public void getCurrentWeather_hasInternet() throws Exception {
         setLocationInitialized();
-        when(networkService.getCurrentWeather(any(Location.class))).thenReturn(
-            Single.just(getDummyNetworkWeather())
-        );
-        when(sharedPreferenceService.getCurrentWeather()).thenReturn(
-            Single.just(getDummyDatabaseWeather())
-        );
+        when(networkService.getCurrentWeather(any(Location.class)))
+            .thenReturn(Single.just(getDummyNetworkWeather()));
+        when(sharedPreferenceService.getCurrentWeather())
+            .thenReturn(Single.just(getDummyDatabaseWeather()));
 
         currentWeatherRepository.getCurrentWeather()
             .test()
             .assertNoErrors()
             .assertComplete()
-            .assertValue(weatherDataModel -> weatherDataModel.getLocationName().equals(DUMMY_DATABASE_LOCATION_NAME)
-                && weatherDataModel.getWeatherDescription().equals(DUMMY_NETWORK_DESCRIPTION)
-                && weatherDataModel.getCurrentTemperature().equals(String.valueOf(DUMMY_NETWORK_TEMPERATURE))
+            .assertValue(weatherDataModel ->
+                weatherDataModel.getLocationName().equals(DATABASE_LOCATION_NAME)
+                    && weatherDataModel.getWeatherDescription().equals(NETWORK_DESCRIPTION)
+                    && weatherDataModel.getCurrentTemperature().equals(String.valueOf(NETWORK_TEMPERATURE))
             );
-
         Mockito.verify(networkService, Mockito.times(1)).getCurrentWeather(any(Location.class));
-        Mockito.verify(sharedPreferenceService, Mockito.never()).getCurrentWeather();
+        Mockito.verify(sharedPreferenceService, never()).getCurrentWeather();
     }
 
     @Test
     public void getFreshCurrentWeather_hasInternet() throws Exception {
         setLocationInitialized();
-        when(networkService.getCurrentWeather(any(Location.class))).thenReturn(
-            Single.just(getDummyNetworkWeather())
-        );
-        when(sharedPreferenceService.getCurrentWeather()).thenReturn(
-            Single.just(getDummyDatabaseWeather())
-        );
+        when(networkService.getCurrentWeather(any(Location.class)))
+            .thenReturn(Single.just(getDummyNetworkWeather()));
+        when(sharedPreferenceService.getCurrentWeather())
+            .thenReturn(Single.just(getDummyDatabaseWeather()));
 
-       currentWeatherRepository.getFreshCurrentWeather()
+        currentWeatherRepository.getFreshCurrentWeather()
             .test()
             .assertComplete()
             .assertValue(weatherDataModel ->
-                weatherDataModel.getLocationName().equals(DUMMY_DATABASE_LOCATION_NAME)
-                && weatherDataModel.getWeatherDescription().equals(DUMMY_NETWORK_DESCRIPTION)
-                && weatherDataModel.getCurrentTemperature().equals(String.valueOf(DUMMY_NETWORK_TEMPERATURE))
+                weatherDataModel.getLocationName().equals(DATABASE_LOCATION_NAME)
+                    && weatherDataModel.getWeatherDescription().equals(NETWORK_DESCRIPTION)
+                    && weatherDataModel.getCurrentTemperature().equals(String.valueOf(NETWORK_TEMPERATURE))
             );
-
-        Mockito.verify(sharedPreferenceService, Mockito.never()).getCurrentWeather();
-        Mockito.verify(networkService, Mockito.atLeastOnce()).getCurrentWeather(any(Location.class));
+        verify(sharedPreferenceService, never()).getCurrentWeather();
+        verify(networkService, atLeastOnce()).getCurrentWeather(any(Location.class));
     }
 
 
@@ -158,21 +156,19 @@ public class CurrentWeatherRepositoryTest {
     @Test
     public void getFreshCurrentWeather_noInternet() throws Exception {
         setLocationInitialized();
-        when(networkService.getCurrentWeather(any(Location.class))).thenReturn(
-            Single.error(new ExceptionBundle(NETWORK_UNAVAILABLE))
-        );
-        when(sharedPreferenceService.getCurrentWeather()).thenReturn(
-            Single.just(getDummyDatabaseWeather())
-        );
+        when(networkService.getCurrentWeather(any(Location.class)))
+            .thenReturn(Single.error(new ExceptionBundle(NETWORK_UNAVAILABLE)));
+        when(sharedPreferenceService.getCurrentWeather())
+            .thenReturn(Single.just(getDummyDatabaseWeather()));
 
         currentWeatherRepository.getFreshCurrentWeather()
             .test()
-            .assertError(error -> error instanceof ExceptionBundle
-                && ((ExceptionBundle) error).getReason() == NETWORK_UNAVAILABLE
+            .assertError(error ->
+                error instanceof ExceptionBundle
+                    && ((ExceptionBundle) error).getReason() == NETWORK_UNAVAILABLE
             );
-
-        Mockito.verify(sharedPreferenceService, Mockito.never()).getCurrentWeather();
-        Mockito.verify(networkService, Mockito.atLeastOnce()).getCurrentWeather(any(Location.class));
+        verify(sharedPreferenceService, never()).getCurrentWeather();
+        verify(networkService, atLeastOnce()).getCurrentWeather(any(Location.class));
     }
 
 
@@ -182,22 +178,19 @@ public class CurrentWeatherRepositoryTest {
     @Test
     public void getCurrentWeather_noInternet_noDatabase() throws Exception {
         setLocationInitialized();
-        when(networkService.getCurrentWeather(any(Location.class))).thenReturn(
-            Single.error(new ExceptionBundle(NETWORK_UNAVAILABLE))
-        );
-        when(sharedPreferenceService.getCurrentWeather()).thenReturn(
-            Single.error(new ExceptionBundle(ExceptionBundle.Reason.EMPTY_DATABASE))
-        );
+        when(networkService.getCurrentWeather(any(Location.class)))
+            .thenReturn(Single.error(new ExceptionBundle(NETWORK_UNAVAILABLE)));
+        when(sharedPreferenceService.getCurrentWeather())
+            .thenReturn(Single.error(new ExceptionBundle(EMPTY_DATABASE)));
 
         currentWeatherRepository.getCurrentWeather()
             .test()
-            .assertError(error -> error instanceof ExceptionBundle
-                && ((ExceptionBundle) error).getReason()
-                == ExceptionBundle.Reason.EMPTY_DATABASE
+            .assertError(error ->
+                error instanceof ExceptionBundle
+                    && ((ExceptionBundle) error).getReason() == EMPTY_DATABASE
             );
-
-        Mockito.verify(sharedPreferenceService, Mockito.atLeastOnce()).getCurrentWeather();
-        Mockito.verify(networkService, Mockito.atLeastOnce()).getCurrentWeather(any(Location.class));
+        verify(sharedPreferenceService, atLeastOnce()).getCurrentWeather();
+        verify(networkService, atLeastOnce()).getCurrentWeather(any(Location.class));
     }
 
 
@@ -207,29 +200,28 @@ public class CurrentWeatherRepositoryTest {
     @Test
     public void getCurrentWeather_noInternet_hasInDatabase() throws Exception {
         setLocationInitialized();
-        when(networkService.getCurrentWeather(DUMMY_LOCATION)).thenReturn(
-            Single.error(new ExceptionBundle(NETWORK_UNAVAILABLE))
-        );
-        when(sharedPreferenceService.getCurrentWeather()).thenReturn(
-            Single.just(getDummyDatabaseWeather())
-        );
+        when(networkService.getCurrentWeather(LOCATION))
+            .thenReturn(Single.error(new ExceptionBundle(NETWORK_UNAVAILABLE)));
+        when(sharedPreferenceService.getCurrentWeather())
+            .thenReturn(Single.just(getDummyDatabaseWeather()));
 
         currentWeatherRepository.getCurrentWeather()
             .test()
             .assertComplete()
-            .assertValue(weatherDataModel -> weatherDataModel.getLocationName().equals(DUMMY_DATABASE_LOCATION_NAME)
-                && weatherDataModel.getWeatherDescription().equals(DUMMY_DATABASE_DESCRIPTION)
-                && weatherDataModel.getCurrentTemperature().equals(String.valueOf(DUMMY_DATABASE_TEMPERATURE))
+            .assertValue(weatherDataModel ->
+                weatherDataModel.getLocationName().equals(DATABASE_LOCATION_NAME)
+                    && weatherDataModel.getWeatherDescription().equals(DATABASE_DESCRIPTION)
+                    && weatherDataModel.getCurrentTemperature().equals(String.valueOf(DATABASE_TEMPERATURE))
             );
-
-        Mockito.verify(sharedPreferenceService, Mockito.atLeastOnce()).getCurrentWeather();
-        Mockito.verify(networkService, Mockito.atLeastOnce()).getCurrentWeather(any(Location.class));
+        verify(sharedPreferenceService, atLeastOnce()).getCurrentWeather();
+        verify(networkService, atLeastOnce()).getCurrentWeather(any(Location.class));
     }
 
+    // --------------------------------------- private --------------------------------------------
 
     private void setLocationInitialized() {
-        when(sharedPreferenceService.getCurrentLocation()).thenReturn(DUMMY_LOCATION);
-        when(sharedPreferenceService.getCurrentLocationName()).thenReturn(DUMMY_DATABASE_LOCATION_NAME);
+        when(sharedPreferenceService.getCurrentLocation()).thenReturn(LOCATION);
+        when(sharedPreferenceService.getCurrentLocationName()).thenReturn(DATABASE_LOCATION_NAME);
         when(sharedPreferenceService.isLocationInitialized()).thenReturn(true);
     }
 
@@ -241,19 +233,19 @@ public class CurrentWeatherRepositoryTest {
 
     private WeatherDataModel getDummyDatabaseWeather() {
         WeatherDataModel dummyWeather = new WeatherDataModel();
-        dummyWeather.setLocationName(DUMMY_DATABASE_LOCATION_NAME);
-        dummyWeather.setCurrentTemperature(String.valueOf(DUMMY_DATABASE_TEMPERATURE));
-        dummyWeather.setWeatherDescription(DUMMY_DATABASE_DESCRIPTION);
+        dummyWeather.setLocationName(DATABASE_LOCATION_NAME);
+        dummyWeather.setCurrentTemperature(String.valueOf(DATABASE_TEMPERATURE));
+        dummyWeather.setWeatherDescription(DATABASE_DESCRIPTION);
         return dummyWeather;
     }
 
     private WeatherInCity getDummyNetworkWeather() {
         Main main = new Main();
-        main.setTemp(DUMMY_NETWORK_TEMPERATURE);
+        main.setTemp(NETWORK_TEMPERATURE);
         main.setHumidity(1);
 
         Weather weather = new Weather();
-        weather.setDescription(DUMMY_NETWORK_DESCRIPTION);
+        weather.setDescription(NETWORK_DESCRIPTION);
         weather.setIcon("");
         List<Weather> list = new ArrayList<>();
         list.add(weather);
@@ -261,7 +253,7 @@ public class CurrentWeatherRepositoryTest {
         WeatherInCity weatherInCity = new WeatherInCity();
         weatherInCity.setMain(main);
         weatherInCity.setWeather(list);
-        weatherInCity.setName(DUMMY_NETWORK_LOCATION_NAME);
+        weatherInCity.setName(NETWORK_LOCATION_NAME);
         return weatherInCity;
     }
 }

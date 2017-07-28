@@ -89,9 +89,10 @@ public class SharedPreferencesServiceTest {
     public void saveWeather_throwsLocationNotInitialized() throws Exception {
         sharedPreferenceService.saveWeatherForCurrentLocation(getDummyWeather())
             .test()
-            .assertError(throwable -> throwable instanceof ExceptionBundle
-                && ((ExceptionBundle) throwable).getReason()
-                == ExceptionBundle.Reason.LOCATION_NOT_INITIALIZED
+            .assertError(throwable ->
+                throwable instanceof ExceptionBundle
+                    && ((ExceptionBundle) throwable).getReason()
+                    == ExceptionBundle.Reason.LOCATION_NOT_INITIALIZED
             );
     }
 
@@ -100,9 +101,10 @@ public class SharedPreferencesServiceTest {
     public void getWeather_throwsLocationNotInitialized() throws Exception {
         sharedPreferenceService.getCurrentWeather()
             .test()
-            .assertError(throwable -> (throwable instanceof ExceptionBundle)
-                && ((ExceptionBundle) throwable).getReason()
-                == ExceptionBundle.Reason.LOCATION_NOT_INITIALIZED
+            .assertError(throwable ->
+                (throwable instanceof ExceptionBundle)
+                    && ((ExceptionBundle) throwable).getReason()
+                    == ExceptionBundle.Reason.LOCATION_NOT_INITIALIZED
             );
     }
 
@@ -112,9 +114,10 @@ public class SharedPreferencesServiceTest {
 
         sharedPreferenceService.getCurrentWeather()
             .test()
-            .assertError(throwable -> (throwable instanceof ExceptionBundle)
-                && ((ExceptionBundle) throwable).getReason()
-                == ExceptionBundle.Reason.EMPTY_DATABASE
+            .assertError(throwable ->
+                (throwable instanceof ExceptionBundle)
+                    && ((ExceptionBundle) throwable).getReason()
+                    == ExceptionBundle.Reason.EMPTY_DATABASE
             );
     }
 
@@ -132,12 +135,15 @@ public class SharedPreferencesServiceTest {
             .assertValueCount(1)
             .assertValue(weatherDataModel ->
                 weatherDataModel.getHumidity() == dummyWeather.getHumidity()
-                && weatherDataModel.getIconId().equals(dummyWeather.getIconId())
-                && weatherDataModel.getLocationName().equals(dummyWeather.getLocationName())
-                && weatherDataModel.getWeatherDescription() != null
-                && weatherDataModel.getCurrentTemperature() != null
+                    && weatherDataModel.getIconId().equals(dummyWeather.getIconId())
+                    && weatherDataModel.getLocationName().equals(dummyWeather.getLocationName())
+                    && weatherDataModel.getWeatherDescription() != null
+                    && weatherDataModel.getCurrentTemperature() != null
             );
     }
+
+
+    // -------------------------------------- private ---------------------------------------------
 
     private WeatherDataModel getDummyWeather() {
         WeatherDataModel dummyWeather = new WeatherDataModel();
@@ -149,5 +155,4 @@ public class SharedPreferencesServiceTest {
         dummyWeather.setWeatherDescription("");
         return dummyWeather;
     }
-
 }
