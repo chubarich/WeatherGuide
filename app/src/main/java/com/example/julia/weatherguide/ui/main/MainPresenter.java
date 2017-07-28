@@ -11,7 +11,7 @@ public class MainPresenter extends BasePresenter<MainView> {
     private final MainViewInteractor mainViewInteractor;
     private final CompositeDisposable compositeDisposable;
 
-    public MainPresenter(MainViewInteractor mainViewInteractor) {
+    private MainPresenter(MainViewInteractor mainViewInteractor) {
         this.mainViewInteractor = mainViewInteractor;
         this.compositeDisposable = new CompositeDisposable();
     }
