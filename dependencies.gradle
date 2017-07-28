@@ -24,8 +24,9 @@ ext.versions = [
 
         espresso                     : '2.2.2',
         junit                        : '4.12',
-        mockito                      : '2.7.22',
+        mockito                      : '2.1.0',
         robolectric                  : '3.3.2',
+        powermock                    : '1.6.6',
 
         googlePlaces                 : '11.0.2'
 ]
@@ -67,6 +68,11 @@ ext.libraries = [
         espressoCore            : "com.android.support.test.espresso:espresso-core:$versions.espresso",
         mockito                 : "org.mockito:mockito-core:$versions.mockito",
         robolectric             : "org.robolectric:robolectric:$versions.robolectric",
+        powermock               : "org.powermock:powermock:$versions.powermock",
+        powermock_junit         : "org.powermock:powermock-module-junit4:$versions.powermock",
+        powermock_api           : "org.powermock:powermock-api-mockito:$versions.powermock",
+        powermock_rule          : "org.powermock:powermock-module-junit4-rule:$versions.powermock",
+        powermock_classloader   : "org.powermock:powermock-classloading-xstream:$versions.powermock",
 
         googlePlaces            : "com.google.android.gms:play-services-places:$versions.googlePlaces"
 ]

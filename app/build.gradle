@@ -90,6 +90,10 @@ dependencies {
     compile libraries.googlePlaces
 
     testCompile libraries.junit
-    testCompile libraries.mockito
     testCompile libraries.robolectric
+    testCompile libraries.powermock
+    testCompile libraries.powermock_junit
+    testCompile libraries.powermock_api
+    testCompile libraries.powermock_rule
+    testCompile libraries.powermock_classloader
 }

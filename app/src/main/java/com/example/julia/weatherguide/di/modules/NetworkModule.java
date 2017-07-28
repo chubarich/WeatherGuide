@@ -14,8 +14,8 @@ public class NetworkModule {
 
     @Provides
     @ScreenScope
-    NetworkService provideOpenWeatherMapNetworkService(Context context) {
-        return new OpenWeatherMapNetworkService(context);
+    NetworkService provideOpenWeatherMapNetworkService() {
+        return new OpenWeatherMapNetworkService();
     }
 
 }

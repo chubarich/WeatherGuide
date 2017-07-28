@@ -15,7 +15,6 @@ public class CurrentWeatherPresenter extends BasePresenter<CurrentWeatherView> {
     private final CurrentWeatherInteractor currentWeatherInteractor;
     private CompositeDisposable compositeDisposable;
 
-
     private CurrentWeatherPresenter(CurrentWeatherInteractor currentWeatherInteractor) {
         this.currentWeatherInteractor = currentWeatherInteractor;
         compositeDisposable = new CompositeDisposable();
@@ -25,20 +24,20 @@ public class CurrentWeatherPresenter extends BasePresenter<CurrentWeatherView> {
 
     @Override
     protected void onViewAttached() {
-        if (viewState.isLoading()) {
-            if (viewState.isReasonForLoadingUpdate()) {
-                refreshCurrentWeather();
-            } else {
-                loadCurrentWeather();
-            }
-        } else {
-            if (viewState.hasData()) {
-                getView().showData(viewState.getData());
-            } else {
-                loadCurrentWeather();
-            }
+        if (viewState.isLoading) {
+            prepareViewForRefreshData();
+        }
+
+        if (viewState.hasData()) {
+            getView().showData(viewState.getData());
+        }
+
+        if (viewState.firstStart) {
+            viewState.setFirstStart(false);
+            loadCurrentWeather();
         }
     }
+
 
     @Override
     protected void onViewDetached() {
@@ -54,7 +53,6 @@ public class CurrentWeatherPresenter extends BasePresenter<CurrentWeatherView> {
 
     public void refreshCurrentWeather() {
         prepareViewForRefreshData();
-        viewState.setReasonForLoadingUpdate(true);
         compositeDisposable.add(
             currentWeatherInteractor.getFreshCurrentWeather()
                 .subscribe(
@@ -138,32 +136,24 @@ public class CurrentWeatherPresenter extends BasePresenter<CurrentWeatherView> {
         }
     }
 
-    // ---------------------------------------- inner types ----------------------------------------
+// ---------------------------------------- inner types ----------------------------------------
 
-    private class CurrentWeatherViewState {
+    class CurrentWeatherViewState {
 
         private boolean isLoading;
-        private boolean reasonForLoadingUpdate = false;
         private WeatherDataModel data;
+        private boolean firstStart = true;
 
         private void setLoading(boolean loading) {
             isLoading = loading;
-        }
-
-        private void setReasonForLoadingUpdate(boolean reasonForLoadingUpdate) {
-            this.reasonForLoadingUpdate = reasonForLoadingUpdate;
         }
 
         public void setData(WeatherDataModel data) {
             this.data = data;
         }
 
-        private boolean isLoading() {
-            return isLoading;
-        }
-
-        private boolean isReasonForLoadingUpdate() {
-            return reasonForLoadingUpdate;
+        private void setFirstStart(boolean firstStart) {
+            this.firstStart = firstStart;
         }
 
         public WeatherDataModel getData() {
