@@ -50,10 +50,10 @@ public class SettingsPresenter extends BasePresenter<SettingsView> {
                         )
                 );
             } else {
-                getView().showNumberFormatError();
+                if (isViewAttached()) getView().showNumberFormatError();
             }
         } catch (NumberFormatException e) {
-            getView().showNumberFormatError();
+            if (isViewAttached()) getView().showNumberFormatError();
         }
     }
 
