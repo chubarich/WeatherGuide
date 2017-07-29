@@ -7,6 +7,8 @@ import com.example.julia.weatherguide.repositories.exception.ExceptionBundle;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.concurrent.TimeUnit;
+
 import io.reactivex.Single;
 
 import static com.example.julia.weatherguide.repositories.exception.ExceptionBundle.Reason.EMPTY_DATABASE;
@@ -15,6 +17,7 @@ import static com.example.julia.weatherguide.repositories.exception.ExceptionBun
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.timeout;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -38,7 +41,7 @@ public class CurrentWeatherPresenterTest {
     }
 
     @Test
-    public void onViewAttach_callsLoadCurrentWeather_success() {
+    public void onViewAttach_callsLoadCurrentWeather_showsWeather() {
         WeatherDataModel dummy = getDummyDatabaseWeather();
         when(currentWeatherInteractor.getCurrentWeather())
             .thenReturn(Single.just(dummy));
@@ -97,6 +100,83 @@ public class CurrentWeatherPresenterTest {
         verify(currentWeatherView, never()).showCityNotPicked();
         verify(currentWeatherView, never()).showData(any(WeatherDataModel.class));
     }
+
+    @Test
+    public void onViewAttach_onViewDetach_showsWeatherEachTimeDetaches() {
+        WeatherDataModel dummy = getDummyDatabaseWeather();
+        when(currentWeatherInteractor.getCurrentWeather())
+            .thenReturn(Single.just(dummy));
+
+        currentWeatherPresenter.attachView(currentWeatherView);
+        currentWeatherPresenter.detachView();
+        currentWeatherPresenter.attachView(currentWeatherView);
+        currentWeatherPresenter.detachView();
+        currentWeatherPresenter.attachView(currentWeatherView);
+
+        verify(currentWeatherView, times(1)).showLoading();
+        verify(currentWeatherView, times(1)).hideLoading();
+        verify(currentWeatherView, times(3)).showData(dummy);
+        verify(currentWeatherView, never()).showEmptyView();
+        verify(currentWeatherView, never()).showNoInternet();
+        verify(currentWeatherView, never()).showCityNotPicked();
+    }
+
+    @Test
+    public void onViewAttach_onViewDetach_showLoadingAndWeatherAgain() {
+        WeatherDataModel dummy = getDummyDatabaseWeather();
+        when(currentWeatherInteractor.getCurrentWeather())
+            .thenReturn(Single.just(dummy).delay(3, TimeUnit.SECONDS));
+
+        currentWeatherPresenter.attachView(currentWeatherView);
+        currentWeatherPresenter.detachView();
+        currentWeatherPresenter.attachView(currentWeatherView);
+
+        verify(currentWeatherView, timeout(4000).times(2)).showLoading();
+        verify(currentWeatherView, timeout(4000).times(1)).hideLoading();
+        verify(currentWeatherView, timeout(4000).times(1)).showData(dummy);
+        verify(currentWeatherView, never()).showEmptyView();
+        verify(currentWeatherView, never()).showNoInternet();
+        verify(currentWeatherView, never()).showCityNotPicked();
+    }
+
+    @Test
+    public void onViewAttach_onViewDetach_refreshCurrentWeather_networkUnavailable() {
+        WeatherDataModel dummy = getDummyDatabaseWeather();
+        when(currentWeatherInteractor.getCurrentWeather())
+            .thenReturn(Single.just(dummy));
+        when(currentWeatherInteractor.getFreshCurrentWeather())
+            .thenReturn(Single.error(new ExceptionBundle(NETWORK_UNAVAILABLE)));
+
+        currentWeatherPresenter.attachView(currentWeatherView);
+        currentWeatherPresenter.refreshCurrentWeather();
+
+        verify(currentWeatherView, times(2)).showLoading();
+        verify(currentWeatherView, times(2)).hideLoading();
+        verify(currentWeatherView, times(1)).showData(dummy);
+        verify(currentWeatherView, times(1)).showNoInternet();
+        verify(currentWeatherView, never()).showEmptyView();
+        verify(currentWeatherView, never()).showCityNotPicked();
+    }
+
+    @Test
+    public void onViewAttach_onViewDetach_refreshCurrentWeather_success() {
+        WeatherDataModel dummy = getDummyDatabaseWeather();
+        when(currentWeatherInteractor.getCurrentWeather())
+            .thenReturn(Single.just(dummy));
+        when(currentWeatherInteractor.getFreshCurrentWeather())
+            .thenReturn(Single.just(dummy));
+
+        currentWeatherPresenter.attachView(currentWeatherView);
+        currentWeatherPresenter.refreshCurrentWeather();
+
+        verify(currentWeatherView, times(2)).showLoading();
+        verify(currentWeatherView, times(2)).hideLoading();
+        verify(currentWeatherView, times(2)).showData(dummy);
+        verify(currentWeatherView, never()).showEmptyView();
+        verify(currentWeatherView, never()).showNoInternet();
+        verify(currentWeatherView, never()).showCityNotPicked();
+    }
+
 
 
     private WeatherDataModel getDummyDatabaseWeather() {
