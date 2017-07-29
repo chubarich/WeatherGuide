@@ -10,6 +10,7 @@ import com.example.julia.weatherguide.repositories.network.weather_data.WeatherI
 import com.google.gson.GsonBuilder;
 import com.squareup.picasso.Picasso;
 
+import java.io.IOException;
 import java.util.Locale;
 
 import io.reactivex.Single;
@@ -19,6 +20,8 @@ import okhttp3.Request;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
+
+import static com.example.julia.weatherguide.repositories.exception.ExceptionBundle.Reason.NETWORK_UNAVAILABLE;
 
 public class OpenWeatherMapNetworkService implements NetworkService {
 
@@ -51,7 +54,12 @@ public class OpenWeatherMapNetworkService implements NetworkService {
         if (location == null) {
             return Single.error(new ExceptionBundle(ExceptionBundle.Reason.LOCATION_NOT_INITIALIZED));
         } else {
-            return weatherApi.getCurrentWeatherForLocation(location.latitude, location.longitude);
+            return weatherApi.getCurrentWeatherForLocation(location.latitude, location.longitude)
+                .onErrorResumeNext(error ->
+                    error instanceof IOException
+                        ? Single.error(new ExceptionBundle(NETWORK_UNAVAILABLE))
+                        : Single.error(error)
+                );
         }
     }
 
