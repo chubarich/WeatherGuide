@@ -47,7 +47,7 @@ public class CurrentWeatherRepositoryTest {
     private static final double DATABASE_TEMPERATURE = 2567.2;
     private static final String DATABASE_LOCATION_NAME = "default city";
 
-    private CurrentWeatherRepositoryImpl currentWeatherRepository;
+    private CurrentWeatherRepository currentWeatherRepository;
     private SharedPreferenceService sharedPreferenceService;
     private NetworkService networkService;
 
