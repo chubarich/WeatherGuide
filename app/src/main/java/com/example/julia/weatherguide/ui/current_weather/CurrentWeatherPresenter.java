@@ -80,17 +80,12 @@ public class CurrentWeatherPresenter extends BasePresenter<CurrentWeatherView> {
     private void onError(Throwable error) {
         if (error instanceof ExceptionBundle) {
             ExceptionBundle exceptionWithReason = (ExceptionBundle) error;
-            // TODO: change interactors to throw only ExceptionBundle for proper exception handling
             if (exceptionWithReason.getReason() == ExceptionBundle.Reason.LOCATION_NOT_INITIALIZED) {
                 showCityNotPicked();
             } else if (exceptionWithReason.getReason() == ExceptionBundle.Reason.EMPTY_DATABASE) {
                 showEmptyView();
-            }
-        } else {
-            if (viewState.hasData()) {
+            } else if (exceptionWithReason.getReason() == ExceptionBundle.Reason.NETWORK_UNAVAILABLE) {
                 showNoInternet();
-            } else {
-                showEmptyView();
             }
         }
     }
