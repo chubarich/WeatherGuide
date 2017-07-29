@@ -55,7 +55,6 @@ public class CurrentWeatherPresenterTest {
 
     @Test
     public void onViewAttach_callsLoadCurrentWeather_locationNotInitialized() {
-        WeatherDataModel dummy = getDummyDatabaseWeather();
         when(currentWeatherInteractor.getCurrentWeather())
             .thenReturn(Single.error(new ExceptionBundle(LOCATION_NOT_INITIALIZED)));
 
@@ -64,8 +63,8 @@ public class CurrentWeatherPresenterTest {
         verify(currentWeatherView, times(1)).showLoading();
         verify(currentWeatherView, times(1)).hideLoading();
         verify(currentWeatherView, times(1)).showCityNotPicked();
+        verify(currentWeatherView, times(1)).showEmptyView();
         verify(currentWeatherView, never()).showNoInternet();
-        verify(currentWeatherView, never()).showEmptyView();
         verify(currentWeatherView, never()).showData(any(WeatherDataModel.class));
     }
 
