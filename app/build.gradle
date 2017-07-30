@@ -96,4 +96,7 @@ dependencies {
     testCompile libraries.powermock_api
     testCompile libraries.powermock_rule
     testCompile libraries.powermock_classloader
+
+    androidTestCompile libraries.espressoCore
+    androidTestCompile libraries.supportAnnotations
 }
