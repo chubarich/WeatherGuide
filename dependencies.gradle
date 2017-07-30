@@ -20,9 +20,15 @@ ext.versions = [
         firebase                     : '0.7.0',
         picasso                      : '2.5.2',
         dagger                       : '2.11',
+        rxbinding                    : '2.0.0',
 
         espresso                     : '2.2.2',
         junit                        : '4.12',
+        mockito                      : '2.1.0',
+        robolectric                  : '3.3.2',
+        powermock                    : '1.6.6',
+
+        googlePlaces                 : '11.0.2'
 ]
 
 ext.gradlePlugins = [
@@ -53,9 +59,20 @@ ext.libraries = [
         picasso                 : "com.squareup.picasso:picasso:$versions.picasso",
         dagger                  : "com.google.dagger:dagger:$versions.dagger",
         daggerProcessor         : "com.google.dagger:dagger-compiler:$versions.dagger",
+        rxbinding               : "com.jakewharton.rxbinding2:rxbinding:$versions.rxbinding",
+        rxbinding_v7            : "com.jakewharton.rxbinding2:rxbinding-appcompat-v7:$versions.rxbinding",
         // Test dependencies
         junit                   : "junit:junit:$versions.junit",
         supportTestRunner       : "com.android.support.test:runner:$versions.supportTestRunner",
         supportTestRules        : "com.android.support.test:rules:$versions.supportTestRunner",
-        espressoCore            : "com.android.support.test.espresso:espresso-core:$versions.espresso"
+        espressoCore            : "com.android.support.test.espresso:espresso-core:$versions.espresso",
+        mockito                 : "org.mockito:mockito-core:$versions.mockito",
+        robolectric             : "org.robolectric:robolectric:$versions.robolectric",
+        powermock               : "org.powermock:powermock:$versions.powermock",
+        powermock_junit         : "org.powermock:powermock-module-junit4:$versions.powermock",
+        powermock_api           : "org.powermock:powermock-api-mockito:$versions.powermock",
+        powermock_rule          : "org.powermock:powermock-module-junit4-rule:$versions.powermock",
+        powermock_classloader   : "org.powermock:powermock-classloading-xstream:$versions.powermock",
+
+        googlePlaces            : "com.google.android.gms:play-services-places:$versions.googlePlaces"
 ]

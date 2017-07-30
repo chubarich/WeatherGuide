@@ -1,6 +1,5 @@
 package com.example.julia.weatherguide.services.refresh;
 
-
 import android.util.Log;
 
 import com.example.julia.weatherguide.WeatherGuideApplication;
@@ -12,29 +11,31 @@ import javax.inject.Inject;
 
 import io.reactivex.schedulers.Schedulers;
 
-
-/**
- * Created by julia on 15.07.17.
- */
-
 public class CurrentWeatherRefreshDataService extends JobService {
 
-    @Inject
-    CurrentWeatherRepository repository;
+    private final static String TAG = CurrentWeatherRefreshDataService.class.getSimpleName();
 
-    private static final String TAG = CurrentWeatherRefreshDataService.class.getSimpleName();
+    @Inject
+    CurrentWeatherRepository currentWeatherRepository;
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        ((WeatherGuideApplication) getApplication()).getCurrentWeatherComponent()
+            .inject(this);
+    }
 
     @Override
     public boolean onStartJob(JobParameters job) {
-        repository.getFreshCurrentWeatherForLocation(repository.getCurrentLocation())
-                .subscribeOn(Schedulers.io()).subscribe(data -> {
-                    //TODO: print to log and skip this data
+        currentWeatherRepository.getFreshCurrentWeather()
+            .subscribeOn(Schedulers.io())
+            .subscribe(
+                data -> {
+                    jobFinished(job, false);
                     Log.d(TAG, "onStartJob get data ");
-                 }, error -> {
-                    //TODO: print this error to log
-                    Log.d(TAG, "onStartJob error " + error.getLocalizedMessage());
-                 }, () -> jobFinished(job, false)
-                );
+                },
+                error -> Log.d(TAG, "onStartJob error " + error.getLocalizedMessage())
+            );
         return true;
     }
 
@@ -43,9 +44,4 @@ public class CurrentWeatherRefreshDataService extends JobService {
         return true;
     }
 
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        WeatherGuideApplication.getDataComponent().inject(this);
-    }
 }

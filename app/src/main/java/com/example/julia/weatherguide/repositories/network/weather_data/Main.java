@@ -1,27 +1,18 @@
 package com.example.julia.weatherguide.repositories.network.weather_data;
 
-import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-/**
- * Created by julia on 13.07.17.
- */
 public class Main {
 
     @SerializedName("temp")
-    @Expose
     private Double temp;
     @SerializedName("pressure")
-    @Expose
-    private Integer pressure;
+    private Double pressure;
     @SerializedName("humidity")
-    @Expose
     private Integer humidity;
     @SerializedName("temp_min")
-    @Expose
     private Double tempMin;
     @SerializedName("temp_max")
-    @Expose
     private Double tempMax;
 
     public Double getTemp() {
@@ -32,11 +23,11 @@ public class Main {
         this.temp = temp;
     }
 
-    public Integer getPressure() {
+    public Double getPressure() {
         return pressure;
     }
 
-    public void setPressure(Integer pressure) {
+    public void setPressure(Double pressure) {
         this.pressure = pressure;
     }
 

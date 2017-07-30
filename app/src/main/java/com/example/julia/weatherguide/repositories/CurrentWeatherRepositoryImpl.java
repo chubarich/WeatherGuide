@@ -1,38 +1,89 @@
 package com.example.julia.weatherguide.repositories;
 
-import android.support.annotation.NonNull;
+import android.graphics.Bitmap;
 
-import com.example.julia.weatherguide.repositories.data.CurrentWeatherDataModel;
+import com.example.julia.weatherguide.repositories.data.Location;
+import com.example.julia.weatherguide.repositories.data.WeatherDataModel;
+import com.example.julia.weatherguide.repositories.exception.ExceptionBundle;
+import com.example.julia.weatherguide.repositories.network.NetworkService;
+import com.example.julia.weatherguide.repositories.network.weather_data.WeatherInCity;
 import com.example.julia.weatherguide.repositories.storage.preferences.SharedPreferenceService;
-import com.example.julia.weatherguide.repositories.network.OpenWeatherMapNetworkService;
+import com.squareup.picasso.Picasso;
 
-import io.reactivex.Observable;
+import java.io.IOException;
 
-
-/**
- * Created by julia on 15.07.17.
- */
+import io.reactivex.Completable;
+import io.reactivex.Single;
 
 public class CurrentWeatherRepositoryImpl implements CurrentWeatherRepository {
 
-    private static final String TAG = CurrentWeatherRepositoryImpl.class.getSimpleName();
+    private static final String ICON_URL_HEAD = "http://openweathermap.org/img/w/";
+    private static final String ICON_URL_TAIL = ".png";
 
-    @Override
-    public Observable<CurrentWeatherDataModel> getCurrentWeatherForLocation(@NonNull String location) {
-            return SharedPreferenceService.getService().getCurrentWeather(location)
-                    .switchIfEmpty(getFreshCurrentWeatherForLocation(location));
+    private final SharedPreferenceService sharedPreferenceService;
+    private final NetworkService openWeatherMapNetworkService;
+    private final Picasso picasso;
+
+    public CurrentWeatherRepositoryImpl(SharedPreferenceService sharedPreferenceService,
+                                        NetworkService networkService,
+                                        Picasso picasso) {
+        this.sharedPreferenceService = sharedPreferenceService;
+        this.openWeatherMapNetworkService = networkService;
+        this.picasso = picasso;
     }
 
     @Override
-    public Observable<CurrentWeatherDataModel> getFreshCurrentWeatherForLocation(@NonNull String location) {
-        Observable<CurrentWeatherDataModel> dataFromNetwork = OpenWeatherMapNetworkService.getService().getCurrentWeather(location);
-        return dataFromNetwork.doOnNext(data -> {
-                    SharedPreferenceService.getService().saveToSharedPreferences(data);
-                });
+    public Single<WeatherDataModel> getCurrentWeather() {
+        return getFreshCurrentWeather()
+            .onErrorResumeNext(sharedPreferenceService.getCurrentWeather());
     }
 
     @Override
-    public String getCurrentLocation() {
-        return SharedPreferenceService.getService().getCurrentLocationId();
+    public Single<WeatherDataModel> getFreshCurrentWeather() {
+        if (!isLocationInitialized()) {
+            return Single.error(new ExceptionBundle(ExceptionBundle.Reason.LOCATION_NOT_INITIALIZED));
+        } else {
+            return openWeatherMapNetworkService.getCurrentWeather(sharedPreferenceService.getCurrentLocation())
+                .map(this::getWeatherDataModelFromNetwork)
+                .flatMap(weatherDataModel ->
+                    sharedPreferenceService.saveWeatherForCurrentLocation(weatherDataModel)
+                        .onErrorComplete()
+                        .toSingle(() -> {
+                            weatherDataModel.setLocationName(sharedPreferenceService.getCurrentLocationName());
+                            return weatherDataModel;
+                        })
+                );
+        }
+    }
+
+    @Override
+    public Completable saveCurrentLocation(final Location location, final String cityName) {
+        return sharedPreferenceService.saveCurrentLocation(location, cityName);
+    }
+
+    @Override
+    public boolean isLocationInitialized() {
+        return sharedPreferenceService.isLocationInitialized();
+    }
+
+
+    private WeatherDataModel getWeatherDataModelFromNetwork(WeatherInCity weatherInCity) {
+        WeatherDataModel data = new WeatherDataModel();
+        data.setLocationName(weatherInCity.getName());
+        data.setCurrentTemperature(String.valueOf(weatherInCity.getMain().getTemp()));
+        data.setHumidity(weatherInCity.getMain().getHumidity());
+        data.setIconId(weatherInCity.getWeather().get(0).getIcon());
+        data.setWeatherDescription(weatherInCity.getWeather().get(0).getDescription());
+
+        Bitmap bitmap = null;
+        try {
+            bitmap = picasso.load(ICON_URL_HEAD + data.getIconId() + ICON_URL_TAIL).get();
+        } catch (IOException e) {
+            // do nothing
+        } finally {
+            data.setIcon(bitmap);
+        }
+
+        return data;
     }
 }

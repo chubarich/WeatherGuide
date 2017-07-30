@@ -1,18 +1,19 @@
 package com.example.julia.weatherguide.ui.current_weather;
 
-import com.example.julia.weatherguide.repositories.data.CurrentWeatherDataModel;
-import com.example.julia.weatherguide.ui.base.BaseView;
-
-/**
- * Created by julia on 15.07.17.
- */
+import com.example.julia.weatherguide.repositories.data.WeatherDataModel;
+import com.example.julia.weatherguide.ui.base.view.BaseView;
 
 public interface CurrentWeatherView extends BaseView {
 
     void showLoading();
+
     void hideLoading();
-    void showError();
+
+    void showNoInternet();
+
+    void showCityNotPicked();
+
     void showEmptyView();
 
-    void showData(CurrentWeatherDataModel data);
+    void showData(WeatherDataModel data);
 }
