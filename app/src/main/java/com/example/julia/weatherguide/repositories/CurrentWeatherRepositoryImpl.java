@@ -14,9 +14,6 @@ import java.io.IOException;
 
 import io.reactivex.Completable;
 import io.reactivex.Single;
-import io.reactivex.SingleSource;
-import io.reactivex.annotations.NonNull;
-import io.reactivex.functions.Function;
 
 public class CurrentWeatherRepositoryImpl implements CurrentWeatherRepository {
 
@@ -37,14 +34,8 @@ public class CurrentWeatherRepositoryImpl implements CurrentWeatherRepository {
 
     @Override
     public Single<WeatherDataModel> getCurrentWeather() {
-        if (!isLocationInitialized()) {
-            return Single.error(new ExceptionBundle(ExceptionBundle.Reason.LOCATION_NOT_INITIALIZED));
-        } else {
-            return getFreshCurrentWeather()
-                .onErrorResumeNext(
-                    throwable -> sharedPreferenceService.getCurrentWeather()
-                );
-        }
+        return getFreshCurrentWeather()
+            .onErrorResumeNext(sharedPreferenceService.getCurrentWeather());
     }
 
     @Override

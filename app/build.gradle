@@ -78,6 +78,8 @@ dependencies {
 
     compile libraries.rxjava
     compile libraries.rxandroid
+    compile libraries.rxbinding
+    compile libraries.rxbinding_v7
 
     compile libraries.firebase
 
@@ -94,7 +96,4 @@ dependencies {
     testCompile libraries.powermock_api
     testCompile libraries.powermock_rule
     testCompile libraries.powermock_classloader
-
-    androidTestCompile libraries.espressoCore
-    androidTestCompile libraries.supportAnnotations
 }
