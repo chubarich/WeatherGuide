@@ -1,69 +1,109 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <LinearLayout
-        android:layout_width="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_location_name"
+        style="@style/TextAppearance.AppCompat.Display1"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_gravity="center">
-        <LinearLayout
-            android:orientation="vertical"
+        android:layout_alignParentRight="true"
+        android:textAlignment="viewEnd"
+        android:gravity="end"
+        android:layout_marginRight="@dimen/horizontal_margin"
+        android:layout_marginTop="@dimen/vertical_margin"
+        android:layout_toRightOf="@+id/tv_current_degrees"
+        android:textSize="@dimen/weather_location_name_text_size"/>
+
+    <TextView
+        android:id="@+id/tv_current_degrees"
+        style="@style/TextAppearance.AppCompat.Display1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/horizontal_margin"
+        android:layout_marginTop="@dimen/vertical_margin"
+        android:textColor="@color/colorPrimary"
+        tools:text="@string/celcium_symbol"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/layout_humidity"
+        android:layout_below="@+id/tv_current_degrees"
+        android:layout_marginLeft="@dimen/horizontal_margin"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_humidity_title"
+            style="@style/TextAppearance.AppCompat.Body1"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-            <TextView
-                android:id="@+id/tv_current_degrees"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                />
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/humidity"/>
-                <TextView
-                    android:id="@+id/tv_humidity"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/strings_margin"
+            android:text="@string/humidity"
+            android:visibility="gone"/>
 
-        </LinearLayout>
-
-        <LinearLayout
-            android:orientation="vertical"
+        <TextView
+            android:id="@+id/tv_humidity"
+            style="@style/TextAppearance.AppCompat.Body1"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
-            <ImageView
-                android:id="@+id/iv_weather_icon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-            <TextView
-                android:id="@+id/tv_location_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/current_location_name"/>
-        </LinearLayout>
-
-
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            tools:text="@string/humidity"/>
 
     </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/layout_humidity"
+        android:layout_marginLeft="@dimen/horizontal_margin"
+        android:layout_marginTop="12dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_weather_description"
+            style="@style/TextAppearance.AppCompat.Body1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <ImageView
+            android:id="@+id/iv_weather_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="@dimen/strings_margin"/>
+
+    </LinearLayout>
+
     <Button
         android:id="@+id/bn_refresh_current_weather"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/button_name_refresh"
-        />
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/strings_margin"
+        android:text="@string/button_name_refresh"/>
 
     <ProgressBar
         android:id="@+id/pb_loading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/strings_margin"
         android:visibility="gone"/>
 
-</LinearLayout>
+    <TextView
+        android:id="@+id/tv_empty_view"
+        style="@style/TextAppearance.AppCompat.Display1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:textAlignment="center"
+        android:text="@string/empty_view_string"
+        android:visibility="gone"/>
+
+</RelativeLayout>

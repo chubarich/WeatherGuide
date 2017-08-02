@@ -1,25 +1,16 @@
 package com.example.julia.weatherguide.repositories.network.weather_data;
 
-import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-
-/**
- * Created by julia on 13.07.17.
- */
 
 public class Weather {
 
     @SerializedName("id")
-    @Expose
     private Integer id;
     @SerializedName("main")
-    @Expose
     private String main;
     @SerializedName("description")
-    @Expose
     private String description;
     @SerializedName("icon")
-    @Expose
     private String icon;
 
     public Integer getId() {

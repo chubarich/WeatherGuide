@@ -1,18 +1,12 @@
 package com.example.julia.weatherguide.repositories.network.weather_data;
 
-import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-/**
- * Created by julia on 13.07.17.
- */
-public class Coord {
+class Coord {
 
     @SerializedName("lon")
-    @Expose
     private Double lon;
     @SerializedName("lat")
-    @Expose
     private Double lat;
 
     public Double getLon() {

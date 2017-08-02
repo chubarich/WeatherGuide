@@ -5,9 +5,6 @@ import java.lang.annotation.RetentionPolicy;
 
 import javax.inject.Scope;
 
-/**
- * Created by julia on 21.07.17.
- */
 @Scope
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ScreenScope {

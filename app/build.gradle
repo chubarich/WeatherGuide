@@ -30,9 +30,10 @@ android {
     buildTypes {
         debug {
             debuggable true
+            signingConfig signingConfigs.config
         }
-
         release {
+            debuggable true
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.config
@@ -57,7 +58,7 @@ repositories {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    androidTestCompile( libraries.espressoCore, {
+    androidTestCompile(libraries.espressoCore, {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     compile libraries.supportAppCompat
@@ -84,5 +85,16 @@ dependencies {
     compile libraries.dagger
     annotationProcessor libraries.daggerProcessor
 
+    compile libraries.googlePlaces
+
     testCompile libraries.junit
+    testCompile libraries.robolectric
+    testCompile libraries.powermock
+    testCompile libraries.powermock_junit
+    testCompile libraries.powermock_api
+    testCompile libraries.powermock_rule
+    testCompile libraries.powermock_classloader
+
+    androidTestCompile libraries.espressoCore
+    androidTestCompile libraries.supportAnnotations
 }

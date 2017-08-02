@@ -8,9 +8,6 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 
-/**
- * Created by julia on 20.07.17.
- */
 @Module
 public class AppModule {
 
@@ -22,7 +19,7 @@ public class AppModule {
 
     @Provides
     @Singleton
-    public Context proviveContext() {
+    Context provideContext() {
         return context;
     }
 

@@ -10,25 +10,30 @@
 
 
     <string name="drawer_open" translatable="false">open drawer</string>
-
     <string name="drawer_close" translatable="false">close drawer</string>
     <string name="celcium_symbol" translatable="false">\u2103</string>
+
     <string name="button_name_refresh">refresh</string>
-    <string name="current_location_name">Moscow</string>
-    <string name="moscow_location_id" translatable="false">524901</string>
 
     //weather parameters
     <string name="humidity">humidity: </string>
 
     //preferences
-    <string name="refresh_key" translatable="false">refresh_key</string>
     <string name="refresh_period">Refresh period</string>
-    <string name="refresh_period_summary">Set refresh period (in minutes)</string>
-    <string name="refresh_period_message">Set refresh period in hours</string>
+    <string name="refresh_period_summary">Set refresh period (minutes)</string>
     <string name="default_refresh_period" translatable="false">3</string>
+    <string name="interval_picked_success">Interval was successfully changed</string>
+    <string name="refresh_key" translatable="false">refresh_key</string>
+    <string name="pick_city_key" translatable="false">pick_city_key</string>
+    <string name="pick_city">Pick city</string>
 
     //errors
-    <string name="network_error_description">Network error.Check your internet connection.</string>
-    <string name="wrong_time_value">Check value</string>
+    <string name="network_error_description">Network error. Check your internet connection.</string>
+    <string name="wrong_time_value">Illegal time value.</string>
+    <string name="play_services_not_available">Google Play Services are not enabled on the device.</string>
+    <string name="city_not_picked_description">City was not picked. You can do this in settings.</string>
+    <string name="city_not_picked_before_interval">City must be picked before refresh interval.</string>
+    <string name="city_not_picked">City was not changed</string>
+    <string name="city_was_picked">City was successfully changed</string>
 
 </resources>

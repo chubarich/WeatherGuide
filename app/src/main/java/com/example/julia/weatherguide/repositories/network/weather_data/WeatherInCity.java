@@ -1,51 +1,34 @@
 package com.example.julia.weatherguide.repositories.network.weather_data;
 
-import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-/**
- * Created by julia on 13.07.17.
- */
-
 public class WeatherInCity {
 
     @SerializedName("coord")
-    @Expose
     private Coord coord;
     @SerializedName("weather")
-    @Expose
     private List<Weather> weather = null;
     @SerializedName("base")
-    @Expose
     private String base;
     @SerializedName("main")
-    @Expose
     private Main main;
     @SerializedName("visibility")
-    @Expose
     private Integer visibility;
     @SerializedName("wind")
-    @Expose
     private Wind wind;
     @SerializedName("clouds")
-    @Expose
     private Clouds clouds;
     @SerializedName("dt")
-    @Expose
     private Integer dt;
     @SerializedName("sys")
-    @Expose
     private Sys sys;
     @SerializedName("id")
-    @Expose
     private Integer id;
     @SerializedName("name")
-    @Expose
     private String name;
     @SerializedName("cod")
-    @Expose
     private Integer cod;
 
     public Coord getCoord() {
