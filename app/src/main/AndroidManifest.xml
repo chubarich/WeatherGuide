@@ -12,9 +12,9 @@
         android:roundIcon="@mipmap/ic_round_cloud_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:name=".WeatherGuideApplication"
+        android:name=".presentation.application.WeatherGuideApplication"
         android:theme="@style/AppTheme.NoActionBar.TransparentStatusBar">
-        <activity android:name="com.example.julia.weatherguide.ui.main.MainActivity">
+        <activity android:name="com.example.julia.weatherguide.presentation.main.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

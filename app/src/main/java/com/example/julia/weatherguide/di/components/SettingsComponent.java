@@ -5,7 +5,7 @@ import com.example.julia.weatherguide.di.modules.SchedulerModule;
 import com.example.julia.weatherguide.di.modules.SettingsModule;
 import com.example.julia.weatherguide.di.modules.StorageModule;
 import com.example.julia.weatherguide.di.scopes.ScreenScope;
-import com.example.julia.weatherguide.ui.settings.SettingsFragment;
+import com.example.julia.weatherguide.presentation.settings.SettingsFragment;
 
 import dagger.Subcomponent;
 

@@ -2,9 +2,10 @@ package com.example.julia.weatherguide.repositories.storage.preferences;
 
 import android.content.SharedPreferences;
 
-import com.example.julia.weatherguide.repositories.data.Location;
-import com.example.julia.weatherguide.repositories.data.WeatherDataModel;
-import com.example.julia.weatherguide.repositories.exception.ExceptionBundle;
+import com.example.julia.weatherguide.data.data_services.local.settings.SharedPreferenceService;
+import com.example.julia.weatherguide.data.entities.repository.Location;
+import com.example.julia.weatherguide.data.entities.repository.WeatherDataModel;
+import com.example.julia.weatherguide.data.exceptions.ExceptionBundle;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -27,14 +28,14 @@ public class SharedPreferencesServiceTest {
 
 
     private SharedPreferences sharedPreferences;
-    private SharedPreferenceServiceImpl sharedPreferenceService;
+    private SharedPreferenceService sharedPreferenceService;
 
     @Before
     public void before() throws Exception {
         sharedPreferences = RuntimeEnvironment.application
             .getSharedPreferences(SHARED_PREFERENCES_DUMMY_NAME, 0);
         sharedPreferences.edit().clear().apply();
-        sharedPreferenceService = new SharedPreferenceServiceImpl(sharedPreferences);
+        sharedPreferenceService = new SharedPreferenceService(sharedPreferences);
     }
 
     @Test
@@ -62,21 +63,21 @@ public class SharedPreferencesServiceTest {
 
     @Test
     public void saveLocation_isLocationInitialized_saveAndReturnTrue() throws Exception {
-        sharedPreferenceService.saveCurrentLocation(DUMMY_LOCATION, DUMMY_LOCATION_NAME).blockingAwait();
+        sharedPreferenceService.addLocation(DUMMY_LOCATION, DUMMY_LOCATION_NAME).blockingAwait();
 
         assertTrue(sharedPreferenceService.isLocationInitialized());
     }
 
     @Test
     public void saveLocation_getLocationName_saveAndReturnExpected() throws Exception {
-        sharedPreferenceService.saveCurrentLocation(DUMMY_LOCATION, DUMMY_LOCATION_NAME).blockingAwait();
+        sharedPreferenceService.addLocation(DUMMY_LOCATION, DUMMY_LOCATION_NAME).blockingAwait();
 
         assertEquals(sharedPreferenceService.getCurrentLocationName(), DUMMY_LOCATION_NAME);
     }
 
     @Test
     public void saveLocation_getLocation_saveAndReturnExpected() throws Exception {
-        sharedPreferenceService.saveCurrentLocation(DUMMY_LOCATION, DUMMY_LOCATION_NAME).blockingAwait();
+        sharedPreferenceService.addLocation(DUMMY_LOCATION, DUMMY_LOCATION_NAME).blockingAwait();
 
         Location location = sharedPreferenceService.getCurrentLocation();
         assertNotNull(location);
@@ -99,7 +100,7 @@ public class SharedPreferencesServiceTest {
 
     @Test
     public void getWeather_throwsLocationNotInitialized() throws Exception {
-        sharedPreferenceService.getCurrentWeather()
+        sharedPreferenceService.getWeather()
             .test()
             .assertError(throwable ->
                 (throwable instanceof ExceptionBundle)
@@ -110,9 +111,9 @@ public class SharedPreferencesServiceTest {
 
     @Test
     public void saveLocation_getWeather_throwsEmptyDatabase() throws Exception {
-        sharedPreferenceService.saveCurrentLocation(DUMMY_LOCATION, DUMMY_LOCATION_NAME).blockingAwait();
+        sharedPreferenceService.addLocation(DUMMY_LOCATION, DUMMY_LOCATION_NAME).blockingAwait();
 
-        sharedPreferenceService.getCurrentWeather()
+        sharedPreferenceService.getWeather()
             .test()
             .assertError(throwable ->
                 (throwable instanceof ExceptionBundle)
@@ -123,12 +124,12 @@ public class SharedPreferencesServiceTest {
 
     @Test
     public void saveLocation_saveWeather_getWeather_returnsExpected() throws Exception {
-        sharedPreferenceService.saveCurrentLocation(DUMMY_LOCATION, DUMMY_LOCATION_NAME).blockingAwait();
+        sharedPreferenceService.addLocation(DUMMY_LOCATION, DUMMY_LOCATION_NAME).blockingAwait();
 
         WeatherDataModel dummyWeather = getDummyWeather();
         sharedPreferenceService.saveWeatherForCurrentLocation(dummyWeather).blockingAwait();
 
-        sharedPreferenceService.getCurrentWeather()
+        sharedPreferenceService.getWeather()
             .test()
             .assertComplete()
             .assertNoErrors()

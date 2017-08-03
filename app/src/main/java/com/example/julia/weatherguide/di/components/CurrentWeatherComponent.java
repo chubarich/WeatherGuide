@@ -6,7 +6,7 @@ import com.example.julia.weatherguide.di.modules.SchedulerModule;
 import com.example.julia.weatherguide.di.modules.StorageModule;
 import com.example.julia.weatherguide.di.scopes.ScreenScope;
 import com.example.julia.weatherguide.services.refresh.CurrentWeatherRefreshDataService;
-import com.example.julia.weatherguide.ui.current_weather.CurrentWeatherFragment;
+import com.example.julia.weatherguide.presentation.current_weather.CurrentWeatherFragment;
 
 import dagger.Subcomponent;
 

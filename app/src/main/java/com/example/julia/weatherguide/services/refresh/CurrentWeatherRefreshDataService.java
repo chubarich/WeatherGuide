@@ -2,8 +2,8 @@ package com.example.julia.weatherguide.services.refresh;
 
 import android.util.Log;
 
-import com.example.julia.weatherguide.WeatherGuideApplication;
-import com.example.julia.weatherguide.repositories.CurrentWeatherRepository;
+import com.example.julia.weatherguide.data.repositories.weather.WeatherRepository;
+import com.example.julia.weatherguide.presentation.application.WeatherGuideApplication;
 import com.firebase.jobdispatcher.JobParameters;
 import com.firebase.jobdispatcher.JobService;
 
@@ -16,7 +16,7 @@ public class CurrentWeatherRefreshDataService extends JobService {
     private final static String TAG = CurrentWeatherRefreshDataService.class.getSimpleName();
 
     @Inject
-    CurrentWeatherRepository currentWeatherRepository;
+    WeatherRepository weatherRepository;
 
     @Override
     public void onCreate() {
@@ -27,7 +27,7 @@ public class CurrentWeatherRefreshDataService extends JobService {
 
     @Override
     public boolean onStartJob(JobParameters job) {
-        currentWeatherRepository.getFreshCurrentWeather()
+        weatherRepository.getFreshWeather()
             .subscribeOn(Schedulers.io())
             .subscribe(
                 data -> {

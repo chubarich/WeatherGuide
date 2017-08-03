@@ -1,6 +1,6 @@
 package com.example.julia.weatherguide.interactors;
 
-import com.example.julia.weatherguide.repositories.data.WeatherDataModel;
+import com.example.julia.weatherguide.data.entities.repository.WeatherDataModel;
 
 import io.reactivex.Single;
 

@@ -1,20 +1,20 @@
 package com.example.julia.weatherguide.interactors;
 
-import com.example.julia.weatherguide.repositories.CurrentWeatherRepository;
-import com.example.julia.weatherguide.repositories.data.Location;
+import com.example.julia.weatherguide.data.repositories.weather.WeatherRepository;
+import com.example.julia.weatherguide.data.entities.repository.Location;
 
 import io.reactivex.Completable;
 import io.reactivex.Scheduler;
 
 public class MainViewInteractorImpl implements MainViewInteractor {
 
-    private CurrentWeatherRepository repository;
+    private WeatherRepository repository;
     private final Scheduler workerScheduler;
     private final Scheduler uiScheduler;
 
-    public MainViewInteractorImpl(CurrentWeatherRepository currentWeatherRepository,
+    public MainViewInteractorImpl(WeatherRepository weatherRepository,
                                   Scheduler workerScheduler, Scheduler uiScheduler) {
-        this.repository = currentWeatherRepository;
+        this.repository = weatherRepository;
         this.workerScheduler = workerScheduler;
         this.uiScheduler = uiScheduler;
     }

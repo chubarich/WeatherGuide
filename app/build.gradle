@@ -5,7 +5,6 @@ def keystorePropertiesFile = rootProject.file("keystore.properties")
 def keystoreProperties = new Properties()
 keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 
-
 android {
     signingConfigs {
         config {
@@ -39,17 +38,18 @@ android {
             signingConfig signingConfigs.config
         }
     }
+    buildTypes.each {
+        it.buildConfigField 'String', 'WEATHER_API_KEY', keystoreProperties['WeatherApiKey'];
+    }
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
-
     configurations.all {
         resolutionStrategy.force 'com.google.code.findbugs:jsr305:3.0.1'
     }
-
 }
 
 repositories {

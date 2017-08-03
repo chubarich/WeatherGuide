@@ -3,10 +3,10 @@ package com.example.julia.weatherguide.di.modules;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.example.julia.weatherguide.data.data_services.local.settings.SettingsService;
 import com.example.julia.weatherguide.di.qualifiers.SharedPreferencesName;
 import com.example.julia.weatherguide.di.scopes.ScreenScope;
-import com.example.julia.weatherguide.repositories.storage.preferences.SharedPreferenceService;
-import com.example.julia.weatherguide.repositories.storage.preferences.SharedPreferenceServiceImpl;
+import com.example.julia.weatherguide.data.data_services.local.settings.SharedPreferenceService;
 
 import dagger.Module;
 import dagger.Provides;
@@ -30,8 +30,8 @@ public class StorageModule {
 
     @Provides
     @ScreenScope
-    SharedPreferenceService provideSharedPreferenceService(SharedPreferences sharedPreferences) {
-        return new SharedPreferenceServiceImpl(sharedPreferences);
+    SettingsService provideSharedPreferenceService(SharedPreferences sharedPreferences) {
+        return new SharedPreferenceService(sharedPreferences);
     }
 
 }

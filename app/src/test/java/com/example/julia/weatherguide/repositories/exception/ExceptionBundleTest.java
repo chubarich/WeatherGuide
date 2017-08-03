@@ -1,5 +1,7 @@
 package com.example.julia.weatherguide.repositories.exception;
 
+import com.example.julia.weatherguide.data.exceptions.ExceptionBundle;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;

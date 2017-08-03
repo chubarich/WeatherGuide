@@ -2,18 +2,18 @@ package com.example.julia.weatherguide.di.modules;
 
 import android.content.Context;
 
+import com.example.julia.weatherguide.data.data_services.local.settings.SettingsService;
+import com.example.julia.weatherguide.data.data_services.network.weather.NetworkWeatherService;
 import com.example.julia.weatherguide.di.qualifiers.UiScheduler;
 import com.example.julia.weatherguide.di.qualifiers.WorkerScheduler;
 import com.example.julia.weatherguide.di.scopes.ScreenScope;
 import com.example.julia.weatherguide.interactors.MainViewInteractor;
 import com.example.julia.weatherguide.interactors.MainViewInteractorImpl;
-import com.example.julia.weatherguide.repositories.CurrentWeatherRepository;
-import com.example.julia.weatherguide.repositories.CurrentWeatherRepositoryImpl;
-import com.example.julia.weatherguide.repositories.network.NetworkService;
-import com.example.julia.weatherguide.repositories.storage.preferences.SharedPreferenceService;
-import com.example.julia.weatherguide.ui.base.presenter.PresenterFactory;
-import com.example.julia.weatherguide.ui.main.MainPresenter;
-import com.example.julia.weatherguide.ui.main.MainView;
+import com.example.julia.weatherguide.data.repositories.weather.WeatherRepository;
+import com.example.julia.weatherguide.data.repositories.weather.OpenWeatherMapRepository;
+import com.example.julia.weatherguide.presentation.base.presenter.PresenterFactory;
+import com.example.julia.weatherguide.presentation.main.MainPresenter;
+import com.example.julia.weatherguide.presentation.main.MainView;
 import com.squareup.picasso.Picasso;
 
 import dagger.Module;
@@ -31,19 +31,19 @@ public class MainViewModule {
 
     @Provides
     @ScreenScope
-    CurrentWeatherRepository provideRepository(SharedPreferenceService sharedPreferenceService,
-                                               NetworkService openWeatherMapNetworkService,
-                                               Picasso picasso) {
-        return new CurrentWeatherRepositoryImpl(sharedPreferenceService, openWeatherMapNetworkService,
+    WeatherRepository provideRepository(SettingsService settingsService,
+                                        NetworkWeatherService openWeatherMapNetworkService,
+                                        Picasso picasso) {
+        return new OpenWeatherMapRepository(settingsService, openWeatherMapNetworkService,
             picasso);
     }
 
     @Provides
     @ScreenScope
-    MainViewInteractor provideMainViewInteractor(CurrentWeatherRepository currentWeatherRepository,
+    MainViewInteractor provideMainViewInteractor(WeatherRepository weatherRepository,
                                                  @WorkerScheduler Scheduler workerScheduler,
                                                  @UiScheduler Scheduler uiScheduler) {
-        return new MainViewInteractorImpl(currentWeatherRepository, workerScheduler, uiScheduler);
+        return new MainViewInteractorImpl(weatherRepository, workerScheduler, uiScheduler);
     }
 
     @Provides

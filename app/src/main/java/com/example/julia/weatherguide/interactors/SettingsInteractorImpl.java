@@ -2,8 +2,8 @@ package com.example.julia.weatherguide.interactors;
 
 import android.content.Context;
 
-import com.example.julia.weatherguide.repositories.CurrentWeatherRepository;
-import com.example.julia.weatherguide.repositories.exception.ExceptionBundle;
+import com.example.julia.weatherguide.data.repositories.weather.WeatherRepository;
+import com.example.julia.weatherguide.data.exceptions.ExceptionBundle;
 import com.example.julia.weatherguide.services.refresh.CurrentWeatherRefreshDataService;
 import com.firebase.jobdispatcher.Constraint;
 import com.firebase.jobdispatcher.Driver;
@@ -24,14 +24,14 @@ public class SettingsInteractorImpl implements SettingsInteractor {
     private static final int WINDOW_IN_MINUTES = 30;
 
     private Context context;
-    private CurrentWeatherRepository repository;
+    private WeatherRepository repository;
     private final Scheduler workerScheduler;
     private final Scheduler uiScheduler;
 
-    public SettingsInteractorImpl(Context context, CurrentWeatherRepository currentWeatherRepository,
+    public SettingsInteractorImpl(Context context, WeatherRepository weatherRepository,
                                   Scheduler workerScheduler, Scheduler uiScheduler) {
         this.context = context.getApplicationContext();
-        this.repository = currentWeatherRepository;
+        this.repository = weatherRepository;
         this.workerScheduler = workerScheduler;
         this.uiScheduler = uiScheduler;
     }
