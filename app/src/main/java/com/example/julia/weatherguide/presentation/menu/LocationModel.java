@@ -21,7 +21,7 @@ public interface LocationModel {
 
     void setDeletionMode(boolean newValue);
 
-    boolean isDeletionMode();
+    boolean isInDeletionMode();
 
 
     interface Callbacks {

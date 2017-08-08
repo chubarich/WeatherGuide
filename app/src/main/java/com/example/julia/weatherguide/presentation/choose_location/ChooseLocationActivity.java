@@ -42,7 +42,7 @@ public class ChooseLocationActivity extends BaseActivity<ChooseLocationPresenter
 
     private View rootView;
     private Toolbar toolbar;
-    private TextView textError;
+    private TextView textMessage;
     private ProgressBar progressBar;
     private EditText editChooseLocation;
     private RecyclerView recyclerView;
@@ -65,8 +65,9 @@ public class ChooseLocationActivity extends BaseActivity<ChooseLocationPresenter
     @Override
     protected void onDestroy() {
         if (chooseLocationDisposable != null) chooseLocationDisposable.dispose();
-        if (recyclerView.getAdapter() != null)
+        if (recyclerView.getAdapter() != null) {
             ((LocationPredictionModel) recyclerView.getAdapter()).detachCallbacks();
+        }
         super.onDestroy();
     }
 
@@ -84,8 +85,8 @@ public class ChooseLocationActivity extends BaseActivity<ChooseLocationPresenter
     @Override
     public void showNoInternet(boolean asOverlay) {
         if (asOverlay) {
-            textError.setText("Интернет соединение отсутствует");
-            textError.setVisibility(View.VISIBLE);
+            textMessage.setText("Интернет соединение отсутствует");
+            textMessage.setVisibility(View.VISIBLE);
         } else {
             Toast.makeText(this, "Интернет соединение отсутствует", Toast.LENGTH_SHORT).show();
         }
@@ -100,12 +101,14 @@ public class ChooseLocationActivity extends BaseActivity<ChooseLocationPresenter
         );
 
         if (locationPredictions.size() != 0) {
-            textError.setVisibility(View.INVISIBLE);
+            textMessage.setVisibility(View.INVISIBLE);
             recyclerView.setVisibility(View.VISIBLE);
         } else if (!request.isEmpty()) {
-            textError.setText("По запросу \"" + request + "\" ничего не найдено");
+            textMessage.setText("По запросу \"" + request + "\" ничего не найдено");
             recyclerView.setVisibility(View.INVISIBLE);
-            textError.setVisibility(View.VISIBLE);
+            textMessage.setVisibility(View.VISIBLE);
+        } else {
+            showDefaultView();
         }
     }
 
@@ -116,7 +119,12 @@ public class ChooseLocationActivity extends BaseActivity<ChooseLocationPresenter
 
     @Override
     public void hideProgressBar() {
-        progressBar.setVisibility(View.INVISIBLE);
+        if (progressBar != null) progressBar.setVisibility(View.INVISIBLE);
+    }
+
+    @Override
+    public void showProgressBar() {
+        if (progressBar != null) progressBar.setVisibility(View.VISIBLE);
     }
 
     // -------------------------------------- BaseActivity ----------------------------------------
@@ -146,7 +154,7 @@ public class ChooseLocationActivity extends BaseActivity<ChooseLocationPresenter
     private void initializeView() {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         rootView = findViewById(R.id.root_view);
-        textError = (TextView) findViewById(R.id.text_error);
+        textMessage = (TextView) findViewById(R.id.text_message);
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
         editChooseLocation = (EditText) findViewById(R.id.edit_choose_location);
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
@@ -159,13 +167,14 @@ public class ChooseLocationActivity extends BaseActivity<ChooseLocationPresenter
         }
 
         progressBar.setVisibility(View.INVISIBLE);
-        textError.setVisibility(View.INVISIBLE);
+        textMessage.setVisibility(View.INVISIBLE);
         recyclerView.setVisibility(View.INVISIBLE);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(new LocationPredictionAdapter());
 
         setListeners();
+        showDefaultView();
     }
 
     private void setListeners() {
@@ -179,12 +188,18 @@ public class ChooseLocationActivity extends BaseActivity<ChooseLocationPresenter
             .observeOn(AndroidSchedulers.mainThread())
             .doOnNext(charSequence -> {
                 progressBar.setVisibility(View.VISIBLE);
-                textError.setVisibility(View.INVISIBLE);
+                textMessage.setVisibility(View.INVISIBLE);
                 recyclerView.setVisibility(View.INVISIBLE);
             })
             .subscribe(phrase -> {
                 ((ChooseLocationPresenter) getPresenter()).onInputPhraseChanged(phrase);
             });
+    }
+
+    private void showDefaultView() {
+        recyclerView.setVisibility(View.INVISIBLE);
+        textMessage.setText(getString(R.string.choose_location));
+        textMessage.setVisibility(View.VISIBLE);
     }
 
     private void returnActivityResult(Location location) {

@@ -116,7 +116,7 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationViewHolder> im
     }
 
     @Override
-    public boolean isDeletionMode() {
+    public boolean isInDeletionMode() {
         return isDeletionMode;
     }
 

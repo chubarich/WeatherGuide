@@ -11,6 +11,8 @@ public interface ChooseLocationView extends BaseView {
 
     void hideProgressBar();
 
+    void showProgressBar();
+
     void showNoInternet(boolean asOverlay);
 
     void showResults(List<LocationPrediction> locationPredictions, String request);

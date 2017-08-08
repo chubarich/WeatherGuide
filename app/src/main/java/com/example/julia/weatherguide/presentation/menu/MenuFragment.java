@@ -10,6 +10,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.Toast;
 
 import com.example.julia.weatherguide.R;
@@ -36,9 +37,11 @@ import static android.app.Activity.RESULT_OK;
 public class MenuFragment extends BaseFragment<MenuPresenter, MenuView>
     implements MenuView {
 
+    private ScrollView scrollView;
     private RecyclerView recyclerView;
     private LinearLayout layoutMenu;
-    private LinearLayout layoutSubmenu;
+    private LinearLayout layoutBottomSubmenu;
+    private LinearLayout layoutTopSubmenu;
     private View buttonAbout;
     private View buttonSettings;
     private View buttonEditLocations;
@@ -151,11 +154,11 @@ public class MenuFragment extends BaseFragment<MenuPresenter, MenuView>
     // ---------------------------------------- private -------------------------------------------
 
     private void initializeView(View view) {
+        scrollView = (ScrollView) view.findViewById(R.id.scroll_view);
         layoutMenu = (LinearLayout) view.findViewById(R.id.layout_menu);
         layoutMenu.setVisibility(View.INVISIBLE);
-        layoutMenu.setOnClickListener(v -> setLocationModelDeletionModeFalse());
-
-        layoutSubmenu = (LinearLayout) view.findViewById(R.id.layout_submenu);
+        layoutBottomSubmenu = (LinearLayout) view.findViewById(R.id.layout_bottom_submenu);
+        layoutTopSubmenu = (LinearLayout) view.findViewById(R.id.layout_top_submenu);
 
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         recyclerView.setAdapter(new LocationAdapter());
@@ -176,6 +179,13 @@ public class MenuFragment extends BaseFragment<MenuPresenter, MenuView>
     }
 
     private void setListeners() {
+        View.OnClickListener deletionModeListener = v -> setLocationModelDeletionModeFalse();
+        scrollView.setOnClickListener(deletionModeListener);
+        layoutMenu.setOnClickListener(deletionModeListener);
+        layoutBottomSubmenu.setOnClickListener(deletionModeListener);
+        layoutTopSubmenu.setOnClickListener(deletionModeListener);
+        recyclerView.setOnClickListener(deletionModeListener);
+
         rxBindingDisposable.add(
             RxView.clicks(buttonAddLocations).subscribe(o -> {
                 if (canClickMenuButtons()) startActivityForResult(
@@ -199,7 +209,7 @@ public class MenuFragment extends BaseFragment<MenuPresenter, MenuView>
 
         rxBindingDisposable.add(
             RxView.clicks(buttonEditLocations).subscribe(o -> {
-                getLocationModel().setDeletionMode(!getLocationModel().isDeletionMode());
+                getLocationModel().setDeletionMode(!getLocationModel().isInDeletionMode());
             })
         );
     }
@@ -211,7 +221,7 @@ public class MenuFragment extends BaseFragment<MenuPresenter, MenuView>
     private boolean canClickMenuButtons() {
         if (getLocationModel() == null) return false;
 
-        if (getLocationModel().isDeletionMode()) {
+        if (getLocationModel().isInDeletionMode()) {
             getLocationModel().setDeletionMode(false);
             return false;
         }
@@ -229,7 +239,9 @@ public class MenuFragment extends BaseFragment<MenuPresenter, MenuView>
         return new LocationModel.Callbacks() {
             @Override
             public void onLocationClicked(LocationWithTemperature location) {
-                Toast.makeText(getContext(), location.location.name, Toast.LENGTH_SHORT).show();
+                if (!getLocationModel().isInDeletionMode()) {
+                    Toast.makeText(getContext(), location.location.name, Toast.LENGTH_SHORT).show();
+                }
             }
 
             @Override

@@ -25,8 +25,8 @@
     <string name="interval_picked_success">Interval was successfully changed</string>
     <string name="refresh_key" translatable="false">refresh_key</string>
     <string name="choose_location_key" translatable="false">choose_location_key</string>
-    <string name="choose_location">Choose location</string>
-    <string name="location_name">Location name</string>
+    <string name="choose_location">Type location name</string>
+    <string name="location_name">Location</string>
 
     //errors
     <string name="network_error_description">Network error. Check your internet connection.</string>

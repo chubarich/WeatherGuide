@@ -15,8 +15,8 @@
     <string name="refresh_period">Интервал обновления</string>
     <string name="refresh_period_summary">Установите интервал обновления (в минутах)</string>
     <string name="interval_picked_success">Интервал обновления был успешно изменен</string>
-    <string name="choose_location">Выберите место</string>
-    <string name="location_name">Название места</string>
+    <string name="choose_location">Введите название населенного пункта</string>
+    <string name="location_name">Населенный пункт</string>
 
     //errors
     <string name="network_error_description">Ошибка сети. Проверьте подключение к Интернету.</string>

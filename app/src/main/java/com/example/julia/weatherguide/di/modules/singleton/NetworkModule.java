@@ -64,8 +64,8 @@ public class NetworkModule {
     @GoogleMaps
     OkHttpClient provideGoogleMapsOkHttpClient(@GoogleMaps String apiKey) {
         return new OkHttpClient().newBuilder()
-            .connectTimeout(5, TimeUnit.SECONDS)
-            .readTimeout(5, TimeUnit.SECONDS)
+            .connectTimeout(2, TimeUnit.SECONDS)
+            .readTimeout(2, TimeUnit.SECONDS)
             .addInterceptor(chain ->
                 chain.proceed(chain.request()
                     .newBuilder()

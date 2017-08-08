@@ -34,26 +34,18 @@ public class MenuPresenter extends BasePresenter<MenuView> {
 
     @Override
     protected void onViewAttached() {
-        getLocationsDisposable = getLocations.execute(null)
-            .subscribe(locations -> {
-                    if (getView() != null) {
-                        getView().setLocationsToAdapter(locations);
-                    }
-                }
-            );
+        runGetLocations();
     }
 
     @Override
     protected void onViewDetached() {
-        if (getLocationsDisposable != null) {
-            getLocationsDisposable.dispose();
-        }
+        disposeGetLocations();
     }
 
     @Override
     protected void onDestroyed() {
-        getLocationsDisposable.dispose();
         deleteLocationDisposable.dispose();
+        addLocationDisposable.dispose();
     }
 
     // ---------------------------------------- public --------------------------------------------
@@ -61,7 +53,11 @@ public class MenuPresenter extends BasePresenter<MenuView> {
     public void onLocationRemoveClicked(final LocationWithTemperature location) {
         deleteLocationDisposable.add(
             deleteLocationUseCase.execute(location.location)
-                .subscribe(() -> removeLocationFromAdapter(location),
+                .doOnSubscribe(d -> disposeGetLocations())
+                .subscribe(() -> {
+                        removeLocationFromAdapter(location);
+                        runGetLocations();
+                    },
                     error -> showLocationNotRemoved()
                 )
         );
@@ -70,13 +66,34 @@ public class MenuPresenter extends BasePresenter<MenuView> {
     public void onLocationAdded(final Location location) {
         addLocationDisposable.add(
             addLocationUseCase.execute(location)
-                .subscribe(() -> addLocationToAdapter(location),
+                .doOnSubscribe(d -> disposeGetLocations())
+                .subscribe(() -> {
+                        addLocationToAdapter(location);
+                        runGetLocations();
+                    },
                     error -> showLocationNotAdded()
                 )
         );
     }
 
     // ---------------------------------------- private -------------------------------------------
+
+    private void disposeGetLocations() {
+        if (getLocationsDisposable != null) {
+            getLocationsDisposable.dispose();
+        }
+    }
+
+    private void runGetLocations() {
+        getLocationsDisposable = getLocations.execute(null)
+            .doOnSubscribe(d -> disposeGetLocations())
+            .subscribe(locations -> {
+                    if (getView() != null) {
+                        getView().setLocationsToAdapter(locations);
+                    }
+                }
+            );
+    }
 
     private void removeLocationFromAdapter(LocationWithTemperature location) {
         if (getView() != null) {

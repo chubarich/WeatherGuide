@@ -58,7 +58,10 @@ public class ChooseLocationPresenter extends BasePresenter<ChooseLocationView> {
 
     public void onLocationPredictionChosen(LocationPrediction locationPrediction) {
         getLocationDisposable = getLocation(locationPrediction)
-            .doOnSubscribe(d -> disposeGetLocationDisposable())
+            .doOnSubscribe(d -> {
+                disposeGetLocationDisposable();
+
+            })
             .subscribe(this::finishLocationChoosing,
                 error -> showError(error, false)
             );
@@ -96,6 +99,12 @@ public class ChooseLocationPresenter extends BasePresenter<ChooseLocationView> {
     private void hideProgressBar() {
         if (getView() != null) {
             getView().hideProgressBar();
+        }
+    }
+
+    private void showProgressBar() {
+        if (getView() != null) {
+            getView().showProgressBar();
         }
     }
 
