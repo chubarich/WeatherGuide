@@ -12,10 +12,10 @@ public class DatabaseLocation {
     Long _id;
 
     @StorIOSQLiteColumn(name = COLUMN_NAME_LONGITUDE)
-    float longitude;
+    double longitude;
 
     @StorIOSQLiteColumn(name = COLUMN_NAME_LATITUDE)
-    float latitude;
+    double latitude;
 
     @StorIOSQLiteColumn(name = COLUMN_NAME_NAME)
     String name;
@@ -23,7 +23,7 @@ public class DatabaseLocation {
     DatabaseLocation() {
     }
 
-    public DatabaseLocation(float longitude, float latitude, String name) {
+    public DatabaseLocation(double longitude, double latitude, String name) {
         this._id = null;
         this.longitude = longitude;
         this.latitude = latitude;
@@ -34,11 +34,11 @@ public class DatabaseLocation {
         return _id;
     }
 
-    public float getLatitude() {
+    public double getLatitude() {
         return latitude;
     }
 
-    public float getLongitude() {
+    public double getLongitude() {
         return longitude;
     }
 

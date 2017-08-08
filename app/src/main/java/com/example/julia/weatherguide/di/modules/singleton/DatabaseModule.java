@@ -1,10 +1,14 @@
 package com.example.julia.weatherguide.di.modules.singleton;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 
 import com.example.julia.weatherguide.BuildConfig;
 import com.example.julia.weatherguide.data.data_services.location.LocalLocationService;
 import com.example.julia.weatherguide.data.data_services.location.StorIOLocationService;
+import com.example.julia.weatherguide.data.data_services.settings.SettingsService;
+import com.example.julia.weatherguide.data.data_services.settings.SharedPreferenceService;
 import com.example.julia.weatherguide.data.data_services.weather.LocalWeatherService;
 import com.example.julia.weatherguide.data.data_services.weather.StorIOWeatherService;
 import com.example.julia.weatherguide.data.database.StorIOFactory;
@@ -12,6 +16,8 @@ import com.example.julia.weatherguide.data.database.StorIOWeatherHelper;
 import com.example.julia.weatherguide.di.qualifiers.DatabaseName;
 import com.example.julia.weatherguide.di.qualifiers.DatabaseVersion;
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
+
+import java.util.prefs.PreferencesFactory;
 
 import javax.inject.Singleton;
 
@@ -45,6 +51,12 @@ public class DatabaseModule {
 
     @Provides
     @Singleton
+    SharedPreferences provideSharedPreferences(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context);
+    }
+
+    @Provides
+    @Singleton
     LocalWeatherService provideLocalWeatherService(StorIOSQLite storIOSQLite) {
         return new StorIOWeatherService(storIOSQLite);
     }
@@ -53,6 +65,12 @@ public class DatabaseModule {
     @Singleton
     LocalLocationService provideLocalLocationService(StorIOSQLite storIOSQLite){
         return new StorIOLocationService(storIOSQLite);
+    }
+
+    @Provides
+    @Singleton
+    SettingsService provideSettingsService(SharedPreferences sharedPreferences) {
+        return new SharedPreferenceService(sharedPreferences);
     }
 
 }

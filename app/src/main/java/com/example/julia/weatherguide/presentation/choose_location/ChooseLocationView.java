@@ -17,5 +17,5 @@ public interface ChooseLocationView extends BaseView {
 
     void showResults(List<LocationPrediction> locationPredictions, String request);
 
-    void finishLocationChoosing(Location location);
+    void finishChoosing();
 }

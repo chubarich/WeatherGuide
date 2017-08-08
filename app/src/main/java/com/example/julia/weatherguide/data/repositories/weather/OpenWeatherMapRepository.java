@@ -87,7 +87,7 @@ public class OpenWeatherMapRepository implements WeatherRepository {
 
     // -------------------------------------- private ---------------------------------------------
 
-    private Single<Weather> getWeatherFromNetwork(float longitude, float latitude) {
+    private Single<Weather> getWeatherFromNetwork(double longitude, double latitude) {
         return Single.zip(
             networkService.getCurrentWeather(longitude, latitude)
                 .doOnSuccess(weather ->

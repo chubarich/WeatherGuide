@@ -11,7 +11,7 @@ import io.reactivex.Single;
 
 public interface LocalLocationService {
 
-    Single<List<DatabaseLocation>> getLocations();
+    Observable<List<DatabaseLocation>> subscribeOnLocationsChanges();
 
     Single<Long> addLocation(DatabaseLocation location);
 

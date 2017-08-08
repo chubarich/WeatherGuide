@@ -4,6 +4,7 @@ import com.example.julia.weatherguide.data.converters.location.LocationConverter
 import com.example.julia.weatherguide.data.converters.weather.WeatherConverter;
 import com.example.julia.weatherguide.data.data_services.location.LocalLocationService;
 import com.example.julia.weatherguide.data.data_services.location.NetworkLocationService;
+import com.example.julia.weatherguide.data.data_services.settings.SettingsService;
 import com.example.julia.weatherguide.data.data_services.weather.LocalWeatherService;
 import com.example.julia.weatherguide.data.data_services.weather.NetworkWeatherService;
 import com.example.julia.weatherguide.data.helpers.DatetimeHelper;
@@ -34,10 +35,12 @@ public class RepositoryModule {
 
     @Provides
     @Singleton
-    LocationRepository provideGoogleMapsRepository(LocationConverter locationConverter,
+    LocationRepository provideGoogleMapsRepository(SettingsService settingsService,
+                                                   LocationConverter locationConverter,
                                                    LocalLocationService localLocationService,
                                                    NetworkLocationService networkLocationService) {
-        return new GoogleMapsRepository(locationConverter, localLocationService, networkLocationService);
+        return new GoogleMapsRepository(settingsService, locationConverter,
+            localLocationService, networkLocationService);
     }
 
 }

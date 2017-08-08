@@ -3,10 +3,10 @@ package com.example.julia.weatherguide.data.repositories.location;
 import com.example.julia.weatherguide.data.converters.location.LocationConverter;
 import com.example.julia.weatherguide.data.data_services.location.LocalLocationService;
 import com.example.julia.weatherguide.data.data_services.location.NetworkLocationService;
+import com.example.julia.weatherguide.data.data_services.settings.SettingsService;
 import com.example.julia.weatherguide.data.entities.local.DatabaseLocation;
 import com.example.julia.weatherguide.data.entities.network.location.predictions.NetworkLocationPrediction;
 import com.example.julia.weatherguide.data.entities.presentation.location.Location;
-import com.example.julia.weatherguide.data.entities.presentation.location.LocationCoordinates;
 import com.example.julia.weatherguide.data.entities.repository.location.LocationWithId;
 import com.example.julia.weatherguide.data.entities.presentation.location.LocationPrediction;
 import com.example.julia.weatherguide.data.exceptions.ExceptionBundle;
@@ -18,43 +18,26 @@ import java.util.List;
 import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.Single;
-import io.reactivex.SingleSource;
-import io.reactivex.annotations.NonNull;
-import io.reactivex.functions.Function;
 
 import static com.example.julia.weatherguide.data.exceptions.ExceptionBundle.Reason.EMPTY_DATABASE;
-import static com.example.julia.weatherguide.data.exceptions.ExceptionBundle.Reason.VALUE_ALREADY_EXISTS;
 
 
 public class GoogleMapsRepository implements LocationRepository {
 
+    private final SettingsService settingsService;
     private final LocationConverter converter;
     private final LocalLocationService localService;
     private final NetworkLocationService networkService;
 
-
-    public GoogleMapsRepository(LocationConverter converter,
+    public GoogleMapsRepository(SettingsService settingsService,
+                                LocationConverter converter,
                                 LocalLocationService localService,
                                 NetworkLocationService networkService) {
         Preconditions.nonNull(converter, localService, networkService);
+        this.settingsService = settingsService;
         this.converter = converter;
         this.localService = localService;
         this.networkService = networkService;
-    }
-
-
-    @Override
-    public Single<List<LocationWithId>> getLocations() {
-        return localService.getLocations().map(list -> {
-            List<LocationWithId> result = new ArrayList<>();
-            for (DatabaseLocation databaseLocation : list) {
-                LocationWithId location = converter.fromDatabase(databaseLocation);
-                if (location != null) {
-                    result.add(location);
-                }
-            }
-            return result;
-        });
     }
 
     @Override
@@ -76,6 +59,17 @@ public class GoogleMapsRepository implements LocationRepository {
             });
     }
 
+
+
+    @Override
+    public Observable<List<LocationWithId>> subscribeOnLocationsChanges() {
+        return Observable.combineLatest(
+            localService.subscribeOnLocationsChanges(),
+            settingsService.subscribeOnCurrentLocationIdChanges(),
+            this::getLocations
+        );
+    }
+
     @Override
     public Completable addLocationAndSetAsCurrent(Location location) {
         return localService.getLocation(converter.toDatabase(location))
@@ -88,13 +82,26 @@ public class GoogleMapsRepository implements LocationRepository {
                     }
                 }
             )
-            .doOnSuccess(converter::setCurrentLocationId)
+            .doOnSuccess(settingsService::setCurrentLocationId)
             .toCompletable();
     }
 
     @Override
     public Completable deleteLocation(Location location) {
         return localService.deleteLocation(converter.toDatabase(location));
+    }
+
+    // --------------------------------------- private --------------------------------------------
+
+    private List<LocationWithId> getLocations(List<DatabaseLocation> locations, long currentLocationId) {
+        List<LocationWithId> result = new ArrayList<>();
+        for (DatabaseLocation databaseLocation : locations) {
+            LocationWithId location = converter.fromDatabase(databaseLocation, currentLocationId);
+            if (location != null) {
+                result.add(location);
+            }
+        }
+        return result;
     }
 
 }

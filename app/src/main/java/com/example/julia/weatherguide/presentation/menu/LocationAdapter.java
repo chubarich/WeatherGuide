@@ -20,12 +20,15 @@ import com.example.julia.weatherguide.data.entities.presentation.location.Locati
 
 public class LocationAdapter extends RecyclerView.Adapter<LocationViewHolder> implements LocationModel {
 
+    private static final int MAIN_VIEW_TYPE = 0;
+
     private List<LocationWithTemperature> locations;
     private Callbacks callbacks;
     private boolean isDeletionMode;
 
     public LocationAdapter() {
         this.locations = new ArrayList<>();
+        setHasStableIds(true);
     }
 
     // ---------------------------------------- LocationModel -----------------------------------------
@@ -42,36 +45,23 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationViewHolder> im
 
     @Override
     public void setupLocations(List<LocationWithTemperature> locations) {
-        if (locations != null && locations.size() == this.locations.size()) {
-            boolean allLocationsEquals = true;
-            for (int i = 0; i < locations.size(); ++i) {
-                if (!locations.get(i).hasTheSameData(this.locations.get(0))) {
-                    allLocationsEquals = false;
-                    break;
-                }
-            }
-
-            if (allLocationsEquals) {
-                return;
-            }
-        }
-
-
         isDeletionMode = false;
 
+        // clear locations
         int currentSize = this.locations.size();
         if (currentSize != 0) {
             this.locations.clear();
-            notifyItemRangeRemoved(0, currentSize);
         }
 
+        // set locations
         if (locations != null) {
             for (LocationWithTemperature location : locations) {
                 this.locations.add(location);
             }
         }
-        notifyDataSetChanged();
 
+        // notify changes
+        notifyDataSetChanged();
         if (callbacks != null) {
             if (this.locations.size() == 0) {
                 callbacks.onLocationsEmpty();
@@ -82,53 +72,10 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationViewHolder> im
     }
 
     @Override
-    public void removeLocation(LocationWithTemperature location) {
-        int index = -1;
-        for (int i = 0; i < locations.size(); ++i) {
-            if (locations.get(i).location.coordinatesMatches(location.location)) {
-                locations.remove(i);
-                notifyItemRemoved(i);
-                setDeletionMode(false);
-                index = i;
-                break;
-            }
-        }
-
-        if (index != -1 && callbacks != null && this.locations.size() == 0) {
-            callbacks.onLocationsEmpty();
-        }
-    }
-
-    @Override
-    public void addLocation(LocationWithTemperature location) {
-        int index = -1;
-        for (int i = 0; i < locations.size(); ++i) {
-            if (locations.get(i).location.coordinatesMatches(location.location)) {
-                index = i;
-                break;
-            }
-        }
-
-        if (index == -1) {
-            locations.add(location);
-            notifyItemInserted(locations.size());
-            if (callbacks != null) {
-                callbacks.onLocationsNotEmpty();
-            }
-            setDeletionMode(false);
-        } else {
-            locations.set(index, location);
-            notifyItemChanged(index);
-        }
-    }
-
-    @Override
     public void setDeletionMode(boolean newValue) {
         if (isDeletionMode != newValue) {
             isDeletionMode = newValue;
-            if (callbacks != null) {
-                callbacks.onDeletionModeChanged(newValue);
-            }
+            if (callbacks != null) callbacks.onDeletionModeChanged(newValue);
             notifyDataSetChanged();
         }
     }
@@ -169,6 +116,11 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationViewHolder> im
     @Override
     public void onBindViewHolder(LocationViewHolder holder, int position) {
         holder.bind(locations.get(position), isDeletionMode);
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return MAIN_VIEW_TYPE;
     }
 
     // -------------------------------------- inner types -----------------------------------------

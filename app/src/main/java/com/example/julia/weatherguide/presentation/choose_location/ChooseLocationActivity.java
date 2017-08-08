@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,6 +23,7 @@ import com.example.julia.weatherguide.data.entities.presentation.location.Locati
 import com.example.julia.weatherguide.presentation.application.WeatherGuideApplication;
 import com.example.julia.weatherguide.presentation.base.presenter.PresenterFactory;
 import com.example.julia.weatherguide.presentation.base.view.BaseActivity;
+import com.example.julia.weatherguide.presentation.menu.MenuPresenter;
 import com.example.julia.weatherguide.utils.ChooseLocationContract;
 import com.jakewharton.rxbinding2.widget.RxTextView;
 
@@ -31,8 +33,17 @@ import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
 import javax.inject.Provider;
 
+import io.reactivex.Completable;
+import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
+import io.reactivex.ObservableTransformer;
+import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Function;
+import io.reactivex.internal.observers.LambdaObserver;
+import io.reactivex.observers.DefaultObserver;
 
 
 public class ChooseLocationActivity extends BaseActivity<ChooseLocationPresenter, ChooseLocationView>
@@ -42,6 +53,7 @@ public class ChooseLocationActivity extends BaseActivity<ChooseLocationPresenter
 
     private View rootView;
     private Toolbar toolbar;
+    private ImageView imageDelete;
     private TextView textMessage;
     private ProgressBar progressBar;
     private EditText editChooseLocation;
@@ -60,6 +72,11 @@ public class ChooseLocationActivity extends BaseActivity<ChooseLocationPresenter
             .inject(this);
         super.onCreate(savedInstanceState);
         initializeView();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
     }
 
     @Override
@@ -96,25 +113,28 @@ public class ChooseLocationActivity extends BaseActivity<ChooseLocationPresenter
     public void showResults(List<LocationPrediction> locationPredictions, String request) {
         LocationPredictionModel locationPredictionModel = (LocationPredictionModel) recyclerView.getAdapter();
         locationPredictionModel.setPredictions(locationPredictions);
-        locationPredictionModel.attachCallbacks(locationPrediction ->
-            ((ChooseLocationPresenter) getPresenter()).onLocationPredictionChosen(locationPrediction)
+        locationPredictionModel.attachCallbacks(locationPrediction -> {
+                progressBar.setVisibility(View.VISIBLE);
+                ((ChooseLocationPresenter) getPresenter()).onLocationPredictionChosen(locationPrediction);
+            }
         );
+
+        progressBar.setVisibility(View.INVISIBLE);
 
         if (locationPredictions.size() != 0) {
             textMessage.setVisibility(View.INVISIBLE);
             recyclerView.setVisibility(View.VISIBLE);
-        } else if (!request.isEmpty()) {
+        } else {
             textMessage.setText("По запросу \"" + request + "\" ничего не найдено");
             recyclerView.setVisibility(View.INVISIBLE);
             textMessage.setVisibility(View.VISIBLE);
-        } else {
-            showDefaultView();
         }
     }
 
     @Override
-    public void finishLocationChoosing(Location location) {
-        returnActivityResult(location);
+    public void finishChoosing() {
+        setResult(RESULT_OK, new Intent());
+        finish();
     }
 
     @Override
@@ -153,6 +173,7 @@ public class ChooseLocationActivity extends BaseActivity<ChooseLocationPresenter
 
     private void initializeView() {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
+        imageDelete = (ImageView) findViewById(R.id.image_delete);
         rootView = findViewById(R.id.root_view);
         textMessage = (TextView) findViewById(R.id.text_message);
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
@@ -166,6 +187,7 @@ public class ChooseLocationActivity extends BaseActivity<ChooseLocationPresenter
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
 
+        imageDelete.setVisibility(View.GONE);
         progressBar.setVisibility(View.INVISIBLE);
         textMessage.setVisibility(View.INVISIBLE);
         recyclerView.setVisibility(View.INVISIBLE);
@@ -180,20 +202,32 @@ public class ChooseLocationActivity extends BaseActivity<ChooseLocationPresenter
     private void setListeners() {
         rootView.setOnClickListener(this::hideSoftKeyboard);
 
+        imageDelete.setOnClickListener(v -> editChooseLocation.setText(""));
+
         chooseLocationDisposable = RxTextView.textChanges(editChooseLocation)
             .skipInitialValue()
             .map(CharSequence::toString)
             .map(String::trim)
+            .doOnEach(getDoOnEachInputObserver())
             .debounce(EDIT_CHOOSE_LOCATIONS_DEBOUNCE_IN_MS, TimeUnit.MILLISECONDS)
             .observeOn(AndroidSchedulers.mainThread())
-            .doOnNext(charSequence -> {
-                progressBar.setVisibility(View.VISIBLE);
-                textMessage.setVisibility(View.INVISIBLE);
-                recyclerView.setVisibility(View.INVISIBLE);
-            })
+            .doOnNext(charSequence -> ((ChooseLocationPresenter) getPresenter()).disposePredictions())
             .subscribe(phrase -> {
-                ((ChooseLocationPresenter) getPresenter()).onInputPhraseChanged(phrase);
+                if (!phrase.isEmpty()) {
+                    showImageDelete();
+                    hideContent();
+                    showProgressBar();
+                    ((ChooseLocationPresenter) getPresenter()).onInputPhraseChanged(phrase);
+                }
             });
+    }
+
+    private void showImageDelete() {
+        imageDelete.setVisibility(View.VISIBLE);
+    }
+
+    private void hideImageDelete() {
+        imageDelete.setVisibility(View.GONE);
     }
 
     private void showDefaultView() {
@@ -202,11 +236,9 @@ public class ChooseLocationActivity extends BaseActivity<ChooseLocationPresenter
         textMessage.setVisibility(View.VISIBLE);
     }
 
-    private void returnActivityResult(Location location) {
-        Intent intent = new Intent();
-        intent.putExtra(ChooseLocationContract.KEY_LOCATION, location);
-        setResult(RESULT_OK, intent);
-        finish();
+    private void hideContent() {
+        textMessage.setVisibility(View.INVISIBLE);
+        recyclerView.setVisibility(View.INVISIBLE);
     }
 
     private void hideSoftKeyboard(View view) {
@@ -214,5 +246,27 @@ public class ChooseLocationActivity extends BaseActivity<ChooseLocationPresenter
 
         ((InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE))
             .hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
+    private Observer<String> getDoOnEachInputObserver() {
+        return new DefaultObserver<String>() {
+            @Override
+            public void onNext(@NonNull String s) {
+                if (s.isEmpty()) {
+                    hideImageDelete();
+                    hideProgressBar();
+                    showDefaultView();
+                    ((ChooseLocationPresenter) getPresenter()).disposePredictions();
+                }
+            }
+
+            @Override
+            public void onError(@NonNull Throwable e) {
+            }
+
+            @Override
+            public void onComplete() {
+            }
+        };
     }
 }

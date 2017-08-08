@@ -43,42 +43,39 @@ public class ChooseLocationPresenter extends BasePresenter<ChooseLocationView> {
 
     @Override
     protected void onDestroyed() {
-        disposePredictions();
+        disposeAllDisposables();
     }
 
     // --------------------------------------- public ---------------------------------------------
 
     public void onInputPhraseChanged(String phrase) {
         getLocationPredictionsDisposable = getPredictions(phrase)
-            .doOnSubscribe(d -> disposePredictions())
-            .doAfterTerminate(this::hideProgressBar)
+            .doOnSubscribe(d -> disposeAllDisposables())
             .subscribe(predictions -> showResults(predictions, phrase),
                 error -> showError(error, true));
     }
 
     public void onLocationPredictionChosen(LocationPrediction locationPrediction) {
         getLocationDisposable = getLocation(locationPrediction)
-            .doOnSubscribe(d -> {
-                disposeGetLocationDisposable();
-
-            })
-            .subscribe(this::finishLocationChoosing,
+            .subscribe(location -> finish(),
                 error -> showError(error, false)
             );
     }
 
-    // --------------------------------------- private --------------------------------------------
-
-    private void disposePredictions() {
+    public void disposePredictions() {
         if (getLocationPredictionsDisposable != null) {
             getLocationPredictionsDisposable.dispose();
         }
-        if (getLocationDisposable != null) {
-            getLocationDisposable.dispose();
-        }
     }
 
-    private void disposeGetLocationDisposable() {
+    // --------------------------------------- private --------------------------------------------
+
+    private void disposeAllDisposables() {
+        disposePredictions();
+        disposeGetLocation();
+    }
+
+    private void disposeGetLocation() {
         if (getLocationDisposable != null) {
             getLocationDisposable.dispose();
         }
@@ -96,18 +93,6 @@ public class ChooseLocationPresenter extends BasePresenter<ChooseLocationView> {
         return getLocationFromPredictionUseCase.execute(prediction);
     }
 
-    private void hideProgressBar() {
-        if (getView() != null) {
-            getView().hideProgressBar();
-        }
-    }
-
-    private void showProgressBar() {
-        if (getView() != null) {
-            getView().showProgressBar();
-        }
-    }
-
     private void showResults(List<LocationPrediction> predictions, String request) {
         if (getView() != null) {
             getView().hideProgressBar();
@@ -115,9 +100,9 @@ public class ChooseLocationPresenter extends BasePresenter<ChooseLocationView> {
         }
     }
 
-    private void finishLocationChoosing(Location location) {
+    private void finish() {
         if (getView() != null) {
-            getView().finishLocationChoosing(location);
+            getView().finishChoosing();
         }
     }
 

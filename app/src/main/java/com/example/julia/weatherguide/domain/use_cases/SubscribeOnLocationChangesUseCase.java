@@ -15,14 +15,14 @@ import io.reactivex.Observable;
 import io.reactivex.Scheduler;
 
 
-public class GetLocationsAndSubscribeUseCase extends ObservableUseCase<List<LocationWithTemperature>, Void> {
+public class SubscribeOnLocationChangesUseCase extends ObservableUseCase<List<LocationWithTemperature>, Void> {
 
     private final LocationRepository locationRepository;
     private final WeatherRepository weatherRepository;
 
-    public GetLocationsAndSubscribeUseCase(Scheduler worker, Scheduler postExecution,
-                                           LocationRepository locationRepository,
-                                           WeatherRepository weatherRepository) {
+    public SubscribeOnLocationChangesUseCase(Scheduler worker, Scheduler postExecution,
+                                             LocationRepository locationRepository,
+                                             WeatherRepository weatherRepository) {
         super(worker, postExecution);
         Preconditions.nonNull(locationRepository, weatherRepository);
         this.locationRepository = locationRepository;
@@ -32,7 +32,7 @@ public class GetLocationsAndSubscribeUseCase extends ObservableUseCase<List<Loca
     @Override
     protected Observable<List<LocationWithTemperature>> getUseCaseObservable(Void aVoid) {
         return Observable.combineLatest(
-            locationRepository.getLocations().toObservable(),
+            locationRepository.subscribeOnLocationsChanges(),
             weatherRepository.subscribeOnCurrentWeatherChanges(),
             (List<LocationWithId> locations, WeatherNotification notification) -> {
                 List<LocationWithTemperature> result = new ArrayList<>();

@@ -14,10 +14,6 @@ public interface LocationModel {
 
     void setupLocations(List<LocationWithTemperature> locations);
 
-    void removeLocation(LocationWithTemperature location);
-
-    void addLocation(LocationWithTemperature location);
-
 
     void setDeletionMode(boolean newValue);
 

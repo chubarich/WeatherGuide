@@ -35,7 +35,7 @@ public class OpenWeatherMapService extends BaseNetworkService<OpenWeatherMapCont
     // --------------------------------------- public -----------------------------------------------
 
     @Override
-    public Single<NetworkCurrentWeather> getCurrentWeather(float latitude, float longitude) {
+    public Single<NetworkCurrentWeather> getCurrentWeather(double latitude, double longitude) {
         return getService().getCurrentWeather(latitude, longitude)
             .doOnSuccess(networkCurrentWeather -> {
                 if (networkCurrentWeather.getCode() != 200) throw new ExceptionBundle(API_ERROR);
@@ -51,7 +51,7 @@ public class OpenWeatherMapService extends BaseNetworkService<OpenWeatherMapCont
     }
 
     @Override
-    public Single<List<NetworkWeatherPrediction>> getPredictions(float latitude, float longitude, int count) {
+    public Single<List<NetworkWeatherPrediction>> getPredictions(double latitude, double longitude, int count) {
         return getService().getWeatherPrediction(latitude, longitude, count)
             .doOnSuccess(prediction -> {
                 if (prediction.getCode() != 200) throw new ExceptionBundle(API_ERROR);

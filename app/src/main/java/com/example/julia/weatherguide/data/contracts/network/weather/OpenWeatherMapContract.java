@@ -13,14 +13,14 @@ public interface OpenWeatherMapContract {
 
     @GET(DATA + V2_5 + WEATHER)
     Single<NetworkCurrentWeather> getCurrentWeather(
-        @Query(KEY_LATITUDE) float latitude,
-        @Query(KEY_LONGITUDE) float longitude
+        @Query(KEY_LATITUDE) double latitude,
+        @Query(KEY_LONGITUDE) double longitude
     );
 
     @GET(DATA + V2_5 + FORECAST)
     Single<NetworkWeatherPredictions> getWeatherPrediction(
-        @Query(KEY_LATITUDE) float latitude,
-        @Query(KEY_LONGITUDE) float longitude,
+        @Query(KEY_LATITUDE) double latitude,
+        @Query(KEY_LONGITUDE) double longitude,
         @Query(KEY_COUNT) int count
     );
 }

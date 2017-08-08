@@ -9,7 +9,7 @@ import com.example.julia.weatherguide.domain.use_cases.AddLocationUseCase;
 import com.example.julia.weatherguide.domain.use_cases.DeleteLocationUseCase;
 import com.example.julia.weatherguide.domain.use_cases.GetLocationFromPredictionUseCase;
 import com.example.julia.weatherguide.domain.use_cases.GetLocationPredictionsUseCase;
-import com.example.julia.weatherguide.domain.use_cases.GetLocationsAndSubscribeUseCase;
+import com.example.julia.weatherguide.domain.use_cases.SubscribeOnLocationChangesUseCase;
 
 import dagger.Module;
 import dagger.Provides;
@@ -21,11 +21,11 @@ public class UseCasesModule {
 
     @Provides
     @PerScreen
-    GetLocationsAndSubscribeUseCase provideGetLocations(@WorkerScheduler Scheduler worker,
-                                                        @PostExecutionScheduler Scheduler postExecution,
-                                                        LocationRepository locationRepository,
-                                                        WeatherRepository weatherRepository) {
-        return new GetLocationsAndSubscribeUseCase(worker, postExecution, locationRepository,
+    SubscribeOnLocationChangesUseCase provideGetLocations(@WorkerScheduler Scheduler worker,
+                                                          @PostExecutionScheduler Scheduler postExecution,
+                                                          LocationRepository locationRepository,
+                                                          WeatherRepository weatherRepository) {
+        return new SubscribeOnLocationChangesUseCase(worker, postExecution, locationRepository,
             weatherRepository);
     }
 

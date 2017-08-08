@@ -1,33 +1,22 @@
 package com.example.julia.weatherguide.data.converters.location;
 
-import com.example.julia.weatherguide.data.data_services.settings.SettingsService;
 import com.example.julia.weatherguide.data.entities.local.DatabaseLocation;
 import com.example.julia.weatherguide.data.entities.network.location.coordinates.NetworkLocationCoordinates;
 import com.example.julia.weatherguide.data.entities.network.location.predictions.NetworkLocationPrediction;
 import com.example.julia.weatherguide.data.entities.network.location.predictions.NetworkLocationStructuredFormatting;
 import com.example.julia.weatherguide.data.entities.presentation.location.Location;
-import com.example.julia.weatherguide.data.entities.presentation.location.LocationCoordinates;
 import com.example.julia.weatherguide.data.entities.repository.location.LocationWithId;
 import com.example.julia.weatherguide.data.entities.presentation.location.LocationPrediction;
-import com.example.julia.weatherguide.utils.Preconditions;
 
 
 public class LocationConverterPlain implements LocationConverter {
 
-    private final SettingsService settingsService;
-
-    public LocationConverterPlain(SettingsService settingsService) {
-        Preconditions.nonNull(settingsService);
-        this.settingsService = settingsService;
-    }
-
     @Override
-    public LocationWithId fromDatabase(DatabaseLocation location) {
+    public LocationWithId fromDatabase(DatabaseLocation location, long currentLocationId) {
         if (location.getId() == null) {
             return null;
         } else {
             long locationId = location.getId();
-            long currentLocationId = settingsService.currentLocationId();
             return new LocationWithId(
                 location.getId(),
                 new Location(location.getLongitude(),
@@ -79,8 +68,4 @@ public class LocationConverterPlain implements LocationConverter {
         return new DatabaseLocation((float) coordinates.getLongitude(), (float) coordinates.getLatitude(), prediction.mainText);
     }
 
-    @Override
-    public void setCurrentLocationId(long id) {
-        settingsService.setCurrentLocationId(id);
-    }
 }

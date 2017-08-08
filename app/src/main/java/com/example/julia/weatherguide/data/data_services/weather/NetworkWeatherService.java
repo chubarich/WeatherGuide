@@ -10,8 +10,8 @@ import io.reactivex.Single;
 
 public interface NetworkWeatherService {
 
-    Single<NetworkCurrentWeather> getCurrentWeather(float latitude, float longitude);
+    Single<NetworkCurrentWeather> getCurrentWeather(double latitude, double longitude);
 
-    Single<List<NetworkWeatherPrediction>> getPredictions(float latitude, float longitude, int count);
+    Single<List<NetworkWeatherPrediction>> getPredictions(double latitude, double longitude, int count);
 
 }

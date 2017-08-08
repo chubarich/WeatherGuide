@@ -8,19 +8,19 @@ import com.example.julia.weatherguide.utils.Preconditions;
 
 public class Location implements Parcelable {
 
-    public final float longitude;
+    public final double longitude;
 
-    public final float latitude;
+    public final double latitude;
 
     public final String name;
 
     public final boolean isCurrent;
 
-    public Location(float longitude, float latitude, String name) {
+    public Location(double longitude, double latitude, String name) {
         this(longitude, latitude, name, false);
     }
 
-    public Location(float longitude, float latitude, String name, boolean isCurrent) {
+    public Location(double longitude, double latitude, String name, boolean isCurrent) {
         Preconditions.nonNull(name);
 
         this.longitude = longitude;
@@ -37,14 +37,15 @@ public class Location implements Parcelable {
     public boolean coordinatesMatches(Location location) {
         return location != null
             && location.latitude == this.latitude
-            && location.longitude == this.longitude;
+            && location.longitude == this.longitude
+            && location.isCurrent == this.isCurrent;
     }
 
     // -------------------------------------- Parcellable -----------------------------------------
 
     public Location(Parcel parcel) {
-        this.longitude = parcel.readFloat();
-        this.latitude = parcel.readFloat();
+        this.longitude = parcel.readDouble();
+        this.latitude = parcel.readDouble();
         this.name = parcel.readString();
         this.isCurrent = parcel.readInt() != 0;
     }
@@ -56,8 +57,8 @@ public class Location implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeFloat(longitude);
-        dest.writeFloat(latitude);
+        dest.writeDouble(longitude);
+        dest.writeDouble(latitude);
         dest.writeString(name);
         dest.writeInt(isCurrent ? 1 : 0);
     }

@@ -4,16 +4,17 @@ import android.util.Log;
 
 import com.example.julia.weatherguide.data.entities.repository.location.LocationWithId;
 import com.example.julia.weatherguide.data.repositories.location.LocationRepository;
-import com.example.julia.weatherguide.data.repositories.weather.OpenWeatherMapRepository;
 import com.example.julia.weatherguide.data.repositories.weather.WeatherRepository;
 import com.example.julia.weatherguide.presentation.application.WeatherGuideApplication;
 import com.firebase.jobdispatcher.JobParameters;
 import com.firebase.jobdispatcher.JobService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
+import io.reactivex.Single;
 import io.reactivex.schedulers.Schedulers;
 
 import static com.example.julia.weatherguide.data.repositories.weather.OpenWeatherMapRepository.GetWeatherStrategy.FROM_NETWORK;
@@ -36,7 +37,10 @@ public class RefreshWeatherService extends JobService {
 
     @Override
     public boolean onStartJob(JobParameters job) {
-        List<LocationWithId> locations = locationRepository.getLocations().blockingGet();
+        List<LocationWithId> locations = locationRepository.subscribeOnLocationsChanges()
+            .doOnError(error -> {})
+            .first(new ArrayList<>())
+            .blockingGet();
 
         for (LocationWithId location : locations) {
             weatherRepository.getWeather(location, FROM_NETWORK)

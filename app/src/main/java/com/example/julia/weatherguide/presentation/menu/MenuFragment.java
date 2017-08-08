@@ -104,26 +104,6 @@ public class MenuFragment extends BaseFragment<MenuPresenter, MenuView>
     }
 
     @Override
-    public void addLocationToAdapter(LocationWithTemperature location) {
-        getLocationModel().addLocation(location);
-    }
-
-    @Override
-    public void removeLocationFromAdapter(LocationWithTemperature location) {
-        getLocationModel().removeLocation(location);
-    }
-
-    @Override
-    public void showLocationNotAdded() {
-        Toast.makeText(getContext(), getString(R.string.location_not_added), Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void showLocationNotRemoved() {
-        Toast.makeText(getContext(), getString(R.string.location_not_removed), Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
     public void onDrawerClosed() {
         setLocationModelDeletionModeFalse();
     }
