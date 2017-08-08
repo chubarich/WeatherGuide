@@ -42,6 +42,21 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationViewHolder> im
 
     @Override
     public void setupLocations(List<LocationWithTemperature> locations) {
+        if (locations != null && locations.size() == this.locations.size()) {
+            boolean allLocationsEquals = true;
+            for (int i = 0; i < locations.size(); ++i) {
+                if (!locations.get(i).hasTheSameData(this.locations.get(0))) {
+                    allLocationsEquals = false;
+                    break;
+                }
+            }
+
+            if (allLocationsEquals) {
+                return;
+            }
+        }
+
+
         isDeletionMode = false;
 
         int currentSize = this.locations.size();
@@ -101,6 +116,9 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationViewHolder> im
                 callbacks.onLocationsNotEmpty();
             }
             setDeletionMode(false);
+        } else {
+            locations.set(index, location);
+            notifyItemChanged(index);
         }
     }
 

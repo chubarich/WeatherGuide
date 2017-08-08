@@ -9,4 +9,6 @@ public class SettingsContract {
 
     public static final String KEY_PRESSURE_IN_HPA = "KEY_PRESSURE_IN_HPA";
 
+    public static final String KEY_CURRENT_LOCATION_ID = "KEY_CURRENT_LOCATION_ID";
+
 }

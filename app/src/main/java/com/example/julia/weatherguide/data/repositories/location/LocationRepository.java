@@ -13,15 +13,14 @@ import io.reactivex.Single;
 
 public interface LocationRepository {
 
-    Single<List<LocationWithId>> getLocations();
-
     Single<List<LocationPrediction>> getPredictionsForPhrase(String phrase);
 
     Single<Location> getLocation(LocationPrediction locationPrediction);
 
-    Completable addLocation(Location location);
 
-    Completable changeLocationName(Location location, String newName);
+    Single<List<LocationWithId>> getLocations();
+
+    Completable addLocationAndSetAsCurrent(Location location);
 
     Completable deleteLocation(Location location);
 

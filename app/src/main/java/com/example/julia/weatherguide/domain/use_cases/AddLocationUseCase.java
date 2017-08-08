@@ -21,6 +21,6 @@ public class AddLocationUseCase extends CompletableUseCase<Location> {
 
     @Override
     protected Completable getUseCaseCompletable(Location location) {
-        return locationRepository.addLocation(location);
+        return locationRepository.addLocationAndSetAsCurrent(location);
     }
 }

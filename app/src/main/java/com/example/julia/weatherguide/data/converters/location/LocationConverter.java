@@ -29,4 +29,6 @@ public interface LocationConverter {
 
     NetworkLocationPrediction toNetwork(LocationPrediction locationPrediction);
 
+
+    void setCurrentLocationId(long id);
 }

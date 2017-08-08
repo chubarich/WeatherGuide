@@ -24,10 +24,12 @@ import io.reactivex.subjects.Subject;
 
 public class StorIOWeatherService extends BaseDatabaseService implements LocalWeatherService {
 
-    private volatile Subject<WeatherNotification> currentWeatherChangeSubject;
+    private final Subject<WeatherNotification> currentWeatherChangeSubject;
 
     public StorIOWeatherService(StorIOSQLite storIOSQLite) {
         super(storIOSQLite);
+        currentWeatherChangeSubject = BehaviorSubject.createDefault(new WeatherNotification())
+            .toSerialized();
     }
 
     // ----------------------------------------- get ----------------------------------------------
@@ -71,7 +73,7 @@ public class StorIOWeatherService extends BaseDatabaseService implements LocalWe
 
     @Override
     public Observable<WeatherNotification> subscribeOnCurrentWeatherChanges() {
-        return getCurrentWeatherChangeSubject();
+        return currentWeatherChangeSubject;
     }
 
     // ----------------------------------------- put ----------------------------------------------
@@ -84,7 +86,7 @@ public class StorIOWeatherService extends BaseDatabaseService implements LocalWe
                     .prepare()
                     .executeAsBlocking();
 
-                getCurrentWeatherChangeSubject().onNext(new WeatherNotification());
+                currentWeatherChangeSubject.onNext(new WeatherNotification());
             }
         );
     }
@@ -124,23 +126,6 @@ public class StorIOWeatherService extends BaseDatabaseService implements LocalWe
                     .prepare().executeAsBlocking();
             }
         );
-    }
-
-    // ---------------------------------------- private -------------------------------------------
-
-    private Subject<WeatherNotification> getCurrentWeatherChangeSubject() {
-        Subject<WeatherNotification> localInstance = currentWeatherChangeSubject;
-        if (localInstance == null) {
-            synchronized (this) {
-                localInstance = currentWeatherChangeSubject;
-                if (localInstance == null) {
-                    currentWeatherChangeSubject = localInstance = BehaviorSubject
-                        .createDefault(new WeatherNotification())
-                        .toSerialized();
-                }
-            }
-        }
-        return localInstance;
     }
 
 }

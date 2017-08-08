@@ -101,6 +101,9 @@ dependencies {
     testCompile libraries.powermockRule
     testCompile libraries.powermockClassloader
 
+    compile 'com.facebook.stetho:stetho:1.5.0'
+    compile 'com.facebook.stetho:stetho-okhttp:1.5.0'
+
     androidTestCompile libraries.espressoCore
     androidTestCompile libraries.supportAnnotations
 }

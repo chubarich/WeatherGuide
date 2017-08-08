@@ -1,6 +1,7 @@
 package com.example.julia.weatherguide.data.data_services.location;
 
 import com.example.julia.weatherguide.data.entities.local.DatabaseLocation;
+import com.example.julia.weatherguide.data.entities.presentation.location.Location;
 
 import java.util.List;
 import io.reactivex.Completable;
@@ -12,10 +13,10 @@ public interface LocalLocationService {
 
     Single<List<DatabaseLocation>> getLocations();
 
-    Completable addLocation(DatabaseLocation location);
+    Single<Long> addLocation(DatabaseLocation location);
 
     Completable deleteLocation(DatabaseLocation location);
 
-    Long getLocationId(DatabaseLocation location);
+    Single<DatabaseLocation> getLocation(DatabaseLocation location);
 
 }

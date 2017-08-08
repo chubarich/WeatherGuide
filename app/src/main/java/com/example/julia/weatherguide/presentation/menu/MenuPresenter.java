@@ -2,6 +2,7 @@ package com.example.julia.weatherguide.presentation.menu;
 
 import com.example.julia.weatherguide.data.entities.presentation.location.Location;
 import com.example.julia.weatherguide.data.entities.presentation.location.LocationWithTemperature;
+import com.example.julia.weatherguide.data.exceptions.ExceptionBundle;
 import com.example.julia.weatherguide.domain.use_cases.AddLocationUseCase;
 import com.example.julia.weatherguide.domain.use_cases.DeleteLocationUseCase;
 import com.example.julia.weatherguide.domain.use_cases.GetLocationsAndSubscribeUseCase;
@@ -11,6 +12,8 @@ import com.example.julia.weatherguide.utils.Preconditions;
 
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
+
+import static com.example.julia.weatherguide.data.exceptions.ExceptionBundle.Reason.VALUE_ALREADY_EXISTS;
 
 
 public class MenuPresenter extends BasePresenter<MenuView> {
@@ -57,8 +60,7 @@ public class MenuPresenter extends BasePresenter<MenuView> {
                 .subscribe(() -> {
                         removeLocationFromAdapter(location);
                         runGetLocations();
-                    },
-                    error -> showLocationNotRemoved()
+                    }
                 )
         );
     }
@@ -70,8 +72,7 @@ public class MenuPresenter extends BasePresenter<MenuView> {
                 .subscribe(() -> {
                         addLocationToAdapter(location);
                         runGetLocations();
-                    },
-                    error -> showLocationNotAdded()
+                    }
                 )
         );
     }
@@ -101,21 +102,9 @@ public class MenuPresenter extends BasePresenter<MenuView> {
         }
     }
 
-    private void showLocationNotRemoved() {
-        if (getView() != null) {
-            getView().showLocationNotRemoved();
-        }
-    }
-
     private void addLocationToAdapter(Location location) {
         if (getView() != null) {
             getView().addLocationToAdapter(new LocationWithTemperature(location, null));
-        }
-    }
-
-    private void showLocationNotAdded() {
-        if (getView() != null) {
-            getView().showLocationNotAdded();
         }
     }
 

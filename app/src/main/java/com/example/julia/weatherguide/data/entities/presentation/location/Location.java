@@ -14,16 +14,29 @@ public class Location implements Parcelable {
 
     public final String name;
 
-    public Location(final float longitude, final float latitude, final String name) {
+    public final boolean isCurrent;
+
+    public Location(float longitude, float latitude, String name) {
+        this(longitude, latitude, name, false);
+    }
+
+    public Location(float longitude, float latitude, String name, boolean isCurrent) {
         Preconditions.nonNull(name);
 
         this.longitude = longitude;
         this.latitude = latitude;
         this.name = name;
+        this.isCurrent = isCurrent;
+    }
+
+    public boolean hasTheSameData(Location location) {
+        return coordinatesMatches(location)
+            && location.name.equals(this.name);
     }
 
     public boolean coordinatesMatches(Location location) {
-        return location != null && location.latitude == this.latitude
+        return location != null
+            && location.latitude == this.latitude
             && location.longitude == this.longitude;
     }
 
@@ -33,6 +46,7 @@ public class Location implements Parcelable {
         this.longitude = parcel.readFloat();
         this.latitude = parcel.readFloat();
         this.name = parcel.readString();
+        this.isCurrent = parcel.readInt() != 0;
     }
 
     @Override
@@ -45,6 +59,7 @@ public class Location implements Parcelable {
         dest.writeFloat(longitude);
         dest.writeFloat(latitude);
         dest.writeString(name);
+        dest.writeInt(isCurrent ? 1 : 0);
     }
 
     public static final Parcelable.Creator<Location> CREATOR = new Parcelable.Creator<Location>() {

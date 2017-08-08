@@ -46,7 +46,9 @@ public class ExceptionBundle extends Exception {
 
         // database
         EMPTY_DATABASE(300),
-        NOT_DELETED(301);
+        NOT_DELETED(301),
+        NOT_ADDED(302),
+        VALUE_ALREADY_EXISTS(303);
 
         private final int code;
 

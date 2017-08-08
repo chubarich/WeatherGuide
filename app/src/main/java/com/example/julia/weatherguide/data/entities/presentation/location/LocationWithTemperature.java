@@ -14,5 +14,17 @@ public class LocationWithTemperature {
         this.location = location;
         this.temperature = temperature;
     }
+
+    public boolean hasTheSameData(LocationWithTemperature other) {
+        if (other == null) return false;
+
+        if (this.temperature == null) {
+            if (other.temperature != null) return false;
+        } else {
+            if (!this.temperature.equals(other.temperature)) return false;
+        }
+
+        return this.location.hasTheSameData(other.location);
+    }
 }
 

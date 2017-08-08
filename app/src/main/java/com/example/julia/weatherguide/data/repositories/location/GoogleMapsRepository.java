@@ -9,6 +9,7 @@ import com.example.julia.weatherguide.data.entities.presentation.location.Locati
 import com.example.julia.weatherguide.data.entities.presentation.location.LocationCoordinates;
 import com.example.julia.weatherguide.data.entities.repository.location.LocationWithId;
 import com.example.julia.weatherguide.data.entities.presentation.location.LocationPrediction;
+import com.example.julia.weatherguide.data.exceptions.ExceptionBundle;
 import com.example.julia.weatherguide.utils.Preconditions;
 
 import java.util.ArrayList;
@@ -17,6 +18,12 @@ import java.util.List;
 import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.Single;
+import io.reactivex.SingleSource;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.functions.Function;
+
+import static com.example.julia.weatherguide.data.exceptions.ExceptionBundle.Reason.EMPTY_DATABASE;
+import static com.example.julia.weatherguide.data.exceptions.ExceptionBundle.Reason.VALUE_ALREADY_EXISTS;
 
 
 public class GoogleMapsRepository implements LocationRepository {
@@ -70,13 +77,19 @@ public class GoogleMapsRepository implements LocationRepository {
     }
 
     @Override
-    public Completable addLocation(Location location) {
-        return localService.addLocation(converter.toDatabase(location));
-    }
-
-    @Override
-    public Completable changeLocationName(Location location, String newName) {
-        return localService.addLocation(converter.toDatabase(location, newName));
+    public Completable addLocationAndSetAsCurrent(Location location) {
+        return localService.getLocation(converter.toDatabase(location))
+            .map(DatabaseLocation::getId)
+            .onErrorResumeNext(error -> {
+                    if (error instanceof ExceptionBundle && ((ExceptionBundle) error).getReason() == EMPTY_DATABASE) {
+                        return localService.addLocation(converter.toDatabase(location));
+                    } else {
+                        return Single.error(error);
+                    }
+                }
+            )
+            .doOnSuccess(converter::setCurrentLocationId)
+            .toCompletable();
     }
 
     @Override

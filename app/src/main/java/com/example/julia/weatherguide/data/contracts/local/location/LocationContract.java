@@ -26,11 +26,11 @@ public class LocationContract {
         + COLUMN_NAME_ID + " INTEGER NOT NULL PRIMARY KEY, "
         + COLUMN_NAME_NAME + " TEXT NOT NULL, "
 
-        + COLUMN_NAME_LATITUDE + " REAL NOT NULL, "
-        + COLUMN_NAME_LONGITUDE + " REAL NOT NULL, "
+        + COLUMN_NAME_LATITUDE + " FLOAT NOT NULL, "
+        + COLUMN_NAME_LONGITUDE + " FLOAT NOT NULL, "
 
-        + "UNIQUE(" + COLUMN_NAME_LATITUDE + ", " + COLUMN_NAME_LONGITUDE + ") ON CONFLICT REPLACE"
-        + ");"; // pair "original text" + "language" is unique
+        + "UNIQUE(" + COLUMN_NAME_LATITUDE + ", " + COLUMN_NAME_LONGITUDE + ") ON CONFLICT REPLACE "
+        + ");";
 
     public static String SQL_DELETE_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
 

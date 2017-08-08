@@ -9,6 +9,7 @@ import com.example.julia.weatherguide.di.modules.per_screen.MenuModule;
 import com.example.julia.weatherguide.di.modules.singleton.AppModule;
 import com.example.julia.weatherguide.di.components.AppComponent;
 import com.example.julia.weatherguide.di.modules.per_screen.SchedulerModule;
+import com.facebook.stetho.Stetho;
 
 
 public class WeatherGuideApplication extends Application {
@@ -18,6 +19,7 @@ public class WeatherGuideApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        Stetho.initializeWithDefaults(this);
         appComponent = DaggerAppComponent.builder()
             .appModule(new AppModule(getApplicationContext()))
             .build();
