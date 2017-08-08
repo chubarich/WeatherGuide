@@ -5,6 +5,7 @@ import com.example.julia.weatherguide.data.data_services.location.LocalLocationS
 import com.example.julia.weatherguide.data.data_services.location.NetworkLocationService;
 import com.example.julia.weatherguide.data.data_services.settings.SettingsService;
 import com.example.julia.weatherguide.data.entities.local.DatabaseLocation;
+import com.example.julia.weatherguide.data.entities.network.location.coordinates.NetworkLocationCoordinates;
 import com.example.julia.weatherguide.data.entities.network.location.predictions.NetworkLocationPrediction;
 import com.example.julia.weatherguide.data.entities.presentation.location.Location;
 import com.example.julia.weatherguide.data.entities.repository.location.LocationWithId;
@@ -18,6 +19,8 @@ import java.util.List;
 import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.Single;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.functions.Consumer;
 
 import static com.example.julia.weatherguide.data.exceptions.ExceptionBundle.Reason.EMPTY_DATABASE;
 
@@ -43,7 +46,11 @@ public class GoogleMapsRepository implements LocationRepository {
     @Override
     public Single<Location> getLocation(LocationPrediction prediction) {
         return networkService.getLocationCoordinates(converter.toNetwork(prediction))
-            .doOnSuccess(coordinates -> localService.addLocation(converter.toDatabase(coordinates, prediction)))
+            .doOnSuccess(coordinates ->
+                localService.addLocation(converter.toDatabase(coordinates, prediction))
+                    .doOnSuccess(settingsService::setCurrentLocationId)
+                    .blockingGet()
+            )
             .map(coordinates -> converter.fromNetwork(coordinates, prediction));
     }
 
@@ -58,7 +65,6 @@ public class GoogleMapsRepository implements LocationRepository {
                 return result;
             });
     }
-
 
 
     @Override

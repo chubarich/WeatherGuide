@@ -23,6 +23,8 @@ import io.reactivex.subjects.Subject;
 
 public class StorIOLocationService extends BaseDatabaseService implements LocalLocationService {
 
+    private static final double EPSILON = 0.001;
+
     private final Subject<List<DatabaseLocation>> locationChangesSubject;
 
     public StorIOLocationService(StorIOSQLite storIOSQLite) {
@@ -63,9 +65,10 @@ public class StorIOLocationService extends BaseDatabaseService implements LocalL
                     .delete()
                     .byQuery(DeleteQuery.builder()
                         .table(LocationContract.TABLE_NAME)
-                        .where(LocationContract.COLUMN_NAME_LATITUDE + " = ?"
-                            + " AND " + LocationContract.COLUMN_NAME_LONGITUDE + " = ?")
-                        .whereArgs(location.getLatitude(), location.getLongitude())
+                        .where("(" + LocationContract.COLUMN_NAME_LATITUDE + " BETWEEN ? AND ?)"
+                            + " AND (" + LocationContract.COLUMN_NAME_LONGITUDE + " BETWEEN ? AND ?)")
+                        .whereArgs(location.getLatitude() - EPSILON, location.getLatitude() + EPSILON,
+                            location.getLongitude() - EPSILON, location.getLongitude() + EPSILON)
                         .build())
                     .prepare()
                     .executeAsBlocking();
@@ -86,9 +89,11 @@ public class StorIOLocationService extends BaseDatabaseService implements LocalL
             .object(DatabaseLocation.class)
             .withQuery(Query.builder()
                 .table(LocationContract.TABLE_NAME)
-                .where(LocationContract.COLUMN_NAME_LATITUDE + " = ?"
-                    + " AND " + LocationContract.COLUMN_NAME_LONGITUDE + " = ?")
-                .whereArgs((double) location.getLatitude(), (double) location.getLongitude())
+                .where("(" + LocationContract.COLUMN_NAME_LATITUDE + " BETWEEN ? AND ?)"
+                    + " AND (" + LocationContract.COLUMN_NAME_LONGITUDE + " BETWEEN ? AND ?)")
+                .whereArgs(location.getLatitude() - EPSILON, location.getLatitude() + EPSILON,
+                    location.getLongitude() - EPSILON, location.getLongitude() + EPSILON)
+                .whereArgs(location.getLatitude(), location.getLongitude())
                 .build())
             .prepare()
             .executeAsBlocking();

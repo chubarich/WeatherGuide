@@ -1,5 +1,6 @@
 package com.example.julia.weatherguide.di.modules.per_screen;
 
+import com.example.julia.weatherguide.data.managers.NetworkManager;
 import com.example.julia.weatherguide.di.scopes.PerScreen;
 import com.example.julia.weatherguide.domain.use_cases.GetLocationFromPredictionUseCase;
 import com.example.julia.weatherguide.domain.use_cases.GetLocationPredictionsUseCase;
@@ -17,10 +18,11 @@ public class ChooseLocationModule {
     @Provides
     @PerScreen
     PresenterFactory<ChooseLocationPresenter, ChooseLocationView> getPresenterFactory(
+        NetworkManager networkManager,
         GetLocationPredictionsUseCase getLocationPredictionsUseCase,
         GetLocationFromPredictionUseCase getLocationFromPredictionUseCase
     ) {
-        return new ChooseLocationPresenter.Factory(getLocationPredictionsUseCase,
+        return new ChooseLocationPresenter.Factory(networkManager, getLocationPredictionsUseCase,
             getLocationFromPredictionUseCase);
     }
 

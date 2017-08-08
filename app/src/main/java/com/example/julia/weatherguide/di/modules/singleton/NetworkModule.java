@@ -1,6 +1,8 @@
 package com.example.julia.weatherguide.di.modules.singleton;
 
 
+import android.content.Context;
+
 import com.example.julia.weatherguide.BuildConfig;
 import com.example.julia.weatherguide.data.constants.GoogleMapsEndpoints;
 import com.example.julia.weatherguide.data.constants.OpenWeatherMapEndpoints;
@@ -8,6 +10,7 @@ import com.example.julia.weatherguide.data.data_services.location.GoogleMapsServ
 import com.example.julia.weatherguide.data.data_services.location.NetworkLocationService;
 import com.example.julia.weatherguide.data.data_services.weather.NetworkWeatherService;
 import com.example.julia.weatherguide.data.data_services.weather.OpenWeatherMapService;
+import com.example.julia.weatherguide.data.managers.NetworkManager;
 import com.example.julia.weatherguide.di.qualifiers.GoogleMaps;
 import com.example.julia.weatherguide.di.qualifiers.OpenWeatherMap;
 
@@ -89,6 +92,12 @@ public class NetworkModule {
     @Singleton
     NetworkLocationService provideNetworkLocationService(@GoogleMaps OkHttpClient okHttpClient) {
         return new GoogleMapsService(okHttpClient);
+    }
+
+    @Provides
+    @Singleton
+    NetworkManager provideNetworkManager(Context context) {
+        return new NetworkManager(context);
     }
 
 }
