@@ -1,78 +1,124 @@
 package com.example.julia.weatherguide.data.repositories.weather;
 
-import com.example.julia.weatherguide.data.data_services.local.weather.LocalWeatherService;
-import com.example.julia.weatherguide.data.data_services.network.weather.NetworkWeatherService;
-import com.example.julia.weatherguide.data.entities.repository.Location;
-import com.example.julia.weatherguide.data.entities.repository.WeatherDataModel;
+import android.support.annotation.IntRange;
+
+import com.example.julia.weatherguide.data.converters.weather.WeatherConverter;
+import com.example.julia.weatherguide.data.data_services.weather.LocalWeatherService;
+import com.example.julia.weatherguide.data.data_services.weather.NetworkWeatherService;
+import com.example.julia.weatherguide.data.entities.local.DatabaseCurrentWeather;
+import com.example.julia.weatherguide.data.entities.repository.location.LocationWithId;
+import com.example.julia.weatherguide.data.entities.presentation.weather.Weather;
+import com.example.julia.weatherguide.data.entities.repository.weather.WeatherNotification;
 import com.example.julia.weatherguide.data.exceptions.ExceptionBundle;
-import com.example.julia.weatherguide.data.entities.remote.WeatherInCity;
-import com.example.julia.weatherguide.data.data_services.local.settings.SettingsService;
-import com.squareup.picasso.Picasso;
+import com.example.julia.weatherguide.data.helpers.DatetimeHelper;
+import com.example.julia.weatherguide.utils.Optional;
+import com.example.julia.weatherguide.utils.Preconditions;
 
 import io.reactivex.Completable;
+import io.reactivex.Observable;
 import io.reactivex.Single;
+
+import static com.example.julia.weatherguide.data.exceptions.ExceptionBundle.Reason.EMPTY_DATABASE;
+import static com.example.julia.weatherguide.data.repositories.weather.OpenWeatherMapRepository.GetWeatherStrategy.FROM_ANYWHERE;
+import static com.example.julia.weatherguide.data.repositories.weather.OpenWeatherMapRepository.GetWeatherStrategy.FROM_CACHE;
 
 
 public class OpenWeatherMapRepository implements WeatherRepository {
 
-    private final LocalWeatherService localWeatherService;
-    private final NetworkWeatherService networkWeatherService;
+    @IntRange(from = 1, to = 16)
+    // TODO: let user choose
+    private static final int PREDICTION_DAYS_COUNT = 16;
 
-    public OpenWeatherMapRepository(LocalWeatherService localWeatherService,
-                                    NetworkWeatherService networkWeatherService) {
-        this.localWeatherService = localWeatherService;
-        this.networkWeatherService = networkWeatherService;
+    private final DatetimeHelper datetimeHelper;
+    private final WeatherConverter converter;
+    private final LocalWeatherService localService;
+    private final NetworkWeatherService networkService;
+
+    public OpenWeatherMapRepository(DatetimeHelper datetimeHelper,
+                                    WeatherConverter converter,
+                                    LocalWeatherService localService,
+                                    NetworkWeatherService networkService) {
+        Preconditions.nonNull(datetimeHelper, converter, localService, networkService);
+        this.datetimeHelper = datetimeHelper;
+        this.converter = converter;
+        this.localService = localService;
+        this.networkService = networkService;
     }
 
+    // ----------------------------------- WeatherRepository --------------------------------------
+
     @Override
-    public Single<WeatherDataModel> getWeather() {
-        if (!isLocationInitialized()) {
-            return Single.error(new ExceptionBundle(ExceptionBundle.Reason.LOCATION_NOT_INITIALIZED));
+    public Single<Weather> getWeather(LocationWithId locationWithId, GetWeatherStrategy getWeatherStrategy) {
+        if (getWeatherStrategy == FROM_CACHE) {
+            return getWeatherFromLocal(locationWithId.id);
         } else {
-            return getFreshWeather().onErrorResumeNext(
-                throwable -> localWeatherService.getWeather()
-            );
+            return getWeatherFromNetwork(locationWithId.location.longitude, locationWithId.location.latitude)
+                .onErrorResumeNext((error) -> {
+                    if (getWeatherStrategy == FROM_ANYWHERE) {
+                        return getWeatherFromLocal(locationWithId.id);
+                    } else {
+                        return Single.error(error);
+                    }
+                });
         }
     }
 
     @Override
-    public Single<WeatherDataModel> getFreshWeather() {
-        if (!isLocationInitialized()) {
-            return Single.error(new ExceptionBundle(ExceptionBundle.Reason.LOCATION_NOT_INITIALIZED));
+    public Observable<WeatherNotification> subscribeOnCurrentWeatherChanges() {
+        return localService.subscribeOnCurrentWeatherChanges();
+    }
+
+    @Override
+    public Completable deleteWeather(LocationWithId locationWithId) {
+        return localService.deleteWeather(locationWithId.id);
+    }
+
+    @Override
+    public Double getTemperature(LocationWithId locationWithId) {
+        Optional<DatabaseCurrentWeather> optional = localService.getCurrentWeather(locationWithId.id)
+            .blockingGet();
+
+        if (!optional.isPresent()) {
+            return null;
         } else {
-            return networkWeatherService.getCurrentWeather(localWeatherService.getCurrentLocation())
-                .map(this::getWeatherDataModelFromNetwork)
-                .flatMap(weatherDataModel ->
-                    settingsService.saveWeatherForCurrentLocation(weatherDataModel)
-                        .onErrorComplete()
-                        .toSingle(() -> {
-                            weatherDataModel.setLocationName(settingsService.getCurrentLocationName());
-                            return weatherDataModel;
-                        })
-                );
+            return optional.get().getMainTemperature();
         }
     }
 
-    @Override
-    public Completable saveCurrentLocation(final Location location, final String cityName) {
-        return settingsService.addLocation(location, cityName);
+    // -------------------------------------- private ---------------------------------------------
+
+    private Single<Weather> getWeatherFromNetwork(float longitude, float latitude) {
+        return Single.zip(
+            networkService.getCurrentWeather(longitude, latitude)
+                .doOnSuccess(weather ->
+                    localService.saveCurrentWeather(converter.fromNetwork(weather))
+                ),
+            networkService.getPredictions(longitude, latitude, PREDICTION_DAYS_COUNT)
+                .doOnSuccess(predictions ->
+                    localService.savePredictions(converter.fromNetwork(predictions))
+                ),
+            converter::fromNetwork
+        );
     }
 
-    @Override
-    public boolean isLocationInitialized() {
-        return settingsService.isLocationInitialized();
+    private Single<Weather> getWeatherFromLocal(long locationId) {
+        return Single.zip(
+            localService.getCurrentWeather(locationId)
+                .map(optional -> {
+                    if (!optional.isPresent()) throw new ExceptionBundle(EMPTY_DATABASE);
+                    return optional.get();
+                }),
+            localService.getPredictions(
+                locationId,
+                datetimeHelper.getNextDates(PREDICTION_DAYS_COUNT)
+            ),
+            converter::fromDatabase
+        );
     }
 
-
-    private WeatherDataModel getWeatherDataModelFromNetwork(WeatherInCity weatherInCity) {
-        WeatherDataModel data = new WeatherDataModel();
-        data.setLocationName(weatherInCity.getName());
-        data.setCurrentTemperature(String.valueOf(weatherInCity.getMain().getTemp()));
-        data.setHumidity(weatherInCity.getMain().getHumidity());
-        data.setIconId(weatherInCity.getWeather().get(0).getIcon());
-        data.setWeatherDescription(weatherInCity.getWeather().get(0).getDescription());
-
-
-        return data;
+    public enum GetWeatherStrategy {
+        FROM_NETWORK,
+        FROM_CACHE,
+        FROM_ANYWHERE
     }
 }

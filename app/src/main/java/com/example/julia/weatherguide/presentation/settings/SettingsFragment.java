@@ -6,10 +6,9 @@ import android.support.v7.preference.Preference;
 import android.widget.Toast;
 
 import com.example.julia.weatherguide.R;
-import com.example.julia.weatherguide.presentation.application.WeatherGuideApplication;
 import com.example.julia.weatherguide.presentation.base.presenter.PresenterFactory;
 import com.example.julia.weatherguide.presentation.base.view.BasePreferenceFragment;
-import com.example.julia.weatherguide.utils.PlacePickerHelper;
+import com.example.julia.weatherguide.utils.ChooseLocationContract;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.AutocompleteFilter;
@@ -34,9 +33,6 @@ public class SettingsFragment extends BasePreferenceFragment<SettingsPresenter, 
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
-        ((WeatherGuideApplication) getActivity().getApplication())
-            .getSettingsComponent()
-            .inject(this);
         super.onActivityCreated(savedInstanceState);
     }
 
@@ -48,7 +44,7 @@ public class SettingsFragment extends BasePreferenceFragment<SettingsPresenter, 
                 ((SettingsPresenter) getPresenter()).onRefreshPeriodChanged((String) newValue);
                 return false;
             });
-        findPreference(getString(R.string.pick_city_key)).setOnPreferenceClickListener(
+        findPreference(getString(R.string.choose_location_key)).setOnPreferenceClickListener(
             (Preference preference) -> {
                 pickCity();
                 return false;
@@ -76,7 +72,7 @@ public class SettingsFragment extends BasePreferenceFragment<SettingsPresenter, 
 
     @Override
     public void showLocationNotPickedError() {
-        Toast.makeText(getContext(), getString(R.string.city_not_picked_before_interval), Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), getString(R.string.location_not_chosen_description), Toast.LENGTH_SHORT).show();
     }
 
     // ------------------------------------ BasePreferenceFragment ----------------------------------
@@ -108,7 +104,7 @@ public class SettingsFragment extends BasePreferenceFragment<SettingsPresenter, 
                 Intent intent = new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_FULLSCREEN)
                     .setFilter(autocompleteFilter)
                     .build(getActivity());
-                getActivity().startActivityForResult(intent, PlacePickerHelper.CODE_PLACE_PICKER_REQUEST);
+                getActivity().startActivityForResult(intent, ChooseLocationContract.REQUEST_CODE);
             } catch (GooglePlayServicesRepairableException | GooglePlayServicesNotAvailableException e) {
                 Toast.makeText(getContext(), getString(R.string.play_services_not_available), Toast.LENGTH_SHORT)
                     .show();

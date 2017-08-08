@@ -1,6 +1,5 @@
 package com.example.julia.weatherguide.presentation.settings;
 
-import com.example.julia.weatherguide.interactors.SettingsInteractor;
 import com.example.julia.weatherguide.presentation.base.presenter.BasePresenter;
 import com.example.julia.weatherguide.presentation.base.presenter.PresenterFactory;
 
@@ -8,11 +7,12 @@ import io.reactivex.disposables.CompositeDisposable;
 
 public class SettingsPresenter extends BasePresenter<SettingsView> {
 
-    private final SettingsInteractor interactor;
+    //private final SettingsInteractor interactor;
     private final CompositeDisposable compositeDisposable;
 
-    private SettingsPresenter(SettingsInteractor interactor) {
-        this.interactor = interactor;
+    private SettingsPresenter(//SettingsInteractor interactor
+                               ) {
+        //this.interactor = interactor;
         this.compositeDisposable = new CompositeDisposable();
     }
 
@@ -38,7 +38,7 @@ public class SettingsPresenter extends BasePresenter<SettingsView> {
         try {
             int period = Integer.valueOf(newValue);
             if (period > 0) {
-                compositeDisposable.add(
+                /*compositeDisposable.add(
                     interactor.saveRefreshPeriod(period)
                         .subscribe(
                             () -> {
@@ -49,6 +49,7 @@ public class SettingsPresenter extends BasePresenter<SettingsView> {
                             }
                         )
                 );
+                */
             } else {
                 if (isViewAttached()) getView().showNumberFormatError();
             }
@@ -61,15 +62,19 @@ public class SettingsPresenter extends BasePresenter<SettingsView> {
 
     public static class Factory implements PresenterFactory<SettingsPresenter, SettingsView> {
 
-        private final SettingsInteractor settingsInteractor;
+        //private final SettingsInteractor settingsInteractor;
 
-        public Factory(SettingsInteractor settingsInteractor) {
-            this.settingsInteractor = settingsInteractor;
+        public Factory(//SettingsInteractor settingsInteractor
+                        ) {
+            //this.settingsInteractor = settingsInteractor;
         }
 
         @Override
         public SettingsPresenter create() {
-            return new SettingsPresenter(settingsInteractor);
+
+            return new SettingsPresenter(
+                //settingsInteractor
+                );
         }
     }
 }

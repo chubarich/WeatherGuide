@@ -1,11 +1,8 @@
 package com.example.julia.weatherguide.presentation.main;
 
-import com.example.julia.weatherguide.presentation.base.view.BaseView;
 
-public interface MainView extends BaseView {
+public interface MainView {
 
-    void showLocationChangedSuccess();
 
-    void showLocationChangedException();
 
 }

@@ -2,7 +2,7 @@ ext.versions = [
         code                         : 1,
         name                         : '1.0',
 
-        minSdk                       : 18,
+        minSdk                       : 19,
         targetSdk                    : 25,
         compileSdk                   : 25,
         buildTools                   : '25.0.3',
@@ -22,6 +22,7 @@ ext.versions = [
         dagger                       : '2.11',
         rxbinding                    : '2.0.0',
         googlePlaces                 : '11.0.2',
+        storIO                       : '1.12.3',
 
         junit                        : '4.12',
         mockito                      : '2.1.0',
@@ -68,18 +69,23 @@ ext.libraries = [
         rxbinding_v7            : "com.jakewharton.rxbinding2:rxbinding-appcompat-v7:$versions.rxbinding",
         googlePlaces            : "com.google.android.gms:play-services-places:$versions.googlePlaces",
 
+
         junit                   : "junit:junit:$versions.junit",
         supportTestRunner       : "com.android.support.test:runner:$versions.supportTestRunner",
         supportTestRules        : "com.android.support.test:rules:$versions.supportTestRunner",
         mockito                 : "org.mockito:mockito-core:$versions.mockito",
         robolectric             : "org.robolectric:robolectric:$versions.robolectric",
         powermock               : "org.powermock:powermock:$versions.powermock",
-        powermock_junit         : "org.powermock:powermock-module-junit4:$versions.powermock",
-        powermock_api           : "org.powermock:powermock-api-mockito:$versions.powermock",
-        powermock_rule          : "org.powermock:powermock-module-junit4-rule:$versions.powermock",
-        powermock_classloader   : "org.powermock:powermock-classloading-xstream:$versions.powermock",
+        powermockJunit          : "org.powermock:powermock-module-junit4:$versions.powermock",
+        powermockApi            : "org.powermock:powermock-api-mockito:$versions.powermock",
+        powermockRule           : "org.powermock:powermock-module-junit4-rule:$versions.powermock",
+        powermockClassloader    : "org.powermock:powermock-classloading-xstream:$versions.powermock",
 
         espressoCore            : "com.android.support.test.espresso:espresso-core:$versions.espresso",
         uiAutomator             : "com.android.support.test.uiautomator:uiautomator-v18:$versions.uiAutomator",
-        robotium                : "com.jayway.android.robotium:robotium-solo:$versions.robotium"
+        robotium                : "com.jayway.android.robotium:robotium-solo:$versions.robotium",
+
+        storIO                  : "com.pushtorefresh.storio:sqlite:$versions.storIO",
+        storIOAnnotations       : "com.pushtorefresh.storio:sqlite-annotations:$versions.storIO",
+        storIOProcessor         : "com.pushtorefresh.storio:sqlite-annotations-processor:$versions.storIO"
 ]

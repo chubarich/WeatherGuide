@@ -10,6 +10,6 @@
         android:singleLine="true"/>
 
     <Preference
-        android:key="@string/pick_city_key"
-        android:title="@string/pick_city"/>
+        android:key="@string/choose_location_key"
+        android:title="@string/choose_location"/>
 </PreferenceScreen>

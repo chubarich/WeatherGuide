@@ -1,8 +1,8 @@
 package com.example.julia.weatherguide.presentation.base.view;
 
 import android.os.Bundle;
+import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
@@ -14,7 +14,6 @@ import com.example.julia.weatherguide.presentation.base.presenter.BasePresenter;
 import com.example.julia.weatherguide.presentation.base.presenter.PresenterFactory;
 import com.example.julia.weatherguide.presentation.base.presenter.PresenterLoader;
 
-import icepick.Icepick;
 
 public abstract class BaseFragment<P extends BasePresenter<V>, V extends BaseView>
     extends Fragment implements BaseView, LoaderManager.LoaderCallbacks<P> {
@@ -26,12 +25,6 @@ public abstract class BaseFragment<P extends BasePresenter<V>, V extends BaseVie
     }
 
     // -------------------------------------- lifecycle ---------------------------------------------
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        Icepick.restoreInstanceState(this, savedInstanceState);
-    }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -73,12 +66,6 @@ public abstract class BaseFragment<P extends BasePresenter<V>, V extends BaseVie
         super.onStop();
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        Icepick.saveInstanceState(this, outState);
-    }
-
     // ------------------------------------ LoaderCallbacks ---------------------------------------
 
     @Override
@@ -104,6 +91,7 @@ public abstract class BaseFragment<P extends BasePresenter<V>, V extends BaseVie
 
     protected abstract int getFragmentId();
 
+    @LayoutRes
     protected abstract int getLayoutRes();
 
 }

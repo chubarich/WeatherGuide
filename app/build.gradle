@@ -39,7 +39,10 @@ android {
         }
     }
     buildTypes.each {
-        it.buildConfigField 'String', 'WEATHER_API_KEY', keystoreProperties['WeatherApiKey'];
+        it.buildConfigField 'String', 'OPEN_WEATHER_MAP_API_KEY', keystoreProperties['OpenWeatherMapApiKey'];
+        it.buildConfigField 'String', 'GOOGLE_MAPS_API_KEY', keystoreProperties['GoogleMapsApiKey'];
+        it.buildConfigField 'String', 'DATABASE_NAME', keystoreProperties['DatabaseName'];
+        it.buildConfigField 'Integer', 'DATABASE_VERSION', keystoreProperties['DatabaseVersion'];
     }
 
     compileOptions {
@@ -69,13 +72,12 @@ dependencies {
     compile libraries.butterKnife
     annotationProcessor libraries.butterKnifeCompiler
 
-    compile libraries.icepick
-    provided libraries.icepickProcessor
-
     compile libraries.retrofit
     compile libraries.retrofitRxAdapter
     compile libraries.retrofitGsonConverter
 
+    compile libraries.rxbinding
+    compile libraries.rxbinding_v7
     compile libraries.rxjava
     compile libraries.rxandroid
 
@@ -87,13 +89,17 @@ dependencies {
 
     compile libraries.googlePlaces
 
+    compile libraries.storIO
+    compile libraries.storIOAnnotations
+    annotationProcessor libraries.storIOProcessor
+
     testCompile libraries.junit
     testCompile libraries.robolectric
     testCompile libraries.powermock
-    testCompile libraries.powermock_junit
-    testCompile libraries.powermock_api
-    testCompile libraries.powermock_rule
-    testCompile libraries.powermock_classloader
+    testCompile libraries.powermockJunit
+    testCompile libraries.powermockApi
+    testCompile libraries.powermockRule
+    testCompile libraries.powermockClassloader
 
     androidTestCompile libraries.espressoCore
     androidTestCompile libraries.supportAnnotations

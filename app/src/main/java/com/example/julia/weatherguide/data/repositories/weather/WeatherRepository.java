@@ -1,19 +1,22 @@
 package com.example.julia.weatherguide.data.repositories.weather;
 
-import com.example.julia.weatherguide.data.entities.repository.Location;
-import com.example.julia.weatherguide.data.entities.repository.WeatherDataModel;
+import com.example.julia.weatherguide.data.entities.repository.location.LocationWithId;
+import com.example.julia.weatherguide.data.entities.presentation.weather.Weather;
+import com.example.julia.weatherguide.data.entities.repository.weather.WeatherNotification;
 
 import io.reactivex.Completable;
+import io.reactivex.Observable;
 import io.reactivex.Single;
+import static com.example.julia.weatherguide.data.repositories.weather.OpenWeatherMapRepository.GetWeatherStrategy;
 
 public interface WeatherRepository {
 
-    Single<WeatherDataModel> getWeather();
+    Single<Weather> getWeather(LocationWithId location, GetWeatherStrategy getWeatherStrategy);
 
-    Single<WeatherDataModel> getFreshWeather();
+    Observable<WeatherNotification> subscribeOnCurrentWeatherChanges();
 
-    Completable saveCurrentLocation(Location location, String cityName);
+    Completable deleteWeather(LocationWithId location);
 
-    boolean isLocationInitialized();
+    Double getTemperature(LocationWithId location);
 
 }

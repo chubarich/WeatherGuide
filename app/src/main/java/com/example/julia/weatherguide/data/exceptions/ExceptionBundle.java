@@ -45,7 +45,8 @@ public class ExceptionBundle extends Exception {
         API_ERROR(200),
 
         // database
-        EMPTY_DATABASE(300);
+        EMPTY_DATABASE(300),
+        NOT_DELETED(301);
 
         private final int code;
 
