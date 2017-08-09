@@ -5,10 +5,11 @@ import com.example.julia.weatherguide.data.repositories.weather.WeatherRepositor
 import com.example.julia.weatherguide.di.qualifiers.PostExecutionScheduler;
 import com.example.julia.weatherguide.di.qualifiers.WorkerScheduler;
 import com.example.julia.weatherguide.di.scopes.PerScreen;
-import com.example.julia.weatherguide.domain.use_cases.AddLocationUseCase;
+import com.example.julia.weatherguide.domain.use_cases.AddLocationAndSetAsCurrentUseCase;
 import com.example.julia.weatherguide.domain.use_cases.DeleteLocationUseCase;
 import com.example.julia.weatherguide.domain.use_cases.GetLocationFromPredictionUseCase;
 import com.example.julia.weatherguide.domain.use_cases.GetLocationPredictionsUseCase;
+import com.example.julia.weatherguide.domain.use_cases.SubscribeOnCurrentLocationUseCase;
 import com.example.julia.weatherguide.domain.use_cases.SubscribeOnLocationChangesUseCase;
 
 import dagger.Module;
@@ -39,10 +40,10 @@ public class UseCasesModule {
 
     @Provides
     @PerScreen
-    AddLocationUseCase provideAddLocationUseCase(@WorkerScheduler Scheduler worker,
-                                                 @PostExecutionScheduler Scheduler postExecution,
-                                                 LocationRepository locationRepository) {
-        return new AddLocationUseCase(worker, postExecution, locationRepository);
+    AddLocationAndSetAsCurrentUseCase provideAddLocationUseCase(@WorkerScheduler Scheduler worker,
+                                                                @PostExecutionScheduler Scheduler postExecution,
+                                                                LocationRepository locationRepository) {
+        return new AddLocationAndSetAsCurrentUseCase(worker, postExecution, locationRepository);
     }
 
     @Provides
@@ -63,6 +64,16 @@ public class UseCasesModule {
         LocationRepository locationRepository
     ) {
         return new GetLocationFromPredictionUseCase(worker, postExecution, locationRepository);
+    }
+
+    @Provides
+    @PerScreen
+    SubscribeOnCurrentLocationUseCase provideSubscribeOnCurrentLocationUseCase(
+        @WorkerScheduler Scheduler worker,
+        @PostExecutionScheduler Scheduler postExecution,
+        LocationRepository locationRepository
+    ) {
+        return new SubscribeOnCurrentLocationUseCase(worker, postExecution, locationRepository);
     }
 
 }

@@ -19,5 +19,4 @@ public interface WeatherConverter {
 
     List<DatabaseWeatherPrediction> fromNetwork(List<NetworkWeatherPrediction> predictions);
 
-    Double mainTemperatureFromDatabase(DatabaseCurrentWeather databaseCurrentWeather);
 }

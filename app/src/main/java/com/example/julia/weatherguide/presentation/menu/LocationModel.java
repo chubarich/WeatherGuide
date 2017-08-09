@@ -26,9 +26,9 @@ public interface LocationModel {
 
         void onLocationRemoveClicked(LocationWithTemperature location);
 
-        void onLocationsEmpty();
+        void onLocationsCanBeDeleted();
 
-        void onLocationsNotEmpty();
+        void onLocationsCannotBeDeleted();
 
         void onDeletionModeChanged(boolean newValue);
 

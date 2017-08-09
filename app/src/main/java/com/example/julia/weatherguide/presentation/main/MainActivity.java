@@ -1,34 +1,48 @@
 package com.example.julia.weatherguide.presentation.main;
 
-import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.FrameLayout;
 
 import com.example.julia.weatherguide.R;
+import com.example.julia.weatherguide.data.entities.presentation.location.Location;
+import com.example.julia.weatherguide.presentation.application.WeatherGuideApplication;
+import com.example.julia.weatherguide.presentation.base.presenter.PresenterFactory;
+import com.example.julia.weatherguide.presentation.base.view.BaseActivity;
+import com.example.julia.weatherguide.presentation.weather.WeatherFragment;
 import com.example.julia.weatherguide.presentation.menu.MenuView;
 
+import javax.inject.Inject;
+import javax.inject.Provider;
 
-public class MainActivity extends AppCompatActivity {
 
+public class MainActivity extends BaseActivity<MainPresenter, MainView> implements MainView{
+
+    private FrameLayout fragmentContainer;
     private DrawerLayout drawerLayout;
     private Toolbar toolbar;
     private ActionBarDrawerToggle drawerToggle;
     private boolean toolbarEnabled;
 
+    @Inject
+    Provider<PresenterFactory<MainPresenter, MainView>> presenterFactoryProvider;
+
     // ------------------------------------------ lifecycle -----------------------------------------
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        ((WeatherGuideApplication)getApplication())
+            .getMainComponent()
+            .inject(this);
+
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
         initializeView(savedInstanceState);
     }
 
@@ -55,11 +69,52 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    // ---------------------------------------- MainView ------------------------------------------
+
+    @Override
+    public void onCurrentLocationChanged(Location newLocation) {
+        // TODO
+        if (toolbarEnabled) {
+            if (newLocation != null) {
+                toolbar.setTitle(newLocation.name);
+            } else {
+                toolbar.setTitle("Погода");
+            }
+        }
+        getSupportFragmentManager()
+            .beginTransaction()
+            .replace(R.id.fragment_container, WeatherFragment.newInstance(newLocation))
+            .commit();
+    }
+
+    // -------------------------------------- BaseActivity ----------------------------------------
+
+    @Override
+    protected MainView getViewInterface() {
+        return this;
+    }
+
+    @Override
+    protected PresenterFactory<MainPresenter, MainView> getPresenterFactory() {
+        return presenterFactoryProvider.get();
+    }
+
+    @Override
+    protected int getActivityId() {
+        return this.getClass().getSimpleName().hashCode();
+    }
+
+    @Override
+    protected int getLayoutRes() {
+        return R.layout.activity_main;
+    }
+
     // ---------------------------------------- private ---------------------------------------------
 
     private void initializeView(Bundle savedInstanceState) {
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        fragmentContainer = (FrameLayout) findViewById(R.id.fragment_container);
 
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         if (toolbar != null) {
             toolbarEnabled = true;
             drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -73,12 +128,10 @@ public class MainActivity extends AppCompatActivity {
             drawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
                 @Override
                 public void onDrawerSlide(View drawerView, float slideOffset) {
-
                 }
 
                 @Override
                 public void onDrawerOpened(View drawerView) {
-
                 }
 
                 @Override
@@ -96,7 +149,6 @@ public class MainActivity extends AppCompatActivity {
 
                 @Override
                 public void onDrawerStateChanged(int newState) {
-
                 }
             });
         }

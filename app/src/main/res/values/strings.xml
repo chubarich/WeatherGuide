@@ -29,11 +29,10 @@
     <string name="location_name">Location</string>
 
     //errors
-    <string name="network_error_description">Network error. Check your internet connection.</string>
+    <string name="network_error">Network error. Internet may be disabled.</string>
     <string name="wrong_time_value">Illegal time value.</string>
     <string name="play_services_not_available">Google Play Services are not enabled on the device.</string>
-    <string name="location_not_chosen_description">City was not picked. You can do this in settings.</string>
-    <string name="location_not_added">Location was not added</string>
-    <string name="location_not_removed">Location was not removed</string>
+    <string name="location_not_chosen">City was not picked. You can do this in settings.</string>
+    <string name="current_locaton_deletion">Current location cannot be deleted</string>
 
 </resources>

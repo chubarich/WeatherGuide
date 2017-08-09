@@ -17,6 +17,8 @@ public interface LocalLocationService {
 
     Completable deleteLocation(DatabaseLocation location);
 
-    Single<DatabaseLocation> getLocation(DatabaseLocation location);
+    Single<DatabaseLocation> getLocation(double longitude, double latitude);
+
+    Single<DatabaseLocation> getLocation(long id);
 
 }

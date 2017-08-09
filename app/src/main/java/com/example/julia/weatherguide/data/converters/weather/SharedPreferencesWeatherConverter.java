@@ -5,6 +5,7 @@ import com.example.julia.weatherguide.data.entities.local.DatabaseCurrentWeather
 import com.example.julia.weatherguide.data.entities.local.DatabaseWeatherPrediction;
 import com.example.julia.weatherguide.data.entities.network.weather.NetworkCurrentWeather;
 import com.example.julia.weatherguide.data.entities.network.weather.NetworkWeatherPrediction;
+import com.example.julia.weatherguide.data.entities.presentation.weather.CurrentWeather;
 import com.example.julia.weatherguide.data.entities.presentation.weather.Weather;
 
 import java.util.List;
@@ -13,6 +14,8 @@ public class SharedPreferencesWeatherConverter implements WeatherConverter {
 
     @Override
     public Weather fromNetwork(NetworkCurrentWeather weather, List<NetworkWeatherPrediction> predictions) {
+
+
         return null;
     }
 
@@ -31,8 +34,4 @@ public class SharedPreferencesWeatherConverter implements WeatherConverter {
         return null;
     }
 
-    @Override
-    public Double mainTemperatureFromDatabase(DatabaseCurrentWeather databaseCurrentWeather) {
-        return null;
-    }
 }

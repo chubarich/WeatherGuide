@@ -10,7 +10,7 @@ import com.example.julia.weatherguide.data.entities.presentation.location.Locati
 
 public interface LocationConverter {
 
-    LocationWithId fromDatabase(DatabaseLocation location, long currentLocationId);
+    LocationWithId fromDatabase(DatabaseLocation location, Long currentLocationId);
 
 
     LocationPrediction fromNetwork(NetworkLocationPrediction locationPrediction);

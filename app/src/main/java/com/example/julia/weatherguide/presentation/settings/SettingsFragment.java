@@ -72,7 +72,7 @@ public class SettingsFragment extends BasePreferenceFragment<SettingsPresenter, 
 
     @Override
     public void showLocationNotPickedError() {
-        Toast.makeText(getContext(), getString(R.string.location_not_chosen_description), Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), getString(R.string.location_not_chosen), Toast.LENGTH_SHORT).show();
     }
 
     // ------------------------------------ BasePreferenceFragment ----------------------------------

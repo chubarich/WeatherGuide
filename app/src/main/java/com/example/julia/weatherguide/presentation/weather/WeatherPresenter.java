@@ -1,4 +1,4 @@
-package com.example.julia.weatherguide.presentation.current_weather;
+package com.example.julia.weatherguide.presentation.weather;
 
 import com.example.julia.weatherguide.data.exceptions.ExceptionBundle;
 import com.example.julia.weatherguide.presentation.base.presenter.BasePresenter;
@@ -6,11 +6,11 @@ import com.example.julia.weatherguide.presentation.base.presenter.PresenterFacto
 import io.reactivex.disposables.CompositeDisposable;
 
 
-public class CurrentWeatherPresenter extends BasePresenter<CurrentWeatherView> {
+public class WeatherPresenter extends BasePresenter<WeatherView> {
 
     private CompositeDisposable compositeDisposable;
 
-    private CurrentWeatherPresenter() {
+    private WeatherPresenter() {
         compositeDisposable = new CompositeDisposable();
     }
 
@@ -48,11 +48,11 @@ public class CurrentWeatherPresenter extends BasePresenter<CurrentWeatherView> {
 
     // --------------------------------------- inner types ----------------------------------------
 
-    public class Factory implements PresenterFactory<CurrentWeatherPresenter, CurrentWeatherView> {
+    public static class Factory implements PresenterFactory<WeatherPresenter, WeatherView> {
 
         @Override
-        public CurrentWeatherPresenter create() {
-            return new CurrentWeatherPresenter();
+        public WeatherPresenter create() {
+            return new WeatherPresenter();
         }
     }
 }

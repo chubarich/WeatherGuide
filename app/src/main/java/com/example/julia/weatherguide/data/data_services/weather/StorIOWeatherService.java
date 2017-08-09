@@ -6,6 +6,7 @@ import com.example.julia.weatherguide.data.data_services.base.BaseDatabaseServic
 import com.example.julia.weatherguide.data.entities.local.DatabaseCurrentWeather;
 import com.example.julia.weatherguide.data.entities.local.DatabaseWeatherPrediction;
 import com.example.julia.weatherguide.data.entities.repository.weather.WeatherNotification;
+import com.example.julia.weatherguide.data.exceptions.ExceptionBundle;
 import com.example.julia.weatherguide.utils.Optional;
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
 import com.pushtorefresh.storio.sqlite.queries.DeleteQuery;
@@ -20,6 +21,8 @@ import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.subjects.BehaviorSubject;
 import io.reactivex.subjects.Subject;
+
+import static com.example.julia.weatherguide.data.exceptions.ExceptionBundle.Reason.EMPTY_DATABASE;
 
 
 public class StorIOWeatherService extends BaseDatabaseService implements LocalWeatherService {
@@ -65,7 +68,11 @@ public class StorIOWeatherService extends BaseDatabaseService implements LocalWe
                 .prepare()
                 .executeAsBlocking();
 
-            result.add(weather);
+            if (weather == null) {
+                return Single.error(new ExceptionBundle(EMPTY_DATABASE));
+            } else {
+                result.add(weather);
+            }
         }
 
         return Single.just(result);

@@ -12,7 +12,7 @@ import com.example.julia.weatherguide.data.entities.presentation.location.Locati
 public class LocationConverterPlain implements LocationConverter {
 
     @Override
-    public LocationWithId fromDatabase(DatabaseLocation location, long currentLocationId) {
+    public LocationWithId fromDatabase(DatabaseLocation location, Long currentLocationId) {
         if (location.getId() == null) {
             return null;
         } else {
@@ -22,7 +22,7 @@ public class LocationConverterPlain implements LocationConverter {
                 new Location(location.getLongitude(),
                     location.getLatitude(),
                     location.getName(),
-                    locationId == currentLocationId
+                    currentLocationId != null && locationId == currentLocationId
                 )
             );
         }

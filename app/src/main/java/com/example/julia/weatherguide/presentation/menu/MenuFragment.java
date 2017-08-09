@@ -2,7 +2,6 @@ package com.example.julia.weatherguide.presentation.menu;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
@@ -14,7 +13,6 @@ import android.widget.ScrollView;
 import android.widget.Toast;
 
 import com.example.julia.weatherguide.R;
-import com.example.julia.weatherguide.data.entities.presentation.location.Location;
 import com.example.julia.weatherguide.data.entities.presentation.location.LocationWithTemperature;
 import com.example.julia.weatherguide.presentation.about.AboutActivity;
 import com.example.julia.weatherguide.presentation.application.WeatherGuideApplication;
@@ -30,8 +28,6 @@ import javax.inject.Inject;
 import javax.inject.Provider;
 
 import io.reactivex.disposables.CompositeDisposable;
-
-import static android.app.Activity.RESULT_OK;
 
 
 public class MenuFragment extends BaseFragment<MenuPresenter, MenuView>
@@ -65,6 +61,7 @@ public class MenuFragment extends BaseFragment<MenuPresenter, MenuView>
         ((WeatherGuideApplication) getActivity().getApplication())
             .getMenuComponent()
             .inject(this);
+
         super.onActivityCreated(savedInstanceState);
     }
 
@@ -81,18 +78,6 @@ public class MenuFragment extends BaseFragment<MenuPresenter, MenuView>
         super.onDestroyView();
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == ChooseLocationContract.REQUEST_CODE) {
-            if (resultCode == RESULT_OK) {
-                Parcelable parcelable = data.getParcelableExtra(ChooseLocationContract.KEY_LOCATION);
-                if (parcelable instanceof Location) {
-                    ((MenuPresenter)getPresenter()).onLocationAdded((Location)parcelable);
-                }
-            }
-        }
-    }
-
     // --------------------------------------- MenuView -------------------------------------------
 
     @Override
@@ -106,6 +91,12 @@ public class MenuFragment extends BaseFragment<MenuPresenter, MenuView>
     @Override
     public void onDrawerClosed() {
         setLocationModelDeletionModeFalse();
+    }
+
+    @Override
+    public void showCannotDeleteCurrentLocation() {
+        // TODO
+        Toast.makeText(getContext(), getString(R.string.current_locaton_deletion), Toast.LENGTH_SHORT).show();
     }
 
     // ------------------------------------- BaseFragment -----------------------------------------
@@ -140,8 +131,12 @@ public class MenuFragment extends BaseFragment<MenuPresenter, MenuView>
         layoutBottomSubmenu = (LinearLayout) view.findViewById(R.id.layout_bottom_submenu);
         layoutTopSubmenu = (LinearLayout) view.findViewById(R.id.layout_top_submenu);
 
+        LocationAdapter locationAdapter = new LocationAdapter(
+            ContextCompat.getColor(getContext(), android.R.color.black),
+            ContextCompat.getColor(getContext(), android.R.color.transparent)
+        );
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
-        recyclerView.setAdapter(new LocationAdapter());
+        recyclerView.setAdapter(locationAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()) {
             @Override
             public boolean canScrollVertically() {
@@ -220,7 +215,7 @@ public class MenuFragment extends BaseFragment<MenuPresenter, MenuView>
             @Override
             public void onLocationClicked(LocationWithTemperature location) {
                 if (!getLocationModel().isInDeletionMode()) {
-                    Toast.makeText(getContext(), location.location.name, Toast.LENGTH_SHORT).show();
+                    ((MenuPresenter) getPresenter()).onLocationClicked(location);
                 }
             }
 
@@ -230,12 +225,12 @@ public class MenuFragment extends BaseFragment<MenuPresenter, MenuView>
             }
 
             @Override
-            public void onLocationsEmpty() {
+            public void onLocationsCanBeDeleted() {
                 buttonEditLocations.setVisibility(View.GONE);
             }
 
             @Override
-            public void onLocationsNotEmpty() {
+            public void onLocationsCannotBeDeleted() {
                 buttonEditLocations.setVisibility(View.VISIBLE);
             }
 

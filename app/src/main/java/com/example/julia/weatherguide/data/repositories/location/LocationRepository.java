@@ -3,6 +3,7 @@ package com.example.julia.weatherguide.data.repositories.location;
 import com.example.julia.weatherguide.data.entities.presentation.location.Location;
 import com.example.julia.weatherguide.data.entities.repository.location.LocationWithId;
 import com.example.julia.weatherguide.data.entities.presentation.location.LocationPrediction;
+import com.example.julia.weatherguide.utils.Optional;
 
 import java.util.List;
 import io.reactivex.Completable;
@@ -18,6 +19,8 @@ public interface LocationRepository {
 
 
     Observable<List<LocationWithId>> subscribeOnLocationsChanges();
+
+    Observable<Optional<Location>> subscribeOnCurrentLocationChanges();
 
     Completable addLocationAndSetAsCurrent(Location location);
 

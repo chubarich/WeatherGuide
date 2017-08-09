@@ -9,11 +9,11 @@ import com.example.julia.weatherguide.utils.Preconditions;
 import io.reactivex.Completable;
 import io.reactivex.Scheduler;
 
-public class AddLocationUseCase extends CompletableUseCase<Location> {
+public class AddLocationAndSetAsCurrentUseCase extends CompletableUseCase<Location> {
 
     private final LocationRepository locationRepository;
 
-    public AddLocationUseCase(Scheduler worker, Scheduler postExecution, LocationRepository locationRepository) {
+    public AddLocationAndSetAsCurrentUseCase(Scheduler worker, Scheduler postExecution, LocationRepository locationRepository) {
         super(worker, postExecution);
         Preconditions.nonNull(locationRepository);
         this.locationRepository = locationRepository;

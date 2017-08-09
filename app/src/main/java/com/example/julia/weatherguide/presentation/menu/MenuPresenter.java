@@ -1,8 +1,8 @@
 package com.example.julia.weatherguide.presentation.menu;
 
-import com.example.julia.weatherguide.data.entities.presentation.location.Location;
 import com.example.julia.weatherguide.data.entities.presentation.location.LocationWithTemperature;
-import com.example.julia.weatherguide.domain.use_cases.AddLocationUseCase;
+import com.example.julia.weatherguide.data.exceptions.ExceptionBundle;
+import com.example.julia.weatherguide.domain.use_cases.AddLocationAndSetAsCurrentUseCase;
 import com.example.julia.weatherguide.domain.use_cases.DeleteLocationUseCase;
 import com.example.julia.weatherguide.domain.use_cases.SubscribeOnLocationChangesUseCase;
 import com.example.julia.weatherguide.presentation.base.presenter.BasePresenter;
@@ -12,23 +12,25 @@ import com.example.julia.weatherguide.utils.Preconditions;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 
+import static com.example.julia.weatherguide.data.exceptions.ExceptionBundle.Reason.CURRENT_LOCATION_DELETION;
+
 
 public class MenuPresenter extends BasePresenter<MenuView> {
 
     private final SubscribeOnLocationChangesUseCase getLocations;
     private final DeleteLocationUseCase deleteLocationUseCase;
-    private final AddLocationUseCase addLocationUseCase;
+    private final AddLocationAndSetAsCurrentUseCase addLocationAndSetAsCurrentUseCase;
     private Disposable getLocationsDisposable;
     private final CompositeDisposable deleteLocationDisposable = new CompositeDisposable();
     private final CompositeDisposable addLocationDisposable = new CompositeDisposable();
 
     private MenuPresenter(SubscribeOnLocationChangesUseCase getLocations,
                           DeleteLocationUseCase deleteLocationUseCase,
-                          AddLocationUseCase addLocationUseCase) {
-        Preconditions.nonNull(getLocations, deleteLocationUseCase, addLocationUseCase);
+                          AddLocationAndSetAsCurrentUseCase addLocationAndSetAsCurrentUseCase) {
+        Preconditions.nonNull(getLocations, deleteLocationUseCase, addLocationAndSetAsCurrentUseCase);
         this.getLocations = getLocations;
         this.deleteLocationUseCase = deleteLocationUseCase;
-        this.addLocationUseCase = addLocationUseCase;
+        this.addLocationAndSetAsCurrentUseCase = addLocationAndSetAsCurrentUseCase;
     }
 
     // --------------------------------------- lifecycle ------------------------------------------
@@ -51,17 +53,23 @@ public class MenuPresenter extends BasePresenter<MenuView> {
 
     // ---------------------------------------- public --------------------------------------------
 
-    public void onLocationRemoveClicked(final LocationWithTemperature location) {
+    public void onLocationRemoveClicked(LocationWithTemperature location) {
         deleteLocationDisposable.add(
             deleteLocationUseCase.execute(location.location)
-                .subscribe(()->{}, error -> {})
+                .subscribe(
+                    () -> {},
+                    this::handleRemoveLocationError
+                )
         );
     }
 
-    public void onLocationAdded(final Location location) {
+    public void onLocationClicked(LocationWithTemperature location) {
         addLocationDisposable.add(
-            addLocationUseCase.execute(location)
-                .subscribe(()->{}, error -> {})
+            addLocationAndSetAsCurrentUseCase.execute(location.location)
+                .subscribe(
+                    () -> {},
+                    error -> {}
+                )
         );
     }
 
@@ -83,25 +91,36 @@ public class MenuPresenter extends BasePresenter<MenuView> {
         }
     }
 
+    private void handleRemoveLocationError(Throwable error) {
+        if (error instanceof ExceptionBundle) {
+            ExceptionBundle exceptionWithReason = (ExceptionBundle) error;
+            if (exceptionWithReason.getReason() == CURRENT_LOCATION_DELETION) {
+                if (getView() != null) {
+                    getView().showCannotDeleteCurrentLocation();
+                }
+            }
+        }
+    }
+
     // -------------------------------------- inner types -----------------------------------------
 
     public static class Factory implements PresenterFactory<MenuPresenter, MenuView> {
 
         private final SubscribeOnLocationChangesUseCase subscribeOnLocationChangesUseCase;
         private final DeleteLocationUseCase deleteLocationUseCase;
-        private final AddLocationUseCase addLocationUseCase;
+        private final AddLocationAndSetAsCurrentUseCase addLocationAndSetAsCurrentUseCase;
 
         public Factory(SubscribeOnLocationChangesUseCase subscribeOnLocationChangesUseCase,
                        DeleteLocationUseCase deleteLocationUseCase,
-                       AddLocationUseCase addLocationUseCase) {
+                       AddLocationAndSetAsCurrentUseCase addLocationAndSetAsCurrentUseCase) {
             this.subscribeOnLocationChangesUseCase = subscribeOnLocationChangesUseCase;
             this.deleteLocationUseCase = deleteLocationUseCase;
-            this.addLocationUseCase = addLocationUseCase;
+            this.addLocationAndSetAsCurrentUseCase = addLocationAndSetAsCurrentUseCase;
         }
 
         @Override
         public MenuPresenter create() {
-            return new MenuPresenter(subscribeOnLocationChangesUseCase, deleteLocationUseCase, addLocationUseCase);
+            return new MenuPresenter(subscribeOnLocationChangesUseCase, deleteLocationUseCase, addLocationAndSetAsCurrentUseCase);
         }
     }
 

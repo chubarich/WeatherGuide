@@ -3,6 +3,7 @@ package com.example.julia.weatherguide.data.data_services.settings;
 import android.content.SharedPreferences;
 import com.example.julia.weatherguide.data.contracts.local.settings.SettingsContract;
 import com.example.julia.weatherguide.data.entities.repository.weather.WeatherNotification;
+import com.example.julia.weatherguide.utils.Optional;
 
 import io.reactivex.Observable;
 import io.reactivex.subjects.BehaviorSubject;
@@ -16,13 +17,13 @@ import static com.example.julia.weatherguide.data.contracts.local.settings.Setti
 
 public class SharedPreferenceService implements SettingsService {
 
-    private final Subject<Long> currentLocationChangeSubject;
+    private final Subject<Optional<Long>> currentLocationChangeSubject;
     private final SharedPreferences sharedPreferences;
 
 
     public SharedPreferenceService(SharedPreferences sharedPreferences) {
         this.sharedPreferences = sharedPreferences;
-        currentLocationChangeSubject = BehaviorSubject.<Long>create()
+        currentLocationChangeSubject = BehaviorSubject.<Optional<Long>>create()
             .toSerialized();
     }
 
@@ -42,8 +43,9 @@ public class SharedPreferenceService implements SettingsService {
     }
 
     @Override
-    public long currentLocationId() {
-        return sharedPreferences.getLong(KEY_CURRENT_LOCATION_ID, -1);
+    public Long currentLocationId() {
+        long id = sharedPreferences.getLong(KEY_CURRENT_LOCATION_ID, -1);
+        return id == -1 ? null : id;
     }
 
     @Override
@@ -52,12 +54,12 @@ public class SharedPreferenceService implements SettingsService {
             .putLong(KEY_CURRENT_LOCATION_ID, id)
             .commit();
 
-        if (success) currentLocationChangeSubject.onNext(id);
+        if (success) currentLocationChangeSubject.onNext(Optional.of(id));
     }
 
     @Override
-    public Observable<Long> subscribeOnCurrentLocationIdChanges() {
-        currentLocationChangeSubject.onNext(currentLocationId());
+    public Observable<Optional<Long>> subscribeOnCurrentLocationIdChanges() {
+        currentLocationChangeSubject.onNext(Optional.of(currentLocationId()));
         return currentLocationChangeSubject;
     }
 }

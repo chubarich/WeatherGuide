@@ -48,7 +48,8 @@ public class ExceptionBundle extends Exception {
         EMPTY_DATABASE(300),
         NOT_DELETED(301),
         NOT_ADDED(302),
-        VALUE_ALREADY_EXISTS(303);
+        VALUE_ALREADY_EXISTS(303),
+        CURRENT_LOCATION_DELETION(304);
 
         private final int code;
 

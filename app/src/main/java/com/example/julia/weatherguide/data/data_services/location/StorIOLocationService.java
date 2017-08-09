@@ -83,7 +83,7 @@ public class StorIOLocationService extends BaseDatabaseService implements LocalL
     }
 
     @Override
-    public Single<DatabaseLocation> getLocation(DatabaseLocation location) {
+    public Single<DatabaseLocation> getLocation(double longitude, double latitude) {
         DatabaseLocation databaseLocation = getSQLite()
             .get()
             .object(DatabaseLocation.class)
@@ -91,9 +91,28 @@ public class StorIOLocationService extends BaseDatabaseService implements LocalL
                 .table(LocationContract.TABLE_NAME)
                 .where("(" + LocationContract.COLUMN_NAME_LATITUDE + " BETWEEN ? AND ?)"
                     + " AND (" + LocationContract.COLUMN_NAME_LONGITUDE + " BETWEEN ? AND ?)")
-                .whereArgs(location.getLatitude() - EPSILON, location.getLatitude() + EPSILON,
-                    location.getLongitude() - EPSILON, location.getLongitude() + EPSILON)
-                .whereArgs(location.getLatitude(), location.getLongitude())
+                .whereArgs(latitude - EPSILON, latitude + EPSILON,
+                    longitude - EPSILON, longitude + EPSILON)
+                .build())
+            .prepare()
+            .executeAsBlocking();
+
+        if (databaseLocation == null) {
+            return Single.error(new ExceptionBundle(ExceptionBundle.Reason.EMPTY_DATABASE));
+        } else {
+            return Single.just(databaseLocation);
+        }
+    }
+
+    @Override
+    public Single<DatabaseLocation> getLocation(long id) {
+        DatabaseLocation databaseLocation = getSQLite()
+            .get()
+            .object(DatabaseLocation.class)
+            .withQuery(Query.builder()
+                .table(LocationContract.TABLE_NAME)
+                .where(LocationContract.COLUMN_NAME_ID + "  = ?")
+                .whereArgs(id)
                 .build())
             .prepare()
             .executeAsBlocking();

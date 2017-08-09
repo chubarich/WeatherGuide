@@ -1,5 +1,7 @@
 package com.example.julia.weatherguide.data.data_services.settings;
 
+import com.example.julia.weatherguide.utils.Optional;
+
 import io.reactivex.Observable;
 
 public interface SettingsService {
@@ -10,10 +12,10 @@ public interface SettingsService {
 
     boolean isPressureInHpa();
 
-    long currentLocationId();
+    Long currentLocationId();
 
     void setCurrentLocationId(long id);
 
-    Observable<Long> subscribeOnCurrentLocationIdChanges();
+    Observable<Optional<Long>> subscribeOnCurrentLocationIdChanges();
 
 }

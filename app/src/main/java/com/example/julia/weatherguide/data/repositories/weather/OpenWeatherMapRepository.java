@@ -92,10 +92,14 @@ public class OpenWeatherMapRepository implements WeatherRepository {
             networkService.getCurrentWeather(longitude, latitude)
                 .doOnSuccess(weather ->
                     localService.saveCurrentWeather(converter.fromNetwork(weather))
+                        .onErrorComplete()
+                        .blockingAwait()
                 ),
             networkService.getPredictions(longitude, latitude, PREDICTION_DAYS_COUNT)
                 .doOnSuccess(predictions ->
                     localService.savePredictions(converter.fromNetwork(predictions))
+                        .onErrorComplete()
+                        .blockingAwait()
                 ),
             converter::fromNetwork
         );

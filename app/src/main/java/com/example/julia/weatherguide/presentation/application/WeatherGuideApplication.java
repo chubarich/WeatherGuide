@@ -4,7 +4,9 @@ import android.app.Application;
 
 import com.example.julia.weatherguide.di.components.ChooseLocationComponent;
 import com.example.julia.weatherguide.di.components.DaggerAppComponent;
+import com.example.julia.weatherguide.di.components.MainComponent;
 import com.example.julia.weatherguide.di.components.MenuComponent;
+import com.example.julia.weatherguide.di.components.WeatherComponent;
 import com.example.julia.weatherguide.di.modules.per_screen.MenuModule;
 import com.example.julia.weatherguide.di.modules.singleton.AppModule;
 import com.example.julia.weatherguide.di.components.AppComponent;
@@ -25,6 +27,10 @@ public class WeatherGuideApplication extends Application {
             .build();
     }
 
+    public AppComponent getAppComponent() {
+        return appComponent;
+    }
+
     public MenuComponent getMenuComponent() {
         return appComponent.plusMenuComponent();
     }
@@ -33,9 +39,12 @@ public class WeatherGuideApplication extends Application {
         return appComponent.plusChooseLocationComponent();
     }
 
-    public AppComponent getAppComponent() {
-        return appComponent;
+    public WeatherComponent getWeatherComponent() {
+        return appComponent.plusWeatherComponent();
     }
 
+    public MainComponent getMainComponent() {
+        return appComponent.plusMainComponent();
+    }
 
 }

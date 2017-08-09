@@ -1,6 +1,6 @@
 package com.example.julia.weatherguide.presentation.menu;
 
-
+import android.support.annotation.ColorRes;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,14 +20,19 @@ import com.example.julia.weatherguide.data.entities.presentation.location.Locati
 
 public class LocationAdapter extends RecyclerView.Adapter<LocationViewHolder> implements LocationModel {
 
+    private final int CURRENT_LOCATION_COLOR;
+    private final int TRANSPARENT_COLOR;
     private static final int MAIN_VIEW_TYPE = 0;
 
     private List<LocationWithTemperature> locations;
     private Callbacks callbacks;
     private boolean isDeletionMode;
 
-    public LocationAdapter() {
-        this.locations = new ArrayList<>();
+
+    public LocationAdapter(int currentLocationColor, int transparentColor) {
+        CURRENT_LOCATION_COLOR = currentLocationColor;
+        TRANSPARENT_COLOR = transparentColor;
+        locations = new ArrayList<>();
         setHasStableIds(true);
     }
 
@@ -56,10 +61,10 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationViewHolder> im
         notifyDataSetChanged();
         if (callbacks != null) {
             callbacks.onDeletionModeChanged(false);
-            if (this.locations.size() == 0) {
-                callbacks.onLocationsEmpty();
+            if (this.locations.size() <= 1) {
+                callbacks.onLocationsCanBeDeleted();
             } else {
-                callbacks.onLocationsNotEmpty();
+                callbacks.onLocationsCannotBeDeleted();
             }
         }
     }
@@ -93,7 +98,9 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationViewHolder> im
         final LocationViewHolder locationViewHolder = new LocationViewHolder(view);
         locationViewHolder.setOnClickListener(v -> {
             if (callbacks != null) {
-                callbacks.onLocationClicked(locationViewHolder.getLocation());
+                if (!locationViewHolder.getLocation().location.isCurrent) {
+                    callbacks.onLocationClicked(locationViewHolder.getLocation());
+                }
             }
         });
         locationViewHolder.setOnDeleteClickListener(v -> {
@@ -140,9 +147,21 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationViewHolder> im
         public void bind(LocationWithTemperature location, boolean isDeletionMode) {
             this.location = location;
             textLocationName.setText(location.location.name);
+
+            if (location.location.isCurrent) {
+                rootView.setBackgroundColor(CURRENT_LOCATION_COLOR);
+            } else {
+                rootView.setBackgroundColor(TRANSPARENT_COLOR);
+            }
+
             if (isDeletionMode) {
-                imageDelete.setVisibility(View.VISIBLE);
-                textTemperature.setVisibility(View.GONE);
+                if (!location.location.isCurrent) {
+                    imageDelete.setVisibility(View.VISIBLE);
+                    textTemperature.setVisibility(View.GONE);
+                } else {
+                    imageDelete.setVisibility(View.GONE);
+                    textTemperature.setVisibility(View.INVISIBLE);
+                }
             } else {
                 imageDelete.setVisibility(View.GONE);
                 textTemperature.setVisibility(View.VISIBLE);

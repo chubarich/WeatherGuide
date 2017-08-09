@@ -10,6 +10,8 @@ public interface MenuView extends BaseView {
 
     void setLocationsToAdapter(List<LocationWithTemperature> locations);
 
+    void showCannotDeleteCurrentLocation();
+
     void onDrawerClosed();
 
 }

@@ -21,6 +21,11 @@ public interface AppComponent {
 
     ChooseLocationComponent plusChooseLocationComponent();
 
+    WeatherComponent plusWeatherComponent();
+
+    MainComponent plusMainComponent();
+
+
     void inject(RefreshWeatherService refreshWeatherService);
 
 }

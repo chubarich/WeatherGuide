@@ -1,5 +1,7 @@
 package com.example.julia.weatherguide.data.entities.presentation.weather;
 
+import android.util.Pair;
+
 import com.example.julia.weatherguide.utils.Preconditions;
 import java.util.List;
 
@@ -10,11 +12,11 @@ public class Weather {
 
     private final CurrentWeather currentWeather;
 
-    private final List<WeatherPrediction> weatherPrediction;
+    private final List<Pair<String, WeatherPrediction>> weatherPrediction;
 
 
     public Weather(String locationName, CurrentWeather currentWeather,
-                   List<WeatherPrediction> weatherPrediction) {
+                   List<Pair<String, WeatherPrediction>> weatherPrediction) {
         Preconditions.nonNull(locationName, weatherPrediction);
         Preconditions.assertFalse(weatherPrediction.size() == 0);
 

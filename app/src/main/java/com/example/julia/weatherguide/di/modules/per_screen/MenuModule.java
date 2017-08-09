@@ -1,7 +1,7 @@
 package com.example.julia.weatherguide.di.modules.per_screen;
 
 import com.example.julia.weatherguide.di.scopes.PerScreen;
-import com.example.julia.weatherguide.domain.use_cases.AddLocationUseCase;
+import com.example.julia.weatherguide.domain.use_cases.AddLocationAndSetAsCurrentUseCase;
 import com.example.julia.weatherguide.domain.use_cases.DeleteLocationUseCase;
 import com.example.julia.weatherguide.domain.use_cases.SubscribeOnLocationChangesUseCase;
 import com.example.julia.weatherguide.presentation.base.presenter.PresenterFactory;
@@ -20,10 +20,10 @@ public class MenuModule {
     PresenterFactory<MenuPresenter, MenuView> getPresenterFactory(
         SubscribeOnLocationChangesUseCase subscribeOnLocationChangesUseCase,
         DeleteLocationUseCase deleteLocationUseCase,
-        AddLocationUseCase addLocationUseCase
+        AddLocationAndSetAsCurrentUseCase addLocationAndSetAsCurrentUseCase
     ) {
         return new MenuPresenter.Factory(subscribeOnLocationChangesUseCase, deleteLocationUseCase,
-            addLocationUseCase);
+            addLocationAndSetAsCurrentUseCase);
     }
 
 }
