@@ -143,6 +143,19 @@ public class WeatherFragment extends BaseFragment<WeatherPresenter, WeatherView>
         }
     }
 
+    @Override
+    public void showApiError() {
+        if (state.locationWithId != null) {
+            swipeRefreshLayout.setVisibility(View.VISIBLE);
+            if (recyclerView.getVisibility() == View.VISIBLE) {
+                Toast.makeText(getContext(), getString(R.string.api_error), Toast.LENGTH_SHORT).show();
+            } else {
+                textMessage.setVisibility(View.VISIBLE);
+                textMessage.setText(getString(R.string.api_error));
+            }
+        }
+    }
+
     // ------------------------------------- BaseFragment -----------------------------------------
 
     @Override

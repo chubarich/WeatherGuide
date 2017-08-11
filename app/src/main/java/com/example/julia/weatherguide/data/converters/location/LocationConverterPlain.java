@@ -49,8 +49,7 @@ public class LocationConverterPlain implements LocationConverter {
 
     @Override
     public Location fromNetwork(NetworkLocationCoordinates coordinates, LocationPrediction prediction) {
-        return new Location((float) coordinates.getLongitude(),
-            (float) coordinates.getLatitude(),
+        return new Location((float) coordinates.getLongitude(), (float) coordinates.getLatitude(),
             prediction.mainText);
     }
 

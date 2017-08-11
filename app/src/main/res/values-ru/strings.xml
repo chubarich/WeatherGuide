@@ -30,6 +30,7 @@
     <string name="play_services_not_available">Google Play Services недоступны на устройстве.</string>
     <string name="location_not_chosen">Выберите место в меню слева</string>
     <string name="current_location_deletion">Текущее место не может быть удалено</string>
+    <string name="api_error">На сервере произошла ошибка. Возможно, город не найден. Вы всегда можете выбрать места неподалеку</string>
 
     <!-- weather -->
     <string name="mmHg">мм рт. ст.</string>

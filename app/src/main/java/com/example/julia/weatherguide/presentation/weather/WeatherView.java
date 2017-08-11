@@ -19,4 +19,6 @@ public interface WeatherView extends BaseView {
 
     void showNoInternet();
 
+    void showApiError();
+
 }

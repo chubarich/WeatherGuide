@@ -53,12 +53,11 @@ public class SharedPreferencesWeatherConverter implements WeatherConverter {
                                List<NetworkWeatherPrediction> networkPredictions) {
         CurrentWeather currentWeather = fromNetworkWeather(networkCurrentWeather);
 
-        List<String> dates = datetimeHelper.getNextDates(networkPredictions.size());
         Collections.sort(networkPredictions, (o1, o2) -> o1.getTimestamp() > o2.getTimestamp() ? 1 : -1);
         List<WeatherPrediction> predictions = new ArrayList<>();
-        for (int i = 0; i < dates.size(); ++i) {
+        for (int i = 0; i < networkPredictions.size(); ++i) {
             NetworkWeatherPrediction networkPrediction = networkPredictions.get(i);
-            predictions.add(fromNetworkPrediction(networkPrediction, dates.get(i)));
+            predictions.add(fromNetworkPrediction(networkPrediction));
         }
 
         return new Weather(currentWeather, predictions);
@@ -98,12 +97,11 @@ public class SharedPreferencesWeatherConverter implements WeatherConverter {
     public List<DatabaseWeatherPrediction> fromNetwork(List<NetworkWeatherPrediction> networkPredictions,
                                                        long locationId) {
         Collections.sort(networkPredictions, (o1, o2) -> o1.getTimestamp() > o2.getTimestamp() ? 1 : -1);
-        List<String> dates = datetimeHelper.getNextDates(networkPredictions.size());
 
         List<DatabaseWeatherPrediction> predictions = new ArrayList<>();
         for (int i = 0; i < networkPredictions.size(); ++i) {
             NetworkWeatherPrediction networkPrediction = networkPredictions.get(i);
-            predictions.add(fromNetworkPredictionToDatabase(networkPrediction, locationId, dates.get(i)));
+            predictions.add(fromNetworkPredictionToDatabase(networkPrediction, locationId));
         }
         return predictions;
     }
@@ -154,14 +152,14 @@ public class SharedPreferencesWeatherConverter implements WeatherConverter {
             .build();
     }
 
-    private WeatherPrediction fromNetworkPrediction(NetworkWeatherPrediction prediction, String date) {
+    private WeatherPrediction fromNetworkPrediction(NetworkWeatherPrediction prediction) {
         boolean isHpa = settingsService.isPressureInHpa();
         TemperatureType temperatureType = settingsService.isTemperatureTypeInFahrenheit()
             ? FAHRENHEIT : CELSIUS;
         boolean isKph = settingsService.isWeatherSpeedInKph();
 
         return new WeatherPrediction.Builder()
-            .date(getDate(datetimeHelper.getTimeForPrediction(date)))
+            .date(getDate(datetimeHelper.getTimeForPrediction(prediction.getTimestamp())))
             .conditionDescription(getConditionDescription(prediction.getConditionId()))
             .conditionIconId(getConditionIconId(prediction.getConditionIconId()))
             .windSummary(getWindSummary(prediction.getWindSpeed(), isKph))
@@ -178,8 +176,7 @@ public class SharedPreferencesWeatherConverter implements WeatherConverter {
     }
 
     private DatabaseWeatherPrediction fromNetworkPredictionToDatabase(NetworkWeatherPrediction prediction,
-                                                                      long locationId,
-                                                                      String date) {
+                                                                      long locationId) {
         return new DatabaseWeatherPrediction.Builder()
             .conditionId(prediction.getConditionId())
             .locationId(locationId)
@@ -187,7 +184,7 @@ public class SharedPreferencesWeatherConverter implements WeatherConverter {
             .windSpeed(prediction.getWindSpeed())
             .cloudiness((int)prediction.getCloudiness())
             .conditionIconId(prediction.getConditionIconId())
-            .date(date)
+            .date(datetimeHelper.getDateFromTimestamp(prediction.getTimestamp()))
             .dayTemperature(prediction.getDayTemperature())
             .eveningTemperature(prediction.getEveningTemperature())
             .conditionId(prediction.getConditionId())

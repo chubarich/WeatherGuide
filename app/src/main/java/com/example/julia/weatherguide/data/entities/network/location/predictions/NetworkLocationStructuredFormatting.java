@@ -13,7 +13,7 @@ public class NetworkLocationStructuredFormatting {
     private String secondaryText;
 
     public NetworkLocationStructuredFormatting(String mainText, String secondaryText) {
-        Preconditions.nonNull(mainText, secondaryText);
+        Preconditions.nonNull(mainText);
         this.mainText = mainText;
         this.secondaryText = secondaryText;
     }

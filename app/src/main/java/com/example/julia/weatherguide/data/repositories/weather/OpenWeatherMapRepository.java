@@ -53,7 +53,9 @@ public class OpenWeatherMapRepository implements WeatherRepository {
         } else {
             return getWeatherFromNetwork(locationWithId)
                 .onErrorResumeNext((error) -> {
-                    if (getWeatherStrategy == FROM_ANYWHERE) {
+                    if (error instanceof ExceptionBundle && ((ExceptionBundle)error).getReason() == API_ERROR) {
+                        return Single.error(error);
+                    } else if (getWeatherStrategy == FROM_ANYWHERE) {
                         return getWeatherFromLocal(locationWithId);
                     } else {
                         return Single.error(error);
@@ -88,13 +90,13 @@ public class OpenWeatherMapRepository implements WeatherRepository {
 
     private Single<Weather> getWeatherFromNetwork(LocationWithId locationWithId) {
         return Single.zip(
-            networkService.getCurrentWeather(locationWithId.location.longitude, locationWithId.location.latitude)
+            networkService.getCurrentWeather(locationWithId.location.latitude, locationWithId.location.longitude)
                 .doOnSuccess(weather -> {
                     localService.saveCurrentWeather(converter.fromNetwork(weather, locationWithId.id))
                         .onErrorComplete()
                         .blockingAwait();
                 }),
-            networkService.getPredictions(locationWithId.location.longitude, locationWithId.location.latitude, PREDICTION_DAYS_COUNT)
+            networkService.getPredictions(locationWithId.location.latitude, locationWithId.location.longitude, PREDICTION_DAYS_COUNT)
                 .doOnSuccess(predictions -> {
                     localService.savePredictions(converter.fromNetwork(predictions, locationWithId.id))
                         .onErrorComplete()

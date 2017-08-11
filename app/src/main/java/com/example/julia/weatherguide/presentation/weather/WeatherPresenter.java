@@ -10,6 +10,7 @@ import com.example.julia.weatherguide.utils.Preconditions;
 
 import io.reactivex.disposables.Disposable;
 
+import static com.example.julia.weatherguide.data.exceptions.ExceptionBundle.Reason.API_ERROR;
 import static com.example.julia.weatherguide.data.exceptions.ExceptionBundle.Reason.EMPTY_DATABASE;
 import static com.example.julia.weatherguide.data.exceptions.ExceptionBundle.Reason.NETWORK_UNAVAILABLE;
 import static com.example.julia.weatherguide.data.repositories.weather.OpenWeatherMapRepository.GetWeatherStrategy.FROM_ANYWHERE;
@@ -83,6 +84,8 @@ public class WeatherPresenter extends BasePresenter<WeatherView> {
                 ExceptionBundle exception = (ExceptionBundle) throwable;
                 if (exception.getReason() == NETWORK_UNAVAILABLE || exception.getReason() == EMPTY_DATABASE) {
                     getView().showNoInternet();
+                } else if (exception.getReason() == API_ERROR) {
+                    getView().showApiError();
                 }
             }
         }

@@ -39,6 +39,7 @@
     <string name="play_services_not_available">Google Play Services are not enabled on the device.</string>
     <string name="location_not_chosen">Choose location in the left menu</string>
     <string name="current_location_deletion">Current location cannot be deleted</string>
+    <string name="api_error">Something unexpected happened on the server side. Maybe, city was not found. You can always choose locations nearby</string>
 
     <!-- weather -->
     <string name="mmHg">mmHg</string>
