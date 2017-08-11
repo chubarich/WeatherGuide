@@ -21,7 +21,7 @@ public class WeatherPredictionContract {
     // condition
     public static final String COLUMN_NAME_CONDITION_ID = "condition_id";
 
-    public static final String COLUMN_NAME_CONDITION_ICON_NAME = "condition_icon_name";
+    public static final String COLUMN_NAME_CONDITION_ICON_ID = "condition_icon_id";
 
     // temperature (in kelvin)
     public static final String COLUMN_NAME_MIN_TEMPERATURE = "min_temperature";
@@ -54,10 +54,10 @@ public class WeatherPredictionContract {
         + COLUMN_NAME_ID + " INTEGER NOT NULL PRIMARY KEY, "
         + COLUMN_NAME_LOCATION_ID + " INTEGER NON NULL, "
 
-        + COLUMN_NAME_DATE + " DATETIME NON NULL, "
+        + COLUMN_NAME_DATE + " STRING NON NULL, "
 
         + COLUMN_NAME_CONDITION_ID + " INTEGER NON NULL, "
-        + COLUMN_NAME_CONDITION_ICON_NAME + " TEXT NON NULL, "
+        + COLUMN_NAME_CONDITION_ICON_ID + " TEXT NON NULL, "
 
         + COLUMN_NAME_MIN_TEMPERATURE + " REAL NON NULL, "
         + COLUMN_NAME_MAX_TEMPERATURE + " REAL NON NULL, "

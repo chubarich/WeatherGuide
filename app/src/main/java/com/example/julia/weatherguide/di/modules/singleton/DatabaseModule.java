@@ -29,14 +29,12 @@ import dagger.Provides;
 public class DatabaseModule {
 
     @Provides
-    @Singleton
     @DatabaseName
     String provideDatabaseName() {
         return BuildConfig.DATABASE_NAME;
     }
 
     @Provides
-    @Singleton
     @DatabaseVersion
     Integer provideDatabaseVersion() {
         return BuildConfig.DATABASE_VERSION;

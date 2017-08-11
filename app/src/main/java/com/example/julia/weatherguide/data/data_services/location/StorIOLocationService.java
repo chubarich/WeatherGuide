@@ -29,13 +29,12 @@ public class StorIOLocationService extends BaseDatabaseService implements LocalL
 
     public StorIOLocationService(StorIOSQLite storIOSQLite) {
         super(storIOSQLite);
-        locationChangesSubject = BehaviorSubject.<List<DatabaseLocation>>create()
+        locationChangesSubject = BehaviorSubject.createDefault(getLocations())
             .toSerialized();
     }
 
     @Override
     public Observable<List<DatabaseLocation>> subscribeOnLocationsChanges() {
-        locationChangesSubject.onNext(getLocations());
         return locationChangesSubject;
     }
 

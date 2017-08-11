@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <EditTextPreference
-        android:key="@string/refresh_key"
+        android:key="@string/key_refresh"
         android:title="@string/refresh_period"
         android:summary="@string/refresh_period_summary"
         android:dialogTitle="@string/refresh_period"
@@ -9,7 +9,25 @@
         android:persistent="false"
         android:singleLine="true"/>
 
-    <Preference
-        android:key="@string/choose_location_key"
-        android:title="@string/choose_location"/>
+    <SwitchPreference
+        android:key="@string/key_temperature_in_fahrenheit"
+        android:defaultValue="false"
+        android:summaryOn="@string/fahrenheit"
+        android:summaryOff="@string/celsius"
+        android:title="@string/Temperature"/>
+
+    <SwitchPreference
+        android:key="@string/key_weather_speed_in_kph"
+        android:defaultValue="false"
+        android:summaryOn="@string/kph"
+        android:summaryOff="@string/mps"
+        android:title="@string/Wind_speed"/>
+
+    <SwitchPreference
+        android:key="@string/key_pressure_in_hpa"
+        android:defaultValue="false"
+        android:summaryOn="@string/hPa"
+        android:summaryOff="@string/mmHg"
+        android:title="@string/Pressure"/>
+
 </PreferenceScreen>

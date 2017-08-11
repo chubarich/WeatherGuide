@@ -13,6 +13,7 @@ import android.widget.FrameLayout;
 
 import com.example.julia.weatherguide.R;
 import com.example.julia.weatherguide.data.entities.presentation.location.Location;
+import com.example.julia.weatherguide.data.entities.presentation.location.LocationWithId;
 import com.example.julia.weatherguide.presentation.application.WeatherGuideApplication;
 import com.example.julia.weatherguide.presentation.base.presenter.PresenterFactory;
 import com.example.julia.weatherguide.presentation.base.view.BaseActivity;
@@ -23,13 +24,13 @@ import javax.inject.Inject;
 import javax.inject.Provider;
 
 
-public class MainActivity extends BaseActivity<MainPresenter, MainView> implements MainView{
+public class MainActivity extends BaseActivity<MainPresenter, MainView> implements MainView, DrawerView {
 
     private FrameLayout fragmentContainer;
     private DrawerLayout drawerLayout;
     private Toolbar toolbar;
     private ActionBarDrawerToggle drawerToggle;
-    private boolean toolbarEnabled;
+    private boolean drawerMode;
 
     @Inject
     Provider<PresenterFactory<MainPresenter, MainView>> presenterFactoryProvider;
@@ -49,12 +50,12 @@ public class MainActivity extends BaseActivity<MainPresenter, MainView> implemen
     @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        if (toolbarEnabled) drawerToggle.syncState();
+        if (drawerMode) drawerToggle.syncState();
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (toolbarEnabled && drawerToggle.onOptionsItemSelected(item)) {
+        if (drawerMode && drawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -62,25 +63,33 @@ public class MainActivity extends BaseActivity<MainPresenter, MainView> implemen
 
     @Override
     public void onBackPressed() {
-        if (toolbarEnabled && drawerLayout.isDrawerOpen(GravityCompat.START)) {
+        if (drawerMode && drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawers();
         } else {
             super.onBackPressed();
         }
     }
 
-    // ---------------------------------------- MainView ------------------------------------------
+    // -------------------------------------- DrawerView ------------------------------------------
 
     @Override
-    public void onCurrentLocationChanged(Location newLocation) {
-        // TODO
-        if (toolbarEnabled) {
-            if (newLocation != null) {
-                toolbar.setTitle(newLocation.name);
-            } else {
-                toolbar.setTitle("Погода");
-            }
+    public void closeDrawer() {
+        if (drawerMode) {
+            drawerLayout.closeDrawer(GravityCompat.START);
         }
+    }
+
+    @Override
+    public void setTitle(String title) {
+        if (drawerMode && getSupportActionBar() != null) {
+            getSupportActionBar().setTitle(title);
+        }
+    }
+
+    // --------------------------------------- MainView -------------------------------------------
+
+    @Override
+    public void onCurrentLocationChanged(LocationWithId newLocation) {
         getSupportFragmentManager()
             .beginTransaction()
             .replace(R.id.fragment_container, WeatherFragment.newInstance(newLocation))
@@ -116,7 +125,7 @@ public class MainActivity extends BaseActivity<MainPresenter, MainView> implemen
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         if (toolbar != null) {
-            toolbarEnabled = true;
+            drawerMode = true;
             drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
             drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.drawer_open, R.string.drawer_close);
             drawerLayout.addDrawerListener(drawerToggle);

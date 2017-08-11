@@ -9,6 +9,7 @@ import com.example.julia.weatherguide.domain.use_cases.AddLocationAndSetAsCurren
 import com.example.julia.weatherguide.domain.use_cases.DeleteLocationUseCase;
 import com.example.julia.weatherguide.domain.use_cases.GetLocationFromPredictionUseCase;
 import com.example.julia.weatherguide.domain.use_cases.GetLocationPredictionsUseCase;
+import com.example.julia.weatherguide.domain.use_cases.GetWeatherUseCase;
 import com.example.julia.weatherguide.domain.use_cases.SubscribeOnCurrentLocationUseCase;
 import com.example.julia.weatherguide.domain.use_cases.SubscribeOnLocationChangesUseCase;
 
@@ -34,8 +35,9 @@ public class UseCasesModule {
     @PerScreen
     DeleteLocationUseCase provideDeleteLocation(@WorkerScheduler Scheduler worker,
                                                 @PostExecutionScheduler Scheduler postExecution,
-                                                LocationRepository locationRepository) {
-        return new DeleteLocationUseCase(worker, postExecution, locationRepository);
+                                                LocationRepository locationRepository,
+                                                WeatherRepository weatherRepository) {
+        return new DeleteLocationUseCase(worker, postExecution, locationRepository, weatherRepository);
     }
 
     @Provides
@@ -74,6 +76,14 @@ public class UseCasesModule {
         LocationRepository locationRepository
     ) {
         return new SubscribeOnCurrentLocationUseCase(worker, postExecution, locationRepository);
+    }
+
+    @Provides
+    @PerScreen
+    GetWeatherUseCase provideGetWeatherUseCase(@WorkerScheduler Scheduler worker,
+                                               @PostExecutionScheduler Scheduler postExecution,
+                                               WeatherRepository weatherRepository) {
+        return new GetWeatherUseCase(worker, postExecution, weatherRepository);
     }
 
 }

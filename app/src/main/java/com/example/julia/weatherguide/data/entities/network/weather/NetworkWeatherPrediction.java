@@ -19,7 +19,7 @@ public class NetworkWeatherPrediction {
     @SerializedName("humidity")
     private double humidity;
 
-    @SerializedName("condition")
+    @SerializedName("weather")
     private List<NetworkCondition> condition;
 
     @SerializedName("speed")
@@ -29,7 +29,7 @@ public class NetworkWeatherPrediction {
     private double windAngle;
 
     @SerializedName("clouds")
-    private double cloudiness;
+    private int cloudiness;
 
 
     public long getTimestamp() {
@@ -74,5 +74,17 @@ public class NetworkWeatherPrediction {
 
     public String getConditionIconId() {
         return condition.get(0).getIconId();
+    }
+
+    public double getWindSpeed() {
+        return windSpeed;
+    }
+
+    public double getWindAngle() {
+        return windAngle;
+    }
+
+    public double getCloudiness() {
+        return cloudiness;
     }
 }

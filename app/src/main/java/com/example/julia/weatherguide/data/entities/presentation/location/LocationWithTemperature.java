@@ -7,9 +7,9 @@ public class LocationWithTemperature {
 
     public final Location location;
 
-    public final Double temperature;
+    public final Integer temperature;
 
-    public LocationWithTemperature(Location location, Double temperature) {
+    public LocationWithTemperature(Location location, Integer temperature) {
         Preconditions.nonNull(location);
         this.location = location;
         this.temperature = temperature;

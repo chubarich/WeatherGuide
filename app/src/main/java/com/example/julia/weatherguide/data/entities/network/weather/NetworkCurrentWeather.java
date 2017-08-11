@@ -6,7 +6,7 @@ import java.util.List;
 
 public class NetworkCurrentWeather {
 
-    @SerializedName("condition")
+    @SerializedName("weather")
     private List<NetworkCondition> condition;
 
     @SerializedName("main")
@@ -30,7 +30,7 @@ public class NetworkCurrentWeather {
         return condition.get(0).getId();
     }
 
-    public String getConditionIconId() {
+    public String getConditionIconName() {
         return condition.get(0).getIconId();
     }
 

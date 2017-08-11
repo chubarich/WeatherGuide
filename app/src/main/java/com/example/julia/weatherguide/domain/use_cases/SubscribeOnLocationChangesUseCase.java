@@ -1,7 +1,7 @@
 package com.example.julia.weatherguide.domain.use_cases;
 
 import com.example.julia.weatherguide.data.entities.presentation.location.LocationWithTemperature;
-import com.example.julia.weatherguide.data.entities.repository.location.LocationWithId;
+import com.example.julia.weatherguide.data.entities.presentation.location.LocationWithId;
 import com.example.julia.weatherguide.data.entities.repository.weather.WeatherNotification;
 import com.example.julia.weatherguide.data.repositories.location.LocationRepository;
 import com.example.julia.weatherguide.data.repositories.weather.WeatherRepository;
@@ -37,7 +37,7 @@ public class SubscribeOnLocationChangesUseCase extends ObservableUseCase<List<Lo
             (List<LocationWithId> locations, WeatherNotification notification) -> {
                 List<LocationWithTemperature> result = new ArrayList<>();
                 for (LocationWithId location : locations) {
-                    Double temperature = weatherRepository.getTemperature(location);
+                    Integer temperature = weatherRepository.getTemperature(location);
                     result.add(new LocationWithTemperature(location.location, temperature));
                 }
                 return result;

@@ -1,5 +1,6 @@
 package com.example.julia.weatherguide.presentation.menu;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
@@ -19,6 +20,8 @@ import com.example.julia.weatherguide.presentation.application.WeatherGuideAppli
 import com.example.julia.weatherguide.presentation.base.presenter.PresenterFactory;
 import com.example.julia.weatherguide.presentation.base.view.BaseFragment;
 import com.example.julia.weatherguide.presentation.choose_location.ChooseLocationActivity;
+import com.example.julia.weatherguide.presentation.main.DrawerView;
+import com.example.julia.weatherguide.presentation.settings.SettingsActivity;
 import com.example.julia.weatherguide.utils.ChooseLocationContract;
 import com.jakewharton.rxbinding2.view.RxView;
 
@@ -55,6 +58,15 @@ public class MenuFragment extends BaseFragment<MenuPresenter, MenuView>
     }
 
     // -------------------------------------- lifecycle -------------------------------------------
+
+    @Override
+    public void onAttach(Context context) {
+        if (!(context instanceof DrawerView)) {
+            throw new IllegalStateException("Paren activity must be instance of DrawerView");
+        }
+
+        super.onAttach(context);
+    }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -95,8 +107,7 @@ public class MenuFragment extends BaseFragment<MenuPresenter, MenuView>
 
     @Override
     public void showCannotDeleteCurrentLocation() {
-        // TODO
-        Toast.makeText(getContext(), getString(R.string.current_locaton_deletion), Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), getString(R.string.current_location_deletion), Toast.LENGTH_SHORT).show();
     }
 
     // ------------------------------------- BaseFragment -----------------------------------------
@@ -172,13 +183,19 @@ public class MenuFragment extends BaseFragment<MenuPresenter, MenuView>
 
         rxBindingDisposable.add(
             RxView.clicks(buttonAbout).subscribe(o -> {
-                if (canClickMenuButtons()) startActivity(new Intent(getContext(), AboutActivity.class));
+                if (canClickMenuButtons()) {
+                    ((DrawerView)getActivity()).closeDrawer();
+                    startActivity(new Intent(getContext(), AboutActivity.class));
+                }
             })
         );
 
         rxBindingDisposable.add(
             RxView.clicks(buttonSettings).subscribe(o -> {
-                if (canClickMenuButtons()) startActivity(new Intent(getContext(), AboutActivity.class));
+                if (canClickMenuButtons()) {
+                    ((DrawerView)getActivity()).closeDrawer();
+                    startActivity(new Intent(getContext(), SettingsActivity.class));
+                }
             })
         );
 
@@ -215,6 +232,7 @@ public class MenuFragment extends BaseFragment<MenuPresenter, MenuView>
             @Override
             public void onLocationClicked(LocationWithTemperature location) {
                 if (!getLocationModel().isInDeletionMode()) {
+                    ((DrawerView)getActivity()).closeDrawer();
                     ((MenuPresenter) getPresenter()).onLocationClicked(location);
                 }
             }

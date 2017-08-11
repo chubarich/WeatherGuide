@@ -1,7 +1,9 @@
 package com.example.julia.weatherguide.di.modules.singleton;
 
 import android.content.Context;
+import android.content.res.Resources;
 
+import com.example.julia.weatherguide.di.qualifiers.ApplicationPackageName;
 import com.example.julia.weatherguide.utils.Preconditions;
 
 import javax.inject.Singleton;
@@ -16,13 +18,23 @@ public class AppModule {
 
     public AppModule(Context context) {
         Preconditions.nonNull(context);
-        this.context = context;
+        this.context = context.getApplicationContext();
     }
 
     @Provides
-    @Singleton
     Context provideContext() {
         return context;
+    }
+
+    @Provides
+    Resources provideResources() {
+        return context.getResources();
+    }
+
+    @Provides
+    @ApplicationPackageName
+    String provideApplicationPackageName() {
+        return context.getPackageName();
     }
 
 }

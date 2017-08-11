@@ -15,8 +15,10 @@ public interface WeatherConverter {
 
     Weather fromDatabase(DatabaseCurrentWeather weather, List<DatabaseWeatherPrediction> predictions);
 
-    DatabaseCurrentWeather fromNetwork(NetworkCurrentWeather weather);
+    DatabaseCurrentWeather fromNetwork(NetworkCurrentWeather weather, long locationId);
 
-    List<DatabaseWeatherPrediction> fromNetwork(List<NetworkWeatherPrediction> predictions);
+    List<DatabaseWeatherPrediction> fromNetwork(List<NetworkWeatherPrediction> predictions, long locationId);
+
+    Integer getTemperature(DatabaseCurrentWeather weather);
 
 }

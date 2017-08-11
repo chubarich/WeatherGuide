@@ -1,5 +1,6 @@
 package com.example.julia.weatherguide.presentation.menu;
 
+import android.content.res.Resources;
 import android.support.annotation.ColorRes;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -27,7 +28,6 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationViewHolder> im
     private List<LocationWithTemperature> locations;
     private Callbacks callbacks;
     private boolean isDeletionMode;
-
 
     public LocationAdapter(int currentLocationColor, int transparentColor) {
         CURRENT_LOCATION_COLOR = currentLocationColor;
@@ -115,7 +115,7 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationViewHolder> im
 
     @Override
     public void onBindViewHolder(LocationViewHolder holder, int position) {
-        holder.bind(locations.get(position), isDeletionMode);
+        holder.bind(locations.get(position), isDeletionMode, CURRENT_LOCATION_COLOR, TRANSPARENT_COLOR);
     }
 
     @Override
@@ -126,7 +126,7 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationViewHolder> im
     // -------------------------------------- inner types -----------------------------------------
 
 
-    class LocationViewHolder extends ViewHolder {
+    static class LocationViewHolder extends ViewHolder {
 
         private LocationWithTemperature location;
         private final View rootView;
@@ -134,7 +134,7 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationViewHolder> im
         private final TextView textTemperature;
         private final ImageView imageDelete;
 
-        public LocationViewHolder(View view) {
+        LocationViewHolder(View view) {
             super(view);
             rootView = view;
             textLocationName = (TextView) view.findViewById(R.id.text_location_name);
@@ -144,14 +144,22 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationViewHolder> im
             textTemperature.setVisibility(View.VISIBLE);
         }
 
-        public void bind(LocationWithTemperature location, boolean isDeletionMode) {
+        void bind(LocationWithTemperature location, boolean isDeletionMode,
+                  int currentLocationColor, int transparentColor) {
             this.location = location;
+
             textLocationName.setText(location.location.name);
 
-            if (location.location.isCurrent) {
-                rootView.setBackgroundColor(CURRENT_LOCATION_COLOR);
+            if (location.temperature == null) {
+                textTemperature.setText(null);
             } else {
-                rootView.setBackgroundColor(TRANSPARENT_COLOR);
+                textTemperature.setText(getTemperatureDescription(location.temperature));
+            }
+
+            if (location.location.isCurrent) {
+                rootView.setBackgroundColor(currentLocationColor);
+            } else {
+                rootView.setBackgroundColor(transparentColor);
             }
 
             if (isDeletionMode) {
@@ -168,11 +176,17 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationViewHolder> im
             }
         }
 
-        public LocationWithTemperature getLocation() {
+
+        private static String getTemperatureDescription(int temperature) {
+            String degree = "\u00B0";
+            return (temperature > 0 ? "+" : "") + temperature + degree;
+        }
+
+        private LocationWithTemperature getLocation() {
             return location;
         }
 
-        public void setOnClickListener(View.OnClickListener listener) {
+        private void setOnClickListener(View.OnClickListener listener) {
             rootView.setOnClickListener(listener);
         }
 

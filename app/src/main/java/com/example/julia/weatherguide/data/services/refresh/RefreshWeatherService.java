@@ -2,7 +2,7 @@ package com.example.julia.weatherguide.data.services.refresh;
 
 import android.util.Log;
 
-import com.example.julia.weatherguide.data.entities.repository.location.LocationWithId;
+import com.example.julia.weatherguide.data.entities.presentation.location.LocationWithId;
 import com.example.julia.weatherguide.data.repositories.location.LocationRepository;
 import com.example.julia.weatherguide.data.repositories.weather.WeatherRepository;
 import com.example.julia.weatherguide.presentation.application.WeatherGuideApplication;
@@ -14,7 +14,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import io.reactivex.Single;
 import io.reactivex.schedulers.Schedulers;
 
 import static com.example.julia.weatherguide.data.repositories.weather.OpenWeatherMapRepository.GetWeatherStrategy.FROM_NETWORK;

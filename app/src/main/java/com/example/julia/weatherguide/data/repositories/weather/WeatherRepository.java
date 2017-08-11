@@ -1,6 +1,6 @@
 package com.example.julia.weatherguide.data.repositories.weather;
 
-import com.example.julia.weatherguide.data.entities.repository.location.LocationWithId;
+import com.example.julia.weatherguide.data.entities.presentation.location.LocationWithId;
 import com.example.julia.weatherguide.data.entities.presentation.weather.Weather;
 import com.example.julia.weatherguide.data.entities.repository.weather.WeatherNotification;
 
@@ -17,6 +17,6 @@ public interface WeatherRepository {
 
     Completable deleteWeather(LocationWithId location);
 
-    Double getTemperature(LocationWithId location);
+    Integer getTemperature(LocationWithId location);
 
 }

@@ -13,6 +13,8 @@ public class OpenWeatherMapEndpoints {
 
     public static final String FORECAST = "/forecast";
 
+    public static final String DAILY = "/daily";
+
 
     public static final String KEY_SECURITY_KEY = "APPID";
 

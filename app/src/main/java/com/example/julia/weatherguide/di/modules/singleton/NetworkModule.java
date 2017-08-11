@@ -13,30 +13,29 @@ import com.example.julia.weatherguide.data.data_services.weather.OpenWeatherMapS
 import com.example.julia.weatherguide.data.managers.NetworkManager;
 import com.example.julia.weatherguide.di.qualifiers.GoogleMaps;
 import com.example.julia.weatherguide.di.qualifiers.OpenWeatherMap;
+import com.facebook.stetho.okhttp.StethoInterceptor;
 
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
 
 import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
-import okhttp3.Request;
+import okhttp3.logging.HttpLoggingInterceptor;
 
 
 @Module
 public class NetworkModule {
 
     @Provides
-    @Singleton
     @OpenWeatherMap
     String provideOpenWeatherMapApiKey() {
         return BuildConfig.OPEN_WEATHER_MAP_API_KEY;
     }
 
     @Provides
-    @Singleton
     @GoogleMaps
     String provideGoogleMapsApiKey() {
         return BuildConfig.GOOGLE_MAPS_API_KEY;
@@ -46,9 +45,13 @@ public class NetworkModule {
     @Singleton
     @OpenWeatherMap
     OkHttpClient provideOpenWeatherMapOkHttpClient(@OpenWeatherMap String apiKey) {
+        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
+
         return new OkHttpClient().newBuilder()
             .connectTimeout(5, TimeUnit.SECONDS)
             .readTimeout(5, TimeUnit.SECONDS)
+            .addInterceptor(logging)
             .addInterceptor(chain ->
                 chain.proceed(chain.request()
                     .newBuilder()

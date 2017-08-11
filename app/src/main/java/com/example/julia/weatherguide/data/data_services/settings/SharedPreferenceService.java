@@ -23,7 +23,7 @@ public class SharedPreferenceService implements SettingsService {
 
     public SharedPreferenceService(SharedPreferences sharedPreferences) {
         this.sharedPreferences = sharedPreferences;
-        currentLocationChangeSubject = BehaviorSubject.<Optional<Long>>create()
+        currentLocationChangeSubject = BehaviorSubject.createDefault(Optional.of(currentLocationId()))
             .toSerialized();
     }
 
@@ -50,16 +50,17 @@ public class SharedPreferenceService implements SettingsService {
 
     @Override
     public void setCurrentLocationId(long id) {
+        long previous = sharedPreferences.getLong(KEY_CURRENT_LOCATION_ID, -1);
+
         boolean success = sharedPreferences.edit()
             .putLong(KEY_CURRENT_LOCATION_ID, id)
             .commit();
 
-        if (success) currentLocationChangeSubject.onNext(Optional.of(id));
+        if (success && id != previous) currentLocationChangeSubject.onNext(Optional.of(id));
     }
 
     @Override
     public Observable<Optional<Long>> subscribeOnCurrentLocationIdChanges() {
-        currentLocationChangeSubject.onNext(Optional.of(currentLocationId()));
         return currentLocationChangeSubject;
     }
 }

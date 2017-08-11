@@ -4,7 +4,7 @@ package com.example.julia.weatherguide.utils;
 @SuppressWarnings("WeakerAccess") // methods with custom message can be used later
 public class Preconditions {
 
-    private static final String MESSAGE_OBJECTS_NULL = "All objects must not be null";
+    private static final String MESSAGE_OBJECTS_NULL = "All objects must not be non null";
 
     private static final String FALSE_CONDITION = "False condition";
 

@@ -1,6 +1,7 @@
 package com.example.julia.weatherguide.domain.use_cases;
 
 import com.example.julia.weatherguide.data.entities.presentation.location.Location;
+import com.example.julia.weatherguide.data.entities.presentation.location.LocationWithId;
 import com.example.julia.weatherguide.data.repositories.location.LocationRepository;
 import com.example.julia.weatherguide.domain.use_cases.base.ObservableUseCase;
 import com.example.julia.weatherguide.domain.use_cases.base.SingleUseCase;
@@ -11,7 +12,7 @@ import io.reactivex.Scheduler;
 import io.reactivex.Single;
 
 
-public class SubscribeOnCurrentLocationUseCase extends ObservableUseCase<Optional<Location>, Void> {
+public class SubscribeOnCurrentLocationUseCase extends ObservableUseCase<Optional<LocationWithId>, Void> {
 
     private final LocationRepository locationRepository;
 
@@ -22,7 +23,7 @@ public class SubscribeOnCurrentLocationUseCase extends ObservableUseCase<Optiona
     }
 
     @Override
-    protected Observable<Optional<Location>> getUseCaseObservable(Void aVoid) {
+    protected Observable<Optional<LocationWithId>> getUseCaseObservable(Void aVoid) {
         return locationRepository.subscribeOnCurrentLocationChanges();
     }
 }

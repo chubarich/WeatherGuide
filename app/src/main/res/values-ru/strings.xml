@@ -1,28 +1,147 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Погода</string>
+
+    <!-- navigation -->
     <string name="left_drawer_menu_title_weather">Погода</string>
     <string name="left_drawer_menu_title_settings">Настройки</string>
     <string name="left_drawer_menu_title_about">О приложении</string>
-    <string name="empty_view_string">Нет данных для отображения</string>
 
+    <!-- messages -->
     <string name="about_application">Приложение WeatherGuide готовится приносить пользу</string>
-
-    <string name="button_name_refresh">обновить</string>
-
-    <string name="humidity">влажность :</string>
-
-    <string name="refresh_period">Интервал обновления</string>
-    <string name="refresh_period_summary">Установите интервал обновления (в минутах)</string>
     <string name="interval_picked_success">Интервал обновления был успешно изменен</string>
+
+    <!-- views -->
+    <string name="button_name_refresh">обновить</string>
     <string name="choose_location">Введите название населенного пункта</string>
     <string name="location_name">Населенный пункт</string>
+    <string name="weather">Погода</string>
 
-    //errors
+    <!-- preferences -->
+    <string name="refresh_period">Интервал обновления</string>
+    <string name="refresh_period_summary">Установите интервал обновления (в минутах)</string>
+    <string name="Pressure">Давление</string>
+    <string name="Wind_speed">Сила ветра</string>
+    <string name="Temperature">Температура</string>
+
+    <!-- errors -->
     <string name="network_error">Ошибка сети. Проверьте подключение к Интернету.</string>
     <string name="wrong_time_value">Неверное значение времени.</string>
     <string name="play_services_not_available">Google Play Services недоступны на устройстве.</string>
-    <string name="location_not_chosen">Ни одно место не выбрано. Вы можете добавить место из главного менб</string>
-    <string name="current_locaton_deletion">Текущее место не может быть удалено</string>
+    <string name="location_not_chosen">Выберите место в меню слева</string>
+    <string name="current_location_deletion">Текущее место не может быть удалено</string>
+
+    <!-- weather -->
+    <string name="mmHg">мм рт. ст.</string>
+    <string name="hPa">гПа</string>
+    <string name="mps">м/с</string>
+    <string name="kph">км/ч</string>
+    <string name="wind">wind</string>
+    <string name="humidity">влажность</string>
+    <string name="cloudiness">облачность</string>
+
+
+    <!-- dates -->
+    <array name="months">
+        <item>января</item>
+        <item>февраля</item>
+        <item>марта</item>
+        <item>апреля</item>
+        <item>мая</item>
+        <item>июня</item>
+        <item>июля</item>
+        <item>августа</item>
+        <item>сентября</item>
+        <item>октября</item>
+        <item>ноября</item>
+        <item>декабря</item>
+    </array>
+    <string name="today">Сегодня</string>
+    <string name="tomorrow">Завтра</string>
+
+    <!--            WEATHER API RESOURCES            -->
+    <!-- thunderstorm -->
+    <string name="id_200">гроза с небольшим дождем</string>
+    <string name="id_201">гроза с дождем</string>
+    <string name="id_202">гроза с сильным дождем</string>
+    <string name="id_210">легкая гроза</string>
+    <string name="id_211">гроза</string>
+    <string name="id_212">сильная гроза</string>
+    <string name="id_221">местами грозы</string>
+    <string name="id_230">гроза с слабо моросящим дождем</string>
+    <string name="id_231">гроза с моросящим дождем</string>
+    <string name="id_232">гроза с сильно моросящим дождем</string>
+    <!-- drizzle -->
+    <string name="id_300">слабо моросящий дождь</string>
+    <string name="id_301">моросящий дождь</string>
+    <string name="id_302">сильно моросящий дождь</string>
+    <string name="id_310">слабо моросящий дождь</string>
+    <string name="id_311">моросящий дождь</string>
+    <string name="id_312">сильно моросящий дождь</string>
+    <string name="id_313">дождь переменной интенсивности</string>
+    <string name="id_314">дождь переменной интенсивности</string>
+    <string name="id_321">дождь переменной интенсивности</string>
+    <!-- rain -->
+    <string name="id_500">легкий дождик</string>
+    <string name="id_501">дождь</string>
+    <string name="id_502">дождь повышенной интенсивности</string>
+    <string name="id_503">необычайно сильный дождь</string>
+    <string name="id_504">экстремально сильный дождь</string>
+    <string name="id_511">ледяной дождь</string>
+    <string name="id_520">слабый дождь</string>
+    <string name="id_521">дождь</string>
+    <string name="id_522">дождь повышенной интенсивности</string>
+    <string name="id_531">дождь переменной интенсивности</string>
+    <!-- snow -->
+    <string name="id_600">слабый снег</string>
+    <string name="id_601">снег</string>
+    <string name="id_602">сильный снег</string>
+    <string name="id_611">дождь со снегом</string>
+    <string name="id_612">сильный дождь ос снегом</string>
+    <string name="id_615">слабый дождь со снегом</string>
+    <string name="id_616">дождь со снегом</string>
+    <string name="id_620">слабый снег</string>
+    <string name="id_621">слабый снег</string>
+    <string name="id_622">сильный снег</string>
+    <!-- atmosphere -->
+    <string name="id_701">туман</string>
+    <string name="id_711">туман</string>
+    <string name="id_721">туман</string>
+    <string name="id_731">завихрения пыли</string>
+    <string name="id_741">туман</string>
+    <string name="id_751">завихрения пыли</string>
+    <string name="id_761">завихрения пыли</string>
+    <string name="id_762">вулканическая зола</string>
+    <string name="id_771">завихрения пыли</string>
+    <string name="id_781">торнадо</string>
+    <!-- clear -->
+    <string name="id_800">чистое небо</string>
+    <!-- clouds -->
+    <string name="id_801">слабо облачно</string>
+    <string name="id_802">местами облачно</string>
+    <string name="id_803">облачно</string>
+    <string name="id_804">пасмурно</string>
+    <!-- extreme -->
+    <string name="id_900">торнадо</string>
+    <string name="id_901">тропический шторм</string>
+    <string name="id_902">ураган</string>
+    <string name="id_903">сильный мороз</string>
+    <string name="id_904">сильная жара</string>
+    <string name="id_905">сильный ветер</string>
+    <string name="id_906">силный град</string>
+    <!-- additional -->
+    <string name="id_951">безветренно</string>
+    <string name="id_952">легкий бриз</string>
+    <string name="id_953">слабый бриз</string>
+    <string name="id_954">бриз</string>
+    <string name="id_955">свежий бриз</string>
+    <string name="id_956">сильный бриз</string>
+    <string name="id_957">сильный ветер, возможен шторм</string>
+    <string name="id_958">шторм</string>
+    <string name="id_959">сильный шторм</string>
+    <string name="id_960">шторм</string>
+    <string name="id_961">сильный шторм</string>
+    <string name="id_962">ураган</string>
+
 
 </resources>

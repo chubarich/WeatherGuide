@@ -5,7 +5,7 @@ import com.example.julia.weatherguide.data.entities.network.location.coordinates
 import com.example.julia.weatherguide.data.entities.network.location.predictions.NetworkLocationPrediction;
 import com.example.julia.weatherguide.data.entities.network.location.predictions.NetworkLocationStructuredFormatting;
 import com.example.julia.weatherguide.data.entities.presentation.location.Location;
-import com.example.julia.weatherguide.data.entities.repository.location.LocationWithId;
+import com.example.julia.weatherguide.data.entities.presentation.location.LocationWithId;
 import com.example.julia.weatherguide.data.entities.presentation.location.LocationPrediction;
 
 
@@ -65,7 +65,7 @@ public class LocationConverterPlain implements LocationConverter {
 
     @Override
     public DatabaseLocation toDatabase(NetworkLocationCoordinates coordinates, LocationPrediction prediction) {
-        return new DatabaseLocation((float) coordinates.getLongitude(), (float) coordinates.getLatitude(), prediction.mainText);
+        return new DatabaseLocation(coordinates.getLongitude(), coordinates.getLatitude(), prediction.mainText);
     }
 
 }

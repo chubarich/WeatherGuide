@@ -1,6 +1,7 @@
 package com.example.julia.weatherguide.presentation.main;
 
 import com.example.julia.weatherguide.data.entities.presentation.location.Location;
+import com.example.julia.weatherguide.data.entities.presentation.location.LocationWithId;
 import com.example.julia.weatherguide.domain.use_cases.SubscribeOnCurrentLocationUseCase;
 import com.example.julia.weatherguide.presentation.base.presenter.BasePresenter;
 import com.example.julia.weatherguide.presentation.base.presenter.PresenterFactory;
@@ -16,7 +17,7 @@ public class MainPresenter extends BasePresenter<MainView> {
     private final SubscribeOnCurrentLocationUseCase subscribeOnCurrentLocationUseCase;
     private Disposable subscribeOnCurrentLocationDisposable;
 
-    private Location locationCache;
+    private LocationWithId locationCache;
 
     public MainPresenter(SubscribeOnCurrentLocationUseCase useCase) {
         Preconditions.nonNull(useCase);
@@ -27,8 +28,8 @@ public class MainPresenter extends BasePresenter<MainView> {
     @Override
     protected void onViewAttached() {
         if (locationCache != null) {
-            locationCache = null;
             getView().onCurrentLocationChanged(locationCache);
+            locationCache = null;
         }
 
         if (subscribeOnCurrentLocationDisposable == null) {
@@ -58,7 +59,7 @@ public class MainPresenter extends BasePresenter<MainView> {
         }
     }
 
-    private void showLocation(Optional<Location> locationOptional) {
+    private void showLocation(Optional<LocationWithId> locationOptional) {
         if (getView() != null) {
             getView().onCurrentLocationChanged(locationOptional.get());
         } else {

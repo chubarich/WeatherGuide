@@ -17,7 +17,7 @@ public interface OpenWeatherMapContract {
         @Query(KEY_LONGITUDE) double longitude
     );
 
-    @GET(DATA + V2_5 + FORECAST)
+    @GET(DATA + V2_5 + FORECAST + DAILY)
     Single<NetworkWeatherPredictions> getWeatherPrediction(
         @Query(KEY_LATITUDE) double latitude,
         @Query(KEY_LONGITUDE) double longitude,

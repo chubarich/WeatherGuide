@@ -1,7 +1,7 @@
 package com.example.julia.weatherguide.data.repositories.location;
 
 import com.example.julia.weatherguide.data.entities.presentation.location.Location;
-import com.example.julia.weatherguide.data.entities.repository.location.LocationWithId;
+import com.example.julia.weatherguide.data.entities.presentation.location.LocationWithId;
 import com.example.julia.weatherguide.data.entities.presentation.location.LocationPrediction;
 import com.example.julia.weatherguide.utils.Optional;
 
@@ -20,10 +20,10 @@ public interface LocationRepository {
 
     Observable<List<LocationWithId>> subscribeOnLocationsChanges();
 
-    Observable<Optional<Location>> subscribeOnCurrentLocationChanges();
+    Observable<Optional<LocationWithId>> subscribeOnCurrentLocationChanges();
 
     Completable addLocationAndSetAsCurrent(Location location);
 
-    Completable deleteLocation(Location location);
+    Single<LocationWithId> deleteLocation(Location location);
 
 }

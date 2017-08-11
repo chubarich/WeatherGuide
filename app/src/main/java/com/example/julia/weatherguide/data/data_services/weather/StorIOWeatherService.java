@@ -15,7 +15,6 @@ import com.pushtorefresh.storio.sqlite.queries.Query;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.reactivex.BackpressureStrategy;
 import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.Single;

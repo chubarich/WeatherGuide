@@ -7,7 +7,7 @@ import com.example.julia.weatherguide.data.data_services.settings.SettingsServic
 import com.example.julia.weatherguide.data.entities.local.DatabaseLocation;
 import com.example.julia.weatherguide.data.entities.network.location.predictions.NetworkLocationPrediction;
 import com.example.julia.weatherguide.data.entities.presentation.location.Location;
-import com.example.julia.weatherguide.data.entities.repository.location.LocationWithId;
+import com.example.julia.weatherguide.data.entities.presentation.location.LocationWithId;
 import com.example.julia.weatherguide.data.entities.presentation.location.LocationPrediction;
 import com.example.julia.weatherguide.data.exceptions.ExceptionBundle;
 import com.example.julia.weatherguide.utils.Optional;
@@ -30,6 +30,7 @@ public class GoogleMapsRepository implements LocationRepository {
     private final LocalLocationService localService;
     private final NetworkLocationService networkService;
 
+
     public GoogleMapsRepository(SettingsService settingsService,
                                 LocationConverter converter,
                                 LocalLocationService localService,
@@ -45,7 +46,11 @@ public class GoogleMapsRepository implements LocationRepository {
     public Single<Location> getLocation(LocationPrediction prediction) {
         return networkService.getLocationCoordinates(converter.toNetwork(prediction))
             .map(coordinates -> converter.fromNetwork(coordinates, prediction))
-            .doOnSuccess(this::addLocationAndSetAsCurrent);
+            .flatMap(location -> {
+                return addLocationAndSetAsCurrent(location)
+                    .onErrorComplete()
+                    .toSingle(() -> location);
+            });
     }
 
     @Override
@@ -71,14 +76,14 @@ public class GoogleMapsRepository implements LocationRepository {
     }
 
     @Override
-    public Observable<Optional<Location>> subscribeOnCurrentLocationChanges() {
+    public Observable<Optional<LocationWithId>> subscribeOnCurrentLocationChanges() {
         return settingsService.subscribeOnCurrentLocationIdChanges()
             .map(id -> {
                 if (!id.isPresent()) {
                     return Optional.of(null);
                 } else {
                     return localService.getLocation(id.get())
-                        .map(location -> converter.fromDatabase(location, id.get()).location)
+                        .map(location -> converter.fromDatabase(location, id.get()))
                         .map(Optional::of)
                         .onErrorReturnItem(Optional.of(null))
                         .blockingGet();
@@ -102,13 +107,16 @@ public class GoogleMapsRepository implements LocationRepository {
     }
 
     @Override
-    public Completable deleteLocation(Location location) {
+    public Single<LocationWithId> deleteLocation(Location location) {
         return localService.getLocation(location.longitude, location.latitude)
-            .flatMapCompletable(databaseLocation -> {
+            .flatMap(databaseLocation -> {
                 if (databaseLocation.getId().equals(settingsService.currentLocationId())) {
-                    return Completable.error(new ExceptionBundle(ExceptionBundle.Reason.CURRENT_LOCATION_DELETION));
+                    return Single.error(new ExceptionBundle(ExceptionBundle.Reason.CURRENT_LOCATION_DELETION));
                 } else {
-                    return localService.deleteLocation(databaseLocation);
+                    return localService.deleteLocation(databaseLocation)
+                        .toSingle(() -> {
+                            return converter.fromDatabase(databaseLocation, settingsService.currentLocationId());
+                        });
                 }
             });
     }

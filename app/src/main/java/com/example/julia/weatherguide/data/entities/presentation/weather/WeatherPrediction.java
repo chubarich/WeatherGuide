@@ -5,36 +5,36 @@ import com.example.julia.weatherguide.utils.Preconditions;
 public class WeatherPrediction {
 
     //meta
+    private final String date;
     private final String conditionDescription;
-    private final String conditionIconName;
+    private final int conditionIconId;
     // temperature
     private final double minTemperature;
     private final double maxTemperature;
     private final double morningTemperature;
     private final double dayTemperature;
     private final double eveningTemperature;
-    private final double nightTemperatureInKelvin;
+    private final double nightTemperature;
     // wind
-    private final double windSpeed;
-    private final double windAngle;
+    private final String windSummary;
     // other
     private final int humidity;
-    private final double pressure;
+    private final String pressureSummary;
     private final int cloudiness;
 
     private WeatherPrediction(Builder builder) {
+        date = builder.date;
         conditionDescription = builder.conditionDescription;
-        conditionIconName = builder.conditionIconName;
+        conditionIconId = builder.conditionIconId;
         minTemperature = builder.minTemperature;
         maxTemperature = builder.maxTemperature;
         morningTemperature = builder.morningTemperature;
         dayTemperature = builder.dayTemperature;
         eveningTemperature = builder.eveningTemperature;
-        nightTemperatureInKelvin = builder.nightTemperatureInKelvin;
-        windSpeed = builder.windSpeed;
-        windAngle = builder.windAngle;
+        nightTemperature = builder.nightTemperature;
+        windSummary = builder.windSummary;
         humidity = builder.humidity;
-        pressure = builder.pressure;
+        pressureSummary = builder.pressureSummary;
         cloudiness = builder.cloudiness;
     }
 
@@ -42,8 +42,8 @@ public class WeatherPrediction {
         return conditionDescription;
     }
 
-    public String getConditionIconName() {
-        return conditionIconName;
+    public int getConditionIconId() {
+        return conditionIconId;
     }
 
     public double getMinTemperature() {
@@ -66,44 +66,43 @@ public class WeatherPrediction {
         return eveningTemperature;
     }
 
-    public double getNightTemperatureInKelvin() {
-        return nightTemperatureInKelvin;
+    public double getNightTemperature() {
+        return nightTemperature;
     }
 
-    public double getWindSpeed() {
-        return windSpeed;
-    }
-
-    public double getWindAngle() {
-        return windAngle;
+    public String getWindSummary() {
+        return windSummary;
     }
 
     public int getHumidity() {
         return humidity;
     }
 
-    public double getPressure() {
-        return pressure;
+    public String getPressureSummary() {
+        return pressureSummary;
     }
 
     public int getCloudiness() {
         return cloudiness;
     }
 
+    public String getDate() {
+        return date;
+    }
+
     public static final class Builder {
         private String date;
         private String conditionDescription;
-        private String conditionIconName;
+        private Integer conditionIconId;
         private Double minTemperature;
         private Double maxTemperature;
         private Double morningTemperature;
         private Double dayTemperature;
         private Double eveningTemperature;
-        private Double nightTemperatureInKelvin;
-        private Double windSpeed;
-        private Double windAngle;
+        private Double nightTemperature;
+        private String windSummary;
         private Integer humidity;
-        private Double pressure;
+        private String pressureSummary;
         private Integer cloudiness;
 
         public Builder() {
@@ -119,8 +118,8 @@ public class WeatherPrediction {
             return this;
         }
 
-        public Builder conditionIconName(String val) {
-            conditionIconName = val;
+        public Builder conditionIconId(Integer val) {
+            conditionIconId = val;
             return this;
         }
 
@@ -149,18 +148,13 @@ public class WeatherPrediction {
             return this;
         }
 
-        public Builder nightTemperatureInKelvin(double val) {
-            nightTemperatureInKelvin = val;
+        public Builder nightTemperature(double val) {
+            nightTemperature = val;
             return this;
         }
 
-        public Builder windSpeed(double val) {
-            windSpeed = val;
-            return this;
-        }
-
-        public Builder windAngle(double val) {
-            windAngle = val;
+        public Builder windSummary(String val) {
+            windSummary = val;
             return this;
         }
 
@@ -169,8 +163,8 @@ public class WeatherPrediction {
             return this;
         }
 
-        public Builder pressure(double val) {
-            pressure = val;
+        public Builder pressure(String val) {
+            pressureSummary = val;
             return this;
         }
 
@@ -180,9 +174,9 @@ public class WeatherPrediction {
         }
 
         public WeatherPrediction build() {
-            Preconditions.nonNull(date, conditionDescription, conditionIconName, minTemperature,
+            Preconditions.nonNull(date, conditionDescription, conditionIconId, minTemperature,
                 maxTemperature, morningTemperature, dayTemperature, eveningTemperature,
-                nightTemperatureInKelvin, windSpeed, windAngle, humidity, pressure, cloudiness);
+                nightTemperature, windSummary, humidity, pressureSummary, cloudiness);
             return new WeatherPrediction(this);
         }
     }

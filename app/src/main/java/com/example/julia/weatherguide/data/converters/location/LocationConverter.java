@@ -4,7 +4,7 @@ import com.example.julia.weatherguide.data.entities.local.DatabaseLocation;
 import com.example.julia.weatherguide.data.entities.network.location.coordinates.NetworkLocationCoordinates;
 import com.example.julia.weatherguide.data.entities.network.location.predictions.NetworkLocationPrediction;
 import com.example.julia.weatherguide.data.entities.presentation.location.Location;
-import com.example.julia.weatherguide.data.entities.repository.location.LocationWithId;
+import com.example.julia.weatherguide.data.entities.presentation.location.LocationWithId;
 import com.example.julia.weatherguide.data.entities.presentation.location.LocationPrediction;
 
 
