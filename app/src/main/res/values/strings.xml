@@ -11,7 +11,7 @@
     <string name="left_drawer_menu_title_about">About</string>
 
     <!-- messages -->
-    <string name="about_application">Enjoy WeatherGuide app!</string>
+    <string name="about_application">The application WeatherGuide was written by Daniel Kashin and Julia Timofeeva in 2017 as a part of Yandex.Mobilization project</string>
     <string name="interval_picked_success">Interval was successfully changed</string>
 
     <!-- views -->

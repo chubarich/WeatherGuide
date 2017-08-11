@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="message_text_size">22sp</dimen>
+    <dimen name="message_horizontal_margin">45dp</dimen>
+
+    <!-- current weather -->
+    <dimen name="date_text_size">16sp</dimen>
+    <dimen name="date_text_vertical_padding">5dp</dimen>
+    <dimen name="main_temperature_text_size">75sp</dimen>
+    <dimen name="main_temperature_margin_from_center">40dp</dimen>
+
+</resources>

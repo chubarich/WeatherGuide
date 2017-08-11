@@ -8,7 +8,7 @@
     <string name="left_drawer_menu_title_about">О приложении</string>
 
     <!-- messages -->
-    <string name="about_application">Приложение WeatherGuide готовится приносить пользу</string>
+    <string name="about_application">Приложение Погода было написано Данилом Кашиным и Юлией Тимофеевой в 2017 году в рамках проекта Яндекс.Мобилизация</string>
     <string name="interval_picked_success">Интервал обновления был успешно изменен</string>
 
     <!-- views -->
