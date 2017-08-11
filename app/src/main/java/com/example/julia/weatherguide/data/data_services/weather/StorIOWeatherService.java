@@ -68,7 +68,11 @@ public class StorIOWeatherService extends BaseDatabaseService implements LocalWe
                 .executeAsBlocking();
 
             if (weather == null) {
-                return Single.error(new ExceptionBundle(EMPTY_DATABASE));
+                if (result.size() > 5 && result.size() > dates.size() - 3) {
+                    return Single.just(result);
+                } else {
+                    return Single.error(new ExceptionBundle(EMPTY_DATABASE));
+                }
             } else {
                 result.add(weather);
             }

@@ -5,6 +5,9 @@ import android.support.v7.widget.RecyclerView;
 
 import static android.support.v7.widget.RecyclerView.ViewHolder;
 
+import android.text.Html;
+import android.text.Spannable;
+import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,8 +27,11 @@ public class LocationPredictionAdapter extends RecyclerView.Adapter<LocationPred
     private List<LocationPrediction> locationPredictions;
     private Callbacks callbacks;
 
-    public LocationPredictionAdapter() {
+    private final int firstLetterColor;
+
+    public LocationPredictionAdapter(int firstLetterColor) {
         locationPredictions = new ArrayList<>();
+        this.firstLetterColor = firstLetterColor;
     }
 
     // -------------------------------- LocationPredictionModel ---------------------------------------
@@ -77,7 +83,7 @@ public class LocationPredictionAdapter extends RecyclerView.Adapter<LocationPred
 
     @Override
     public void onBindViewHolder(LocationPredictionViewHolder holder, int position) {
-        holder.bind(locationPredictions.get(position));
+        holder.bind(locationPredictions.get(position), firstLetterColor);
     }
 
     @Override
@@ -99,9 +105,16 @@ public class LocationPredictionAdapter extends RecyclerView.Adapter<LocationPred
             textSecondary = (TextView) view.findViewById(R.id.text_secondary);
         }
 
-        public void bind(LocationPrediction locationPrediction) {
+        public void bind(LocationPrediction locationPrediction, int firstLetterColor) {
             this.locationPrediction = locationPrediction;
-            textMain.setText(locationPrediction.mainText);
+
+            String mainText = locationPrediction.mainText;
+            textMain.setText(locationPrediction.mainText, TextView.BufferType.SPANNABLE);
+            if (!mainText.isEmpty()) {
+                Spannable spannable = (Spannable)textMain.getText();
+                spannable.setSpan(new ForegroundColorSpan(firstLetterColor), 0, 1, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+            }
+
             textSecondary.setText(locationPrediction.secondaryText);
         }
 

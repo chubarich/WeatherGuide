@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -45,6 +47,9 @@ import io.reactivex.functions.Function;
 import io.reactivex.internal.observers.LambdaObserver;
 import io.reactivex.observers.DefaultObserver;
 
+import static android.support.v7.widget.DividerItemDecoration.HORIZONTAL;
+import static android.support.v7.widget.DividerItemDecoration.VERTICAL;
+
 
 public class ChooseLocationActivity extends BaseActivity<ChooseLocationPresenter, ChooseLocationView>
     implements ChooseLocationView {
@@ -71,7 +76,7 @@ public class ChooseLocationActivity extends BaseActivity<ChooseLocationPresenter
         ((WeatherGuideApplication) getApplication()).getChooseLocationComponent()
             .inject(this);
         super.onCreate(savedInstanceState);
-        initializeView();
+        initializeView(savedInstanceState);
     }
 
     @Override
@@ -171,7 +176,7 @@ public class ChooseLocationActivity extends BaseActivity<ChooseLocationPresenter
 
     // --------------------------------------- private --------------------------------------------
 
-    private void initializeView() {
+    private void initializeView(Bundle savedInstanceState) {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         imageDelete = (ImageView) findViewById(R.id.image_delete);
         rootView = findViewById(R.id.root_view);
@@ -193,7 +198,12 @@ public class ChooseLocationActivity extends BaseActivity<ChooseLocationPresenter
         recyclerView.setVisibility(View.INVISIBLE);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(new LocationPredictionAdapter());
+        recyclerView.setAdapter(
+            new LocationPredictionAdapter(ContextCompat.getColor(this, R.color.yandex_red_color))
+        );
+        recyclerView.addItemDecoration(new DividerItemDecoration(this, VERTICAL));
+
+        if (savedInstanceState == null) editChooseLocation.requestFocus();
 
         setListeners();
         showDefaultView();

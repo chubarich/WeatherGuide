@@ -143,7 +143,7 @@ public class MenuFragment extends BaseFragment<MenuPresenter, MenuView>
         layoutTopSubmenu = (LinearLayout) view.findViewById(R.id.layout_top_submenu);
 
         LocationAdapter locationAdapter = new LocationAdapter(
-            ContextCompat.getColor(getContext(), android.R.color.black),
+            ContextCompat.getColor(getContext(), R.color.colorAccentLight),
             ContextCompat.getColor(getContext(), android.R.color.transparent)
         );
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
@@ -257,7 +257,7 @@ public class MenuFragment extends BaseFragment<MenuPresenter, MenuView>
                 if (newValue) {
                     layoutMenu.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.blur));
                 } else {
-                    layoutMenu.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.transparent));
+                    layoutMenu.setBackgroundColor(ContextCompat.getColor(getContext(), android.R.color.transparent));
                 }
             }
         };

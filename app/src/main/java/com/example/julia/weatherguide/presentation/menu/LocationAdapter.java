@@ -1,7 +1,5 @@
 package com.example.julia.weatherguide.presentation.menu;
 
-import android.content.res.Resources;
-import android.support.annotation.ColorRes;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -93,7 +91,7 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationViewHolder> im
     @Override
     public LocationViewHolder onCreateViewHolder(ViewGroup parent, final int viewType) {
         final View view = LayoutInflater.from(parent.getContext())
-            .inflate(R.layout.item_location, parent, false);
+            .inflate(R.layout.menu_item_location, parent, false);
 
         final LocationViewHolder locationViewHolder = new LocationViewHolder(view);
         locationViewHolder.setOnClickListener(v -> {

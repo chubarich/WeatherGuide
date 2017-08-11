@@ -20,7 +20,9 @@
     <string name="location_name">Location</string>
     <string name="choose_location">Type location name</string>
     <string name="weather">Weather</string>
-
+    <string name="add_location">Add location</string>
+    <string name="edit_locations">Edit</string>
+    <string name="menu_item_content_description">Menu item</string>
 
     <!-- preferences -->
     <string name="key_refresh" translatable="false">refresh_key</string>

@@ -11,7 +11,6 @@ ext.versions = [
         retrolambdaGradlePlugin      : '3.6.1',
 
         supportLibs                  : '25.3.1',
-        supportConstraintLayout      : '1.0.2',
         butterKnife                  : '8.7.0',
         icepick                      : '3.2.0',
         retrofit                     : '2.3.0',
@@ -48,7 +47,6 @@ ext.libraries = [
 
         supportAppCompat        : "com.android.support:appcompat-v7:$versions.supportLibs",
         supportDesign           : "com.android.support:design:$versions.supportLibs",
-        supportConstraintLayout : "com.android.support.constraint:constraint-layout:$versions.supportConstraintLayout",
         supportPreference       : "com.android.support:preference-v7:$versions.supportLibs",
         supportAnnotations      : "com.android.support:support-annotations:$versions.supportLibs",
 

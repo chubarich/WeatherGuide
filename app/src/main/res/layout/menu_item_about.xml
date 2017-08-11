@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                style="@style/MenuItemHolder">
+
+    <ImageView
+        android:id="@+id/image_left_icon"
+        style="@style/MenuItemIcon"
+        android:layout_alignParentStart="true"
+        android:layout_marginEnd="15dp"
+        android:background="@drawable/ic_about"/>
+
+    <TextView
+        android:id="@+id/text_location_name"
+        style="@style/MenuItemTextView"
+        android:layout_toEndOf="@id/image_left_icon"
+        android:text="@string/left_drawer_menu_title_about"/>
+
+</RelativeLayout>

@@ -6,7 +6,6 @@
                 android:padding="10dp">
 
     <TextView
-        android:text="Сегодня"
         android:id="@+id/text_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -30,15 +29,13 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_toStartOf="@+id/text_min_temperature"
-        android:paddingEnd="10dp"
-        android:text="21"/>
+        android:paddingEnd="10dp"/>
 
     <TextView
         android:id="@+id/text_min_temperature"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
-        android:layout_centerVertical="true"
-        android:text="19"/>
+        android:layout_centerVertical="true"/>
 
 </RelativeLayout>

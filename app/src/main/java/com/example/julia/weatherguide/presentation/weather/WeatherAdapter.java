@@ -71,8 +71,7 @@ public class WeatherAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     @Override
     public int getItemCount() {
-        int size = weather == null ? 0 : (weather.getPredictionsSize() + 1);
-        return size;
+        return weather == null ? 0 : (weather.getPredictionsSize() + 1);
     }
 
     @Override
@@ -100,7 +99,7 @@ public class WeatherAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
 
         void bind(CurrentWeather weather, Resources resources) {
-            textDate.setText(weather.getDatetimeOfUpdate());
+            textDate.setText(resources.getString(R.string.updated) + " " + weather.getDatetimeOfUpdate());
 
             int temperature = weather.getMainTemperature();
             textTemperature.setText(getTemperatureDescription(temperature, resources));

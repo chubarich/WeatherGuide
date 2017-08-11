@@ -16,6 +16,8 @@
     <string name="choose_location">Введите название населенного пункта</string>
     <string name="location_name">Населенный пункт</string>
     <string name="weather">Погода</string>
+    <string name="add_location">Добавить место</string>
+    <string name="edit_locations">Редактировать</string>
 
     <!-- preferences -->
     <string name="refresh_period">Интервал обновления</string>
