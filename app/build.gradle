@@ -99,6 +99,7 @@ dependencies {
     compile 'com.facebook.stetho:stetho-okhttp:1.5.0'
     compile 'com.squareup.okhttp3:logging-interceptor:3.4.1'
     compile 'com.squareup.okhttp3:okhttp:3.4.1'
+    compile 'net.cachapa.expandablelayout:expandablelayout:2.9.1'
 
     androidTestCompile libraries.espressoCore
     androidTestCompile libraries.supportAnnotations

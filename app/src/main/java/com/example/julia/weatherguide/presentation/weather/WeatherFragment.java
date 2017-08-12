@@ -3,6 +3,7 @@ package com.example.julia.weatherguide.presentation.weather;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -19,6 +20,8 @@ import com.example.julia.weatherguide.presentation.main.DrawerView;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
+
+import static android.support.v7.widget.DividerItemDecoration.VERTICAL;
 
 
 public class WeatherFragment extends BaseFragment<WeatherPresenter, WeatherView>
@@ -195,6 +198,7 @@ public class WeatherFragment extends BaseFragment<WeatherPresenter, WeatherView>
         } else {
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
             recyclerView.setAdapter(new WeatherAdapter());
+            recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), VERTICAL));
 
             swipeRefreshLayout.setOnRefreshListener(() -> {
                 ((WeatherPresenter) getPresenter()).onRefresh();

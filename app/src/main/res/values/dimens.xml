@@ -31,8 +31,25 @@
     <dimen name="condition_icon_size">100dp</dimen>
     <dimen name="main_temperature_text_size">60sp</dimen>
     <dimen name="main_temperature_margin_from_center">25dp</dimen>
-    <dimen name="main_temperature_margin_top">15dp</dimen>
-    <dimen name="main_temperature_margin_bottom">10dp</dimen>
+    <dimen name="main_temperature_margin_top">5dp</dimen>
     <dimen name="condition_description_size">22sp</dimen>
+    <dimen name="condition_description_margin_top">5dp</dimen>
+    <dimen name="condition_description_margin_bottom">25dp</dimen>
+    <dimen name="current_weather_additional_text_size">16sp</dimen>
+    <dimen name="weather_additional_info_horizontal_margin">20dp</dimen>
+    <dimen name="current_weather_margin_bottom">40dp</dimen>
+
+    <!-- prediction weather -->
+    <dimen name="prediction_weather_padding_start">20dp</dimen>
+    <dimen name="prediction_weather_padding_end">15dp</dimen>
+    <dimen name="prediction_weather_icon_margin_end">100dp</dimen>
+    <dimen name="prediction_weather_vertical_padding">10dp</dimen>
+    <dimen name="prediction_weather_text_size">16sp</dimen>
+    <dimen name="prediction_weather_date_text_end_margin">10dp</dimen>
+    <dimen name="prediction_weather_temperature_margin">40dp</dimen>
+    <dimen name="prediction_weather_additional_margin_top">15dp</dimen>
+    <dimen name="prediction_weather_additional_margin_bottom">10dp</dimen>
+    <dimen name="prediction_weather_temperatures_margin_top">20dp</dimen>
+
 
 </resources>

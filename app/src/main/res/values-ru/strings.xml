@@ -13,6 +13,7 @@
 
     <!-- views -->
     <string name="button_name_refresh">обновить</string>
+    <string name="updated">обновлено</string>
     <string name="choose_location">Введите название населенного пункта</string>
     <string name="location_name">Населенный пункт</string>
     <string name="weather">Погода</string>
@@ -61,6 +62,11 @@
     </array>
     <string name="today">Сегодня</string>
     <string name="tomorrow">Завтра</string>
+    <string name="morning">Утро</string>
+    <string name="day">День</string>
+    <string name="evening">Вечер</string>
+    <string name="night">Ночь</string>
+
 
     <!--            WEATHER API RESOURCES            -->
     <!-- thunderstorm -->

@@ -54,28 +54,31 @@
 
     <!-- dates -->
     <array name="months">
-        <item>of january</item>
-        <item>of february</item>
-        <item>of march</item>
-        <item>of april</item>
-        <item>of may</item>
-        <item>of june</item>
-        <item>of jule</item>
-        <item>of august</item>
-        <item>of september</item>
-        <item>of october</item>
-        <item>of november</item>
-        <item>of december</item>
+        <item>of January</item>
+        <item>of February</item>
+        <item>of March</item>
+        <item>of April</item>
+        <item>of May</item>
+        <item>of June</item>
+        <item>of Jule</item>
+        <item>of August</item>
+        <item>of September</item>
+        <item>of October</item>
+        <item>of November</item>
+        <item>of December</item>
     </array>
     <string name="today">Today</string>
     <string name="tomorrow">Tomorrow</string>
+    <string name="morning">Morning</string>
+    <string name="day">Day</string>
+    <string name="evening">Evening</string>
+    <string name="night">Night</string>
 
     <string name="degree" translatable="false">\u00B0</string>
     <string name="celsius" translatable="false">\u2103</string>
     <string name="fahrenheit" translatable="false">\u2109</string>
     <string name="arrow_down" translatable="false">\u2193</string>
     <string name="arrow_up" translatable="false">\u2191</string>
-
 
 
     <!--            WEATHER API RESOURCES            -->

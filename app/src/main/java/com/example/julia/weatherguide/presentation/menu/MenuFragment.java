@@ -174,17 +174,20 @@ public class MenuFragment extends BaseFragment<MenuPresenter, MenuView>
 
         rxBindingDisposable.add(
             RxView.clicks(buttonAddLocations).subscribe(o -> {
-                if (canClickMenuButtons()) startActivityForResult(
-                    new Intent(getContext(), ChooseLocationActivity.class),
-                    ChooseLocationContract.REQUEST_CODE
-                );
+                if (canClickMenuButtons()) {
+                    ((DrawerView) getActivity()).closeDrawer();
+                    startActivityForResult(
+                        new Intent(getContext(), ChooseLocationActivity.class),
+                        ChooseLocationContract.REQUEST_CODE
+                    );
+                }
             })
         );
 
         rxBindingDisposable.add(
             RxView.clicks(buttonAbout).subscribe(o -> {
                 if (canClickMenuButtons()) {
-                    ((DrawerView)getActivity()).closeDrawer();
+                    ((DrawerView) getActivity()).closeDrawer();
                     startActivity(new Intent(getContext(), AboutActivity.class));
                 }
             })
@@ -193,7 +196,7 @@ public class MenuFragment extends BaseFragment<MenuPresenter, MenuView>
         rxBindingDisposable.add(
             RxView.clicks(buttonSettings).subscribe(o -> {
                 if (canClickMenuButtons()) {
-                    ((DrawerView)getActivity()).closeDrawer();
+                    ((DrawerView) getActivity()).closeDrawer();
                     startActivity(new Intent(getContext(), SettingsActivity.class));
                 }
             })
@@ -232,7 +235,7 @@ public class MenuFragment extends BaseFragment<MenuPresenter, MenuView>
             @Override
             public void onLocationClicked(LocationWithTemperature location) {
                 if (!getLocationModel().isInDeletionMode()) {
-                    ((DrawerView)getActivity()).closeDrawer();
+                    ((DrawerView) getActivity()).closeDrawer();
                     ((MenuPresenter) getPresenter()).onLocationClicked(location);
                 }
             }
