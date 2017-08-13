@@ -1,6 +1,5 @@
 package com.example.julia.weatherguide.domain.use_cases;
 
-
 import com.example.julia.weatherguide.data.entities.presentation.location.Location;
 import com.example.julia.weatherguide.data.repositories.location.LocationRepository;
 import com.example.julia.weatherguide.domain.use_cases.base.CompletableUseCase;
@@ -8,6 +7,7 @@ import com.example.julia.weatherguide.utils.Preconditions;
 
 import io.reactivex.Completable;
 import io.reactivex.Scheduler;
+
 
 public class AddLocationAndSetAsCurrentUseCase extends CompletableUseCase<Location> {
 

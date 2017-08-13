@@ -12,10 +12,8 @@
 
     <!-- messages -->
     <string name="about_application">The application WeatherGuide was written by Daniel Kashin and Julia Timofeeva in 2017 as a part of Yandex.Mobilization project</string>
-    <string name="interval_picked_success">Interval was successfully changed</string>
 
     <!-- views -->
-    <string name="button_name_refresh">refresh</string>
     <string name="updated">updated</string>
     <string name="location_name">Location</string>
     <string name="choose_location">Type location name</string>
@@ -23,6 +21,8 @@
     <string name="add_location">Add location</string>
     <string name="edit_locations">Edit</string>
     <string name="menu_item_content_description">Menu item</string>
+    <string name="with_request">With request "</string>
+    <string name="nothing_was_found">" nothing was found</string>
 
     <!-- preferences -->
     <string name="key_refresh" translatable="false">refresh_key</string>
@@ -37,8 +37,6 @@
 
     <!-- errors -->
     <string name="network_error">Network error. Internet may be disabled.</string>
-    <string name="wrong_time_value">Illegal time value.</string>
-    <string name="play_services_not_available">Google Play Services are not enabled on the device.</string>
     <string name="location_not_chosen">Choose location in the left menu</string>
     <string name="current_location_deletion">Current location cannot be deleted</string>
     <string name="api_error">Something unexpected happened on the server side. Maybe, city was not found. You can always choose locations nearby</string>
@@ -73,6 +71,18 @@
     <string name="day">Day</string>
     <string name="evening">Evening</string>
     <string name="night">Night</string>
+
+    <!-- dates -->
+    <array name="refresh_intervals">
+        <item>Never</item>
+        <item>Half an hour</item>
+        <item>One hour</item>
+        <item>3 hours</item>
+        <item>6 hours</item>
+        <item>12 hours</item>
+        <item>24 hours</item>
+    </array>
+    <string name="refresh_interval">Refresh interval</string>
 
     <string name="degree" translatable="false">\u00B0</string>
     <string name="celsius" translatable="false">\u2103</string>

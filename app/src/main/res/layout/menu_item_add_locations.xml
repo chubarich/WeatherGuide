@@ -6,7 +6,7 @@
         android:id="@+id/image_left_icon"
         style="@style/MenuItemIcon"
         android:layout_alignParentStart="true"
-        android:layout_marginEnd="15dp"
+        android:layout_marginEnd="@dimen/menu_item_icon_right_margin"
         android:background="@drawable/ic_add_location"/>
 
     <TextView

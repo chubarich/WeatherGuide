@@ -23,17 +23,11 @@ public class LocationNotInitializedShowsTest {
 
     @Test
     public void locationNotInitializedShowsTest() {
-        /*onView(withText(R.string.location_not_picked_description)).check(
+        onView(withText(R.string.location_not_chosen)).check(
             matches(
                 withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)
             )
         );
 
-        onView(withText(R.string.empty_view_string)).check(
-            matches(
-                withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)
-            )
-        );
-        */
     }
 }

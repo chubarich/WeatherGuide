@@ -8,6 +8,10 @@ public class NetworkLocationResult {
     @SerializedName("geometry")
     private NetworkLocationGeometry geometry;
 
+    public NetworkLocationResult(NetworkLocationGeometry geometry) {
+        this.geometry = geometry;
+    }
+
     public NetworkLocationGeometry getGeometry() {
         return geometry;
     }

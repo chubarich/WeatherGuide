@@ -14,6 +14,11 @@ public class NetworkWeatherPredictions {
     @SerializedName("cod")
     private int code;
 
+    public NetworkWeatherPredictions(List<NetworkWeatherPrediction> predictions) {
+        predictions = new ArrayList<>();
+        predictions.addAll(predictions);
+    }
+
     public List<NetworkWeatherPrediction> getPredictions() {
         List<NetworkWeatherPrediction> result = new ArrayList<>();
         for (NetworkWeatherPrediction prediction : predictions) {

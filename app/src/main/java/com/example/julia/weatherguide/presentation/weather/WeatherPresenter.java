@@ -19,6 +19,7 @@ import static com.example.julia.weatherguide.data.repositories.weather.OpenWeath
 import static com.example.julia.weatherguide.domain.use_cases.GetWeatherUseCase.Args;
 import static com.example.julia.weatherguide.data.repositories.weather.OpenWeatherMapRepository.GetWeatherStrategy;
 
+
 public class WeatherPresenter extends BasePresenter<WeatherView> {
 
     private final NetworkManager networkManager;

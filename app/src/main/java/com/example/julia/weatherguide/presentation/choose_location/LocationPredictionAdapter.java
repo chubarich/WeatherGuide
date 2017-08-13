@@ -91,25 +91,25 @@ public class LocationPredictionAdapter extends RecyclerView.Adapter<LocationPred
         return locationPredictions.size();
     }
 
-    public static class LocationPredictionViewHolder extends ViewHolder {
+    static class LocationPredictionViewHolder extends ViewHolder {
 
         private LocationPrediction locationPrediction;
         private final View rootView;
         private final TextView textMain;
         private final TextView textSecondary;
 
-        public LocationPredictionViewHolder(View view) {
+        LocationPredictionViewHolder(View view) {
             super(view);
             rootView = view;
             textMain = (TextView) view.findViewById(R.id.text_main);
             textSecondary = (TextView) view.findViewById(R.id.text_secondary);
         }
 
-        public void bind(LocationPrediction locationPrediction, int firstLetterColor) {
+        void bind(LocationPrediction locationPrediction, int firstLetterColor) {
             this.locationPrediction = locationPrediction;
 
             String mainText = locationPrediction.mainText;
-            textMain.setText(locationPrediction.mainText, TextView.BufferType.SPANNABLE);
+            textMain.setText(mainText, TextView.BufferType.SPANNABLE);
             if (!mainText.isEmpty()) {
                 Spannable spannable = (Spannable)textMain.getText();
                 spannable.setSpan(new ForegroundColorSpan(firstLetterColor), 0, 1, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
@@ -118,14 +118,12 @@ public class LocationPredictionAdapter extends RecyclerView.Adapter<LocationPred
             textSecondary.setText(locationPrediction.secondaryText);
         }
 
-        public LocationPrediction getLocationPrediction() {
+        LocationPrediction getLocationPrediction() {
             return locationPrediction;
         }
 
-        public void setOnClickListener(View.OnClickListener listener) {
+        void setOnClickListener(View.OnClickListener listener) {
             rootView.setOnClickListener(listener);
         }
-
     }
-
 }

@@ -27,3 +27,4 @@
 -dontwarn okhttp3.**
 -dontwarn okio.**
 -dontwarn retrofit2.**
+-dontwarn com.pushtorefresh.**

@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/fragment_menu"
         android:name="com.example.julia.weatherguide.presentation.menu.MenuFragment"
-        android:layout_width="350dp"
+        android:layout_width="@dimen/menu_tablet_width"
         android:layout_height="match_parent"/>
 
     <FrameLayout

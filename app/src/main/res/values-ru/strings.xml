@@ -9,16 +9,16 @@
 
     <!-- messages -->
     <string name="about_application">Приложение Погода было написано Данилом Кашиным и Юлией Тимофеевой в 2017 году в рамках проекта Яндекс.Мобилизация</string>
-    <string name="interval_picked_success">Интервал обновления был успешно изменен</string>
 
     <!-- views -->
-    <string name="button_name_refresh">обновить</string>
     <string name="updated">обновлено</string>
     <string name="choose_location">Введите название населенного пункта</string>
     <string name="location_name">Населенный пункт</string>
     <string name="weather">Погода</string>
     <string name="add_location">Добавить место</string>
     <string name="edit_locations">Редактировать</string>
+    <string name="with_request">По запросу "</string>
+    <string name="nothing_was_found">" ничего не найдено</string>
 
     <!-- preferences -->
     <string name="refresh_period">Интервал обновления</string>
@@ -29,8 +29,6 @@
 
     <!-- errors -->
     <string name="network_error">Ошибка сети. Проверьте подключение к Интернету.</string>
-    <string name="wrong_time_value">Неверное значение времени.</string>
-    <string name="play_services_not_available">Google Play Services недоступны на устройстве.</string>
     <string name="location_not_chosen">Выберите место в меню слева</string>
     <string name="current_location_deletion">Текущее место не может быть удалено</string>
     <string name="api_error">На сервере произошла ошибка. Возможно, город не найден. Вы всегда можете выбрать места неподалеку</string>
@@ -67,6 +65,17 @@
     <string name="evening">Вечер</string>
     <string name="night">Ночь</string>
 
+    <!-- dates -->
+    <array name="refresh_intervals">
+        <item>Никогда</item>
+        <item>Полчаса</item>
+        <item>Один час</item>
+        <item>3 часа</item>
+        <item>6 часов</item>
+        <item>12 часов</item>
+        <item>24 часа</item>
+    </array>
+    <string name="refresh_interval">Интервал обновления</string>
 
     <!--            WEATHER API RESOURCES            -->
     <!-- thunderstorm -->

@@ -16,7 +16,7 @@ public abstract class CompletableUseCase<Params>  {
         this.postExecutionScheduler = postExecutionScheduler;
     }
 
-    public final Completable execute(Params params) {
+    public Completable execute(Params params) {
         return wrapWithSchedulers(getUseCaseCompletable(params));
     }
 

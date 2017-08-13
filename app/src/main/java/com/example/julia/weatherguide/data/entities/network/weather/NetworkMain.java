@@ -13,6 +13,12 @@ public class NetworkMain {
     @SerializedName("humidity")
     private double humidity;
 
+    public NetworkMain(double temperature, double pressure, double humidity) {
+        this.temperature = temperature;
+        this.pressure = pressure;
+        this.humidity = humidity;
+    }
+
     public double getTemp() {
         return temperature;
     }

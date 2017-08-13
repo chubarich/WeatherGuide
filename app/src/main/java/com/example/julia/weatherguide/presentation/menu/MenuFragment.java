@@ -22,7 +22,6 @@ import com.example.julia.weatherguide.presentation.base.view.BaseFragment;
 import com.example.julia.weatherguide.presentation.choose_location.ChooseLocationActivity;
 import com.example.julia.weatherguide.presentation.main.DrawerView;
 import com.example.julia.weatherguide.presentation.settings.SettingsActivity;
-import com.example.julia.weatherguide.utils.ChooseLocationContract;
 import com.jakewharton.rxbinding2.view.RxView;
 
 import java.util.List;
@@ -176,10 +175,7 @@ public class MenuFragment extends BaseFragment<MenuPresenter, MenuView>
             RxView.clicks(buttonAddLocations).subscribe(o -> {
                 if (canClickMenuButtons()) {
                     ((DrawerView) getActivity()).closeDrawer();
-                    startActivityForResult(
-                        new Intent(getContext(), ChooseLocationActivity.class),
-                        ChooseLocationContract.REQUEST_CODE
-                    );
+                    startActivity(new Intent(getContext(), ChooseLocationActivity.class));
                 }
             })
         );

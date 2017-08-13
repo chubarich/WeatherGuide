@@ -9,6 +9,11 @@ public class NetworkWind {
     @SerializedName("deg")
     private double angle;
 
+    public NetworkWind(double speed, double angle) {
+        this.speed = speed;
+        this.angle = angle;
+    }
+
     public double getSpeed() {
         return speed;
     }

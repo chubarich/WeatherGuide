@@ -38,6 +38,13 @@ public class LocationConverterPlain implements LocationConverter {
     }
 
     @Override
+    public Location fromNetwork(NetworkLocationCoordinates coordinates, LocationPrediction prediction) {
+        return new Location(coordinates.getLongitude(), coordinates.getLatitude(), prediction.mainText);
+    }
+
+
+
+    @Override
     public DatabaseLocation toDatabase(Location location) {
         return new DatabaseLocation(location.longitude, location.latitude, location.name);
     }
@@ -48,9 +55,8 @@ public class LocationConverterPlain implements LocationConverter {
     }
 
     @Override
-    public Location fromNetwork(NetworkLocationCoordinates coordinates, LocationPrediction prediction) {
-        return new Location((float) coordinates.getLongitude(), (float) coordinates.getLatitude(),
-            prediction.mainText);
+    public DatabaseLocation toDatabase(NetworkLocationCoordinates coordinates, LocationPrediction prediction) {
+        return new DatabaseLocation(coordinates.getLongitude(), coordinates.getLatitude(), prediction.mainText);
     }
 
     @Override
@@ -60,11 +66,6 @@ public class LocationConverterPlain implements LocationConverter {
             locationPrediction.secondaryText
         );
         return new NetworkLocationPrediction(locationPrediction.placeId, formatting);
-    }
-
-    @Override
-    public DatabaseLocation toDatabase(NetworkLocationCoordinates coordinates, LocationPrediction prediction) {
-        return new DatabaseLocation(coordinates.getLongitude(), coordinates.getLatitude(), prediction.mainText);
     }
 
 }

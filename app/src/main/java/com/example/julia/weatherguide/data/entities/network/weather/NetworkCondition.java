@@ -1,5 +1,6 @@
 package com.example.julia.weatherguide.data.entities.network.weather;
 
+import com.example.julia.weatherguide.utils.Preconditions;
 import com.google.gson.annotations.SerializedName;
 
 
@@ -11,6 +12,11 @@ public class NetworkCondition {
     @SerializedName("icon")
     private String iconId;
 
+    public NetworkCondition(int id, String iconId) {
+        Preconditions.nonNull(iconId);
+        this.id = id;
+        this.iconId = iconId;
+    }
 
     public int getId() {
         return id;

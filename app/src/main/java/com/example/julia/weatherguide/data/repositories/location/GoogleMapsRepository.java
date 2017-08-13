@@ -110,12 +110,12 @@ public class GoogleMapsRepository implements LocationRepository {
     public Single<LocationWithId> deleteLocation(Location location) {
         return localService.getLocation(location.longitude, location.latitude)
             .flatMap(databaseLocation -> {
-                if (databaseLocation.getId().equals(settingsService.currentLocationId())) {
+                if (databaseLocation.getId().equals(settingsService.getCurrentLocationId())) {
                     return Single.error(new ExceptionBundle(ExceptionBundle.Reason.CURRENT_LOCATION_DELETION));
                 } else {
                     return localService.deleteLocation(databaseLocation)
                         .toSingle(() -> {
-                            return converter.fromDatabase(databaseLocation, settingsService.currentLocationId());
+                            return converter.fromDatabase(databaseLocation, settingsService.getCurrentLocationId());
                         });
                 }
             });

@@ -12,7 +12,7 @@ public interface SettingsService {
 
     boolean isPressureInHpa();
 
-    Long currentLocationId();
+    Long getCurrentLocationId();
 
     void setCurrentLocationId(long id);
 

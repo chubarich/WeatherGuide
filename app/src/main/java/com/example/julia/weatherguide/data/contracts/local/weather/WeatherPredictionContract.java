@@ -54,7 +54,7 @@ public class WeatherPredictionContract {
         + COLUMN_NAME_ID + " INTEGER NOT NULL PRIMARY KEY, "
         + COLUMN_NAME_LOCATION_ID + " INTEGER NON NULL, "
 
-        + COLUMN_NAME_DATE + " STRING NON NULL, "
+        + COLUMN_NAME_DATE + " TEXT NON NULL, "
 
         + COLUMN_NAME_CONDITION_ID + " INTEGER NON NULL, "
         + COLUMN_NAME_CONDITION_ICON_ID + " TEXT NON NULL, "

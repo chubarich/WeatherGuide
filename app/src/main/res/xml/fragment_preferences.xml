@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <EditTextPreference
+    <ListPreference
         android:key="@string/key_refresh"
-        android:title="@string/refresh_period"
-        android:summary="@string/refresh_period_summary"
-        android:dialogTitle="@string/refresh_period"
-        android:inputType="number"
-        android:persistent="false"
-        android:singleLine="true"/>
+        android:defaultValue="Never"
+        android:entries="@array/refresh_intervals"
+        android:entryValues="@array/refresh_intervals_identifiers"
+        android:title="@string/refresh_interval"/>
 
     <SwitchPreference
         android:key="@string/key_temperature_in_fahrenheit"

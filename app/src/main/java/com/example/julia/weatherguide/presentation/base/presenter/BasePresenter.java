@@ -14,10 +14,6 @@ public abstract class BasePresenter<V extends BaseView> implements Presenter<V> 
         return relatedView;
     }
 
-    protected final boolean isViewAttached() {
-        return relatedView != null;
-    }
-
     // ---------------------------------------- Presenter ---------------------------------------
 
     @Override

@@ -8,6 +8,10 @@ public class NetworkClouds {
     @SerializedName("all")
     private double cloudiness;
 
+    public NetworkClouds(double cloudiness) {
+        this.cloudiness = cloudiness;
+    }
+
     public double getCloudiness() {
         return cloudiness;
     }

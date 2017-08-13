@@ -1,8 +1,7 @@
 package com.example.julia.weatherguide.data.data_services.settings;
 
 import android.content.SharedPreferences;
-import com.example.julia.weatherguide.data.contracts.local.settings.SettingsContract;
-import com.example.julia.weatherguide.data.entities.repository.weather.WeatherNotification;
+
 import com.example.julia.weatherguide.utils.Optional;
 
 import io.reactivex.Observable;
@@ -23,7 +22,7 @@ public class SharedPreferenceService implements SettingsService {
 
     public SharedPreferenceService(SharedPreferences sharedPreferences) {
         this.sharedPreferences = sharedPreferences;
-        currentLocationChangeSubject = BehaviorSubject.createDefault(Optional.of(currentLocationId()))
+        currentLocationChangeSubject = BehaviorSubject.createDefault(Optional.of(getCurrentLocationId()))
             .toSerialized();
     }
 
@@ -43,7 +42,7 @@ public class SharedPreferenceService implements SettingsService {
     }
 
     @Override
-    public Long currentLocationId() {
+    public Long getCurrentLocationId() {
         long id = sharedPreferences.getLong(KEY_CURRENT_LOCATION_ID, -1);
         return id == -1 ? null : id;
     }

@@ -15,7 +15,7 @@ android {
         }
     }
 
-    compileSdkVersion versions.compileSdk
+    compileSdkVersion 26
     buildToolsVersion versions.buildTools
     defaultConfig {
         applicationId "com.example.julia.weatherguide"
@@ -67,26 +67,22 @@ dependencies {
     compile libraries.supportAppCompat
     compile libraries.supportDesign
     compile libraries.supportPreference
-
     compile libraries.retrofit
     compile libraries.retrofitRxAdapter
     compile libraries.retrofitGsonConverter
-
     compile libraries.rxbinding
     compile libraries.rxbinding_v7
     compile libraries.rxjava
     compile libraries.rxandroid
-
     compile libraries.firebase
-
     compile libraries.picasso
     compile libraries.dagger
     annotationProcessor libraries.daggerProcessor
-
     compile libraries.storIO
     compile libraries.storIOAnnotations
     annotationProcessor libraries.storIOProcessor
-
+    compile libraries.androidJob
+    compile libraries.expandableLayout
     testCompile libraries.junit
     testCompile libraries.robolectric
     testCompile libraries.powermock
@@ -94,13 +90,6 @@ dependencies {
     testCompile libraries.powermockApi
     testCompile libraries.powermockRule
     testCompile libraries.powermockClassloader
-
-    compile 'com.facebook.stetho:stetho:1.5.0'
-    compile 'com.facebook.stetho:stetho-okhttp:1.5.0'
-    compile 'com.squareup.okhttp3:logging-interceptor:3.4.1'
-    compile 'com.squareup.okhttp3:okhttp:3.4.1'
-    compile 'net.cachapa.expandablelayout:expandablelayout:2.9.1'
-
     androidTestCompile libraries.espressoCore
     androidTestCompile libraries.supportAnnotations
 }

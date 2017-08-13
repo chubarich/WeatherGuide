@@ -1,5 +1,6 @@
 package com.example.julia.weatherguide.data.entities.network.weather;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gson.annotations.SerializedName;
@@ -30,6 +31,20 @@ public class NetworkWeatherPrediction {
 
     @SerializedName("clouds")
     private int cloudiness;
+
+    public NetworkWeatherPrediction(long timestamp, NetworkTemperatures networkTemperatures,
+                                    double pressure, double humidity, List<NetworkCondition> condition,
+                                    double windSpeed, double windAngle, int cloudiness) {
+        this.timestamp = timestamp;
+        this.temperatures = networkTemperatures;
+        this.pressure = pressure;
+        this.humidity = humidity;
+        this.condition = new ArrayList<>();
+        this.condition.addAll(condition);
+        this.windSpeed = windSpeed;
+        this.windAngle = windAngle;
+        this.cloudiness = cloudiness;
+    }
 
 
     public long getTimestamp() {

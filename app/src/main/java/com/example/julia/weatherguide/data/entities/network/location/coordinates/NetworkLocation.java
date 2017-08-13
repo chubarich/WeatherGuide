@@ -11,6 +11,11 @@ public class NetworkLocation {
     @SerializedName("lng")
     private double longitude;
 
+    public NetworkLocation(double latitude, double longitude) {
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
+
     public double getLatitude() {
         return latitude;
     }

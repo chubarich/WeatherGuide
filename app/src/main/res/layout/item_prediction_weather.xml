@@ -27,8 +27,8 @@
 
         <ImageView
             android:id="@+id/image_condition"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="@dimen/menu_item_icon_size"
+            android:layout_height="@dimen/menu_item_icon_size"
             android:layout_alignParentEnd="true"
             android:layout_marginEnd="@dimen/prediction_weather_icon_margin_end"
             android:background="@drawable/w09n"/>

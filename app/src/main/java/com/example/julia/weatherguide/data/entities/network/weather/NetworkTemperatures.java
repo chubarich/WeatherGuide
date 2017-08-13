@@ -23,6 +23,15 @@ public class NetworkTemperatures {
     @SerializedName("eve")
     private double eveningTemperature;
 
+    public NetworkTemperatures(double minTemperature, double maxTemperature, double morningTemperature,
+                               double dayTemperature, double nightTemperature, double eveningTemperature) {
+        this.minTemperature = minTemperature;
+        this.maxTemperature = maxTemperature;
+        this.morningTemperature = morningTemperature;
+        this.dayTemperature = dayTemperature;
+        this.nightTemperature = nightTemperature;
+        this.eveningTemperature = eveningTemperature;
+    }
 
 
     public double getMinTemperature() {

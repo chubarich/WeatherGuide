@@ -24,7 +24,11 @@ public class DatabaseLocation {
     }
 
     public DatabaseLocation(double longitude, double latitude, String name) {
-        this._id = null;
+        this(null, longitude, latitude, name);
+    }
+
+    public DatabaseLocation(Long _id, double longitude, double latitude, String name) {
+        this._id = _id;
         this.longitude = longitude;
         this.latitude = latitude;
         this.name = name;

@@ -18,6 +18,7 @@ import net.cachapa.expandablelayout.ExpandableLayout;
 import static com.example.julia.weatherguide.presentation.weather.WeatherAdapter.HolderType.CURRENT;
 import static com.example.julia.weatherguide.presentation.weather.WeatherAdapter.HolderType.PREDICTION;
 
+
 public class WeatherAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     implements WeatherModel {
 
@@ -61,7 +62,6 @@ public class WeatherAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        holder.setIsRecyclable(false);
         if (resources != null) {
             long positionViewType = getItemViewType(position);
             if (positionViewType == CURRENT.getLayoutRes() && holder instanceof CurrentWeatherViewHolder) {
@@ -188,7 +188,6 @@ public class WeatherAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     enum HolderType {
-
         CURRENT(R.layout.item_current_weather),
         PREDICTION(R.layout.item_prediction_weather);
 

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="refresh_intervals_identifiers">
+        <item>Never</item>
+        <item>Half an hour</item>
+        <item>One hour</item>
+        <item>Three hours</item>
+        <item>Six hours</item>
+        <item>Twelve hours</item>
+        <item>Twenty four hours</item>
+    </string-array>
+</resources>

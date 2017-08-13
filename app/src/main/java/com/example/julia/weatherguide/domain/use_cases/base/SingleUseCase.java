@@ -17,7 +17,7 @@ public abstract class SingleUseCase<T, Params> {
         this.postExecutionScheduler = postExecutionScheduler;
     }
 
-    public final Single<T> execute(Params params) {
+    public Single<T> execute(Params params) {
         return wrapWithSchedulers(getUseCaseSingle(params));
     }
 

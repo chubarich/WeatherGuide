@@ -15,6 +15,7 @@
     <dimen name="menu_item_holder_horizontal_padding">15dp</dimen>
     <dimen name="menu_item_holder_vertical_margin">8dp</dimen>
     <dimen name="menu_item_location_name_right_margin">10dp</dimen>
+    <dimen name="menu_tablet_width">350dp</dimen>
 
     <!-- predictions -->
     <dimen name="yandex_logo_width">50dp</dimen>

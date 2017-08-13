@@ -1,11 +1,11 @@
 package com.example.julia.weatherguide.di.components;
 
+import com.example.julia.weatherguide.data.services.refresh.RefreshDatabaseService;
 import com.example.julia.weatherguide.di.modules.singleton.AppModule;
 import com.example.julia.weatherguide.di.modules.singleton.DatabaseModule;
 import com.example.julia.weatherguide.di.modules.singleton.NetworkModule;
 import com.example.julia.weatherguide.di.modules.singleton.RepositoryModule;
 import com.example.julia.weatherguide.di.modules.singleton.UtilsModule;
-import com.example.julia.weatherguide.data.services.refresh.RefreshWeatherService;
 
 import javax.inject.Singleton;
 
@@ -26,6 +26,6 @@ public interface AppComponent {
     MainComponent plusMainComponent();
 
 
-    void inject(RefreshWeatherService refreshWeatherService);
+    void inject(RefreshDatabaseService refreshWeatherService);
 
 }

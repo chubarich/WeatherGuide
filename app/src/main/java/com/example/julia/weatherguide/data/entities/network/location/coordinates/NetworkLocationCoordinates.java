@@ -8,6 +8,10 @@ public class NetworkLocationCoordinates {
     @SerializedName("result")
     private NetworkLocationResult result;
 
+    public NetworkLocationCoordinates(NetworkLocationResult result) {
+        this.result = result;
+    }
+
     public boolean isValid() {
         return result != null;
     }

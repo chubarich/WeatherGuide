@@ -1,4 +1,4 @@
-package com.example.julia.weatherguide.repositories.exception;
+package com.example.julia.weatherguide.data.exception;
 
 import com.example.julia.weatherguide.data.exceptions.ExceptionBundle;
 

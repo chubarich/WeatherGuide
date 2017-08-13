@@ -17,7 +17,7 @@ public abstract class ObservableUseCase<T, Params> {
         this.postExecutionScheduler = postExecutionScheduler;
     }
 
-    public final Observable<T> execute(Params params) {
+    public Observable<T> execute(Params params) {
         return wrapWithSchedulers(getUseCaseObservable(params));
     }
 

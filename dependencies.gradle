@@ -3,9 +3,9 @@ ext.versions = [
         name                         : '1.0',
 
         minSdk                       : 19,
-        targetSdk                    : 25,
-        compileSdk                   : 25,
-        buildTools                   : '25.0.3',
+        targetSdk                    : 26,
+        compileSdk                   : 26,
+        buildTools                   : '26.0.0',
 
         androidGradlePlugin          : '2.3.3',
         retrolambdaGradlePlugin      : '3.6.1',
@@ -22,6 +22,8 @@ ext.versions = [
         rxbinding                    : '2.0.0',
         googlePlaces                 : '11.0.2',
         storIO                       : '1.12.3',
+        expandableLayout             : '2.9.1',
+        androidJob                   : '1.1.11',
 
         junit                        : '4.12',
         mockito                      : '2.1.0',
@@ -31,6 +33,8 @@ ext.versions = [
         espresso                     : '2.2.2',
         uiAutomator                  : '2.1.1',
         robotium                     : '5.6.1'
+
+
 ]
 
 
@@ -66,7 +70,8 @@ ext.libraries = [
         rxbinding               : "com.jakewharton.rxbinding2:rxbinding:$versions.rxbinding",
         rxbinding_v7            : "com.jakewharton.rxbinding2:rxbinding-appcompat-v7:$versions.rxbinding",
         googlePlaces            : "com.google.android.gms:play-services-places:$versions.googlePlaces",
-
+        expandableLayout        : "net.cachapa.expandablelayout:expandablelayout:$versions.expandableLayout",
+        androidJob              : "com.evernote:android-job:$versions.androidJob",
 
         junit                   : "junit:junit:$versions.junit",
         supportTestRunner       : "com.android.support.test:runner:$versions.supportTestRunner",

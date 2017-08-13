@@ -20,13 +20,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.julia.weatherguide.R;
-import com.example.julia.weatherguide.data.entities.presentation.location.Location;
 import com.example.julia.weatherguide.data.entities.presentation.location.LocationPrediction;
 import com.example.julia.weatherguide.presentation.application.WeatherGuideApplication;
 import com.example.julia.weatherguide.presentation.base.presenter.PresenterFactory;
 import com.example.julia.weatherguide.presentation.base.view.BaseActivity;
-import com.example.julia.weatherguide.presentation.menu.MenuPresenter;
-import com.example.julia.weatherguide.utils.ChooseLocationContract;
 import com.jakewharton.rxbinding2.widget.RxTextView;
 
 import java.util.List;
@@ -35,19 +32,12 @@ import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
 import javax.inject.Provider;
 
-import io.reactivex.Completable;
-import io.reactivex.Observable;
-import io.reactivex.ObservableSource;
-import io.reactivex.ObservableTransformer;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Function;
-import io.reactivex.internal.observers.LambdaObserver;
 import io.reactivex.observers.DefaultObserver;
 
-import static android.support.v7.widget.DividerItemDecoration.HORIZONTAL;
 import static android.support.v7.widget.DividerItemDecoration.VERTICAL;
 
 
@@ -107,10 +97,10 @@ public class ChooseLocationActivity extends BaseActivity<ChooseLocationPresenter
     @Override
     public void showNoInternet(boolean asOverlay) {
         if (asOverlay) {
-            textMessage.setText("Интернет соединение отсутствует");
+            textMessage.setText(getString(R.string.network_error));
             textMessage.setVisibility(View.VISIBLE);
         } else {
-            Toast.makeText(this, "Интернет соединение отсутствует", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.network_error), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -130,7 +120,7 @@ public class ChooseLocationActivity extends BaseActivity<ChooseLocationPresenter
             textMessage.setVisibility(View.INVISIBLE);
             recyclerView.setVisibility(View.VISIBLE);
         } else {
-            textMessage.setText("По запросу \"" + request + "\" ничего не найдено");
+            textMessage.setText(getString(R.string.with_request) + request + getString(R.string.nothing_was_found));
             recyclerView.setVisibility(View.INVISIBLE);
             textMessage.setVisibility(View.VISIBLE);
         }
