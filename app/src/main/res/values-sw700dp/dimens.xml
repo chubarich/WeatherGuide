@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="message_text_size">22sp</dimen>
+    <dimen name="message_horizontal_margin">45dp</dimen>
+
+    <!-- current weather -->
+    <dimen name="date_text_size">16sp</dimen>
+    <dimen name="date_text_vertical_padding">5dp</dimen>
+    <dimen name="main_temperature_text_size">75sp</dimen>
+    <dimen name="main_temperature_margin_from_center">40dp</dimen>
+    <dimen name="weather_additional_info_horizontal_margin">50dp</dimen>
+
+    <!-- prediction weather -->
+    <dimen name="prediction_weather_padding_start">50dp</dimen>
+    <dimen name="prediction_weather_padding_end">35dp</dimen>
+    <dimen name="prediction_weather_icon_margin_end">120dp</dimen>
+    <dimen name="prediction_weather_text_size">18sp</dimen>
+    <dimen name="prediction_weather_temperature_margin">65dp</dimen>
+
+</resources>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- prediction weather -->
+    <dimen name="prediction_weather_padding_start">35dp</dimen>
+    <dimen name="prediction_weather_padding_end">25dp</dimen>
+    <dimen name="prediction_weather_icon_margin_end">110dp</dimen>
+    <dimen name="prediction_weather_temperature_margin">55dp</dimen>
+
+</resources>

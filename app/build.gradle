@@ -5,7 +5,6 @@ def keystorePropertiesFile = rootProject.file("keystore.properties")
 def keystoreProperties = new Properties()
 keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 
-
 android {
     signingConfigs {
         config {
@@ -16,7 +15,7 @@ android {
         }
     }
 
-    compileSdkVersion versions.compileSdk
+    compileSdkVersion 26
     buildToolsVersion versions.buildTools
     defaultConfig {
         applicationId "com.example.julia.weatherguide"
@@ -39,17 +38,21 @@ android {
             signingConfig signingConfigs.config
         }
     }
+    buildTypes.each {
+        it.buildConfigField 'String', 'OPEN_WEATHER_MAP_API_KEY', keystoreProperties['OpenWeatherMapApiKey'];
+        it.buildConfigField 'String', 'GOOGLE_MAPS_API_KEY', keystoreProperties['GoogleMapsApiKey'];
+        it.buildConfigField 'String', 'DATABASE_NAME', keystoreProperties['DatabaseName'];
+        it.buildConfigField 'Integer', 'DATABASE_VERSION', keystoreProperties['DatabaseVersion'];
+    }
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
-
     configurations.all {
         resolutionStrategy.force 'com.google.code.findbugs:jsr305:3.0.1'
     }
-
 }
 
 repositories {
@@ -62,39 +65,31 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     compile libraries.supportAppCompat
-    compile libraries.supportConstraintLayout
     compile libraries.supportDesign
     compile libraries.supportPreference
-
-    compile libraries.butterKnife
-    annotationProcessor libraries.butterKnifeCompiler
-
-    compile libraries.icepick
-    provided libraries.icepickProcessor
-
     compile libraries.retrofit
     compile libraries.retrofitRxAdapter
     compile libraries.retrofitGsonConverter
-
+    compile libraries.rxbinding
+    compile libraries.rxbinding_v7
     compile libraries.rxjava
     compile libraries.rxandroid
-
     compile libraries.firebase
-
     compile libraries.picasso
     compile libraries.dagger
     annotationProcessor libraries.daggerProcessor
-
-    compile libraries.googlePlaces
-
+    compile libraries.storIO
+    compile libraries.storIOAnnotations
+    annotationProcessor libraries.storIOProcessor
+    compile libraries.androidJob
+    compile libraries.expandableLayout
     testCompile libraries.junit
     testCompile libraries.robolectric
     testCompile libraries.powermock
-    testCompile libraries.powermock_junit
-    testCompile libraries.powermock_api
-    testCompile libraries.powermock_rule
-    testCompile libraries.powermock_classloader
-
+    testCompile libraries.powermockJunit
+    testCompile libraries.powermockApi
+    testCompile libraries.powermockRule
+    testCompile libraries.powermockClassloader
     androidTestCompile libraries.espressoCore
     androidTestCompile libraries.supportAnnotations
 }

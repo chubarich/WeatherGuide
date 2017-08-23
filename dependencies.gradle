@@ -2,16 +2,15 @@ ext.versions = [
         code                         : 1,
         name                         : '1.0',
 
-        minSdk                       : 18,
-        targetSdk                    : 25,
-        compileSdk                   : 25,
-        buildTools                   : '25.0.3',
+        minSdk                       : 19,
+        targetSdk                    : 26,
+        compileSdk                   : 26,
+        buildTools                   : '26.0.0',
 
         androidGradlePlugin          : '2.3.3',
         retrolambdaGradlePlugin      : '3.6.1',
 
         supportLibs                  : '25.3.1',
-        supportConstraintLayout      : '1.0.2',
         butterKnife                  : '8.7.0',
         icepick                      : '3.2.0',
         retrofit                     : '2.3.0',
@@ -22,6 +21,9 @@ ext.versions = [
         dagger                       : '2.11',
         rxbinding                    : '2.0.0',
         googlePlaces                 : '11.0.2',
+        storIO                       : '1.12.3',
+        expandableLayout             : '2.9.1',
+        androidJob                   : '1.1.11',
 
         junit                        : '4.12',
         mockito                      : '2.1.0',
@@ -31,6 +33,8 @@ ext.versions = [
         espresso                     : '2.2.2',
         uiAutomator                  : '2.1.1',
         robotium                     : '5.6.1'
+
+
 ]
 
 
@@ -47,7 +51,6 @@ ext.libraries = [
 
         supportAppCompat        : "com.android.support:appcompat-v7:$versions.supportLibs",
         supportDesign           : "com.android.support:design:$versions.supportLibs",
-        supportConstraintLayout : "com.android.support.constraint:constraint-layout:$versions.supportConstraintLayout",
         supportPreference       : "com.android.support:preference-v7:$versions.supportLibs",
         supportAnnotations      : "com.android.support:support-annotations:$versions.supportLibs",
 
@@ -67,6 +70,8 @@ ext.libraries = [
         rxbinding               : "com.jakewharton.rxbinding2:rxbinding:$versions.rxbinding",
         rxbinding_v7            : "com.jakewharton.rxbinding2:rxbinding-appcompat-v7:$versions.rxbinding",
         googlePlaces            : "com.google.android.gms:play-services-places:$versions.googlePlaces",
+        expandableLayout        : "net.cachapa.expandablelayout:expandablelayout:$versions.expandableLayout",
+        androidJob              : "com.evernote:android-job:$versions.androidJob",
 
         junit                   : "junit:junit:$versions.junit",
         supportTestRunner       : "com.android.support.test:runner:$versions.supportTestRunner",
@@ -74,12 +79,16 @@ ext.libraries = [
         mockito                 : "org.mockito:mockito-core:$versions.mockito",
         robolectric             : "org.robolectric:robolectric:$versions.robolectric",
         powermock               : "org.powermock:powermock:$versions.powermock",
-        powermock_junit         : "org.powermock:powermock-module-junit4:$versions.powermock",
-        powermock_api           : "org.powermock:powermock-api-mockito:$versions.powermock",
-        powermock_rule          : "org.powermock:powermock-module-junit4-rule:$versions.powermock",
-        powermock_classloader   : "org.powermock:powermock-classloading-xstream:$versions.powermock",
+        powermockJunit          : "org.powermock:powermock-module-junit4:$versions.powermock",
+        powermockApi            : "org.powermock:powermock-api-mockito:$versions.powermock",
+        powermockRule           : "org.powermock:powermock-module-junit4-rule:$versions.powermock",
+        powermockClassloader    : "org.powermock:powermock-classloading-xstream:$versions.powermock",
 
         espressoCore            : "com.android.support.test.espresso:espresso-core:$versions.espresso",
         uiAutomator             : "com.android.support.test.uiautomator:uiautomator-v18:$versions.uiAutomator",
-        robotium                : "com.jayway.android.robotium:robotium-solo:$versions.robotium"
+        robotium                : "com.jayway.android.robotium:robotium-solo:$versions.robotium",
+
+        storIO                  : "com.pushtorefresh.storio:sqlite:$versions.storIO",
+        storIOAnnotations       : "com.pushtorefresh.storio:sqlite-annotations:$versions.storIO",
+        storIOProcessor         : "com.pushtorefresh.storio:sqlite-annotations-processor:$versions.storIO"
 ]

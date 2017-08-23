@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_marginBottom="@dimen/current_weather_margin_bottom"
+              android:orientation="vertical">
+
+
+    <TextView
+        android:id="@+id/text_date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/prediction_weather_date_text_end_margin"
+        android:paddingBottom="@dimen/date_text_vertical_padding"
+        android:paddingTop="@dimen/date_text_vertical_padding"
+        android:textAlignment="center"
+        android:textColor="@color/hintText"
+        android:textSize="@dimen/date_text_size"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/main_temperature_margin_top"
+        android:minHeight="@dimen/condition_icon_size"
+        android:orientation="horizontal">
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/text_temperature"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="@dimen/main_temperature_margin_from_center"
+                android:textColor="@color/colorAccent"
+                android:textSize="@dimen/main_temperature_text_size"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <ImageView
+                android:id="@+id/image_condition"
+                android:layout_width="@dimen/condition_icon_size"
+                android:layout_height="@dimen/condition_icon_size"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="@dimen/main_temperature_margin_from_center"/>
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/text_condition_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/condition_description_margin_bottom"
+        android:layout_marginTop="@dimen/condition_description_margin_top"
+        android:textAlignment="center"
+        android:textColor="@color/colorAccent"
+        android:textSize="@dimen/condition_description_size"
+        android:textStyle="bold"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/weather_additional_info_horizontal_margin"
+        android:layout_marginStart="@dimen/weather_additional_info_horizontal_margin"
+        android:orientation="horizontal">
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <ImageView
+                android:id="@+id/image_wind"
+                style="@style/WeatherAdditionalIcon"
+                android:background="@drawable/ic_wind"/>
+
+            <TextView
+                android:id="@+id/text_wind"
+                style="@style/WeatherAdditionalTextView"
+                android:layout_below="@id/image_wind"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <ImageView
+                android:id="@+id/image_humidity"
+                style="@style/WeatherAdditionalIcon"
+                android:background="@drawable/ic_humidity"/>
+
+            <TextView
+                android:id="@+id/text_humidity"
+                style="@style/WeatherAdditionalTextView"
+                android:layout_below="@id/image_humidity"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <ImageView
+                android:id="@+id/image_pressure"
+                style="@style/WeatherAdditionalIcon"
+                android:background="@drawable/ic_pressure"/>
+
+            <TextView
+                android:id="@+id/text_pressure"
+                style="@style/WeatherAdditionalTextView"
+                android:layout_below="@id/image_pressure"/>
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</LinearLayout>
